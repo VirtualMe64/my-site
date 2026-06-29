@@ -13,6 +13,35 @@ const projects = [
       { label: 'doc', href: 'https://github.com/VirtualMe64/polymarket-trader-analysis/blob/main/DOC/team010poster.pdf' },
       { label: 'report', href: 'https://github.com/VirtualMe64/polymarket-trader-analysis/blob/main/DOC/report.pdf'}
     ],
+  },
+  {
+    name: 'RL Soccer Agent',
+    pos: 'n.',
+    def: 'Via reward shaping and experimenting with neural network architecture, we trained a model to play a simple 2v2 game of soccer faster and more effectively than a baseline model. The agent wins 79.5% of episodes against the baseline, even after training for a similar amount of time.',
+    stack: 'Python · RLlib',
+    links: [
+      { label: 'source', href: 'https://github.com/VirtualMe64/soccer-twos-starter/tree/main' },
+      { label: 'report', href: 'https://github.com/VirtualMe64/soccer-twos-starter/blob/main/report.pdf' }
+    ]
+  },
+  {
+    name: 'Authorship Attribution via AI Stylometry',
+    pos: 'n.',
+    def: 'Created and evaluated a pipeline to classify authorship of a text using a neural net trained via triplet loss. Achieves 84% accuracy on a 50-author victorian work dataset, amd 99.8% accuracy on a human vs. ai dataset.',
+    stack: 'Python · PyTorch',
+    links: [
+      { label: 'source', href: 'https://github.com/VirtualMe64/cs7643-style2vec' },
+      { label: 'report', href: 'https://github.com/VirtualMe64/cs7643-style2vec/blob/main/report.pdf' },
+    ]
+  },
+  {
+    name: 'Sprint Analysis Dashboard',
+    pos: 'n.',
+    def: <>As a Junior Design project with <a href="https://demotu.org" target="_blank" rel="noreferrer">Demotu</a>, created an analysis pipeline and dashboard to analyze the gait and form of a sprinter. Placed 3rd out of ~50 student groups in the final showcase. <em>Source not available due to confidentiality agreement with Demotu.</em></>,
+    stack: 'Python · React',
+    links: [ {
+      label: 'article', href: 'https://www.cc.gatech.edu/news/student-innovation-shines-spring-2025-cs-junior-design-capstone-expo#3rd'
+    } ]
   }
 ]
 
@@ -33,8 +62,7 @@ export default function Projects() {
               {row.map((project) => (
                 <article key={project.name} className={styles.card}>
                   <div className={styles.cardHead}>
-                    <span className={styles.name}>{project.name}</span>
-                    <span className={styles.pos}>{project.pos}</span>
+                    <span className={styles.name}>{project.name} <span className={styles.pos}>{project.pos}</span></span>
                   </div>
                   <p className={styles.def}>{project.def}</p>
                   <footer className={styles.cardFoot}>

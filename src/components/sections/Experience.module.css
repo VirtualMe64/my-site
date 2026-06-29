@@ -46,4 +46,9 @@
   .company {
     font-size: 1rem;
   }
+
+  .meta,
+  .roleDesc {
+    font-size: 0.85rem;
+  }
 }
