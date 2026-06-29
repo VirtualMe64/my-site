@@ -16,7 +16,7 @@ export default function Sidebar({ active }) {
           <li key={link.id}>
             <a
               href={`#${link.id}`}
-              className={`${styles.link} ${active === link.id ? styles.active : ''}`.trim()}
+              className={active === link.id ? styles.active : styles.link}
               aria-current={active === link.id ? 'true' : undefined}
             >
               {link.label}

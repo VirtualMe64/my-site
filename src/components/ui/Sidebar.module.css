@@ -36,18 +36,20 @@
 .link {
   display: inline-block;
   font-size: 1.125rem;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .link:hover,
 .link:focus-visible {
-  color: var(--color-text);
+  color: var(--color-accent);
 }
 
 /* the section currently in view */
 .active {
-  color: var(--color-text);
+  display: inline-block;
+  font-size: 1.125rem;
+  color: var(--color-accent);
   font-weight: 700;
   transform: translateX(4px);
 }

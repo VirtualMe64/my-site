@@ -1,7 +1,7 @@
 .entry {
   max-width: 60rem;
-  /* scales the hero Headword up from its default section size */
   --headword-size: clamp(2.5rem, 6vw, 4rem);
+  --headword-color: var(--color-accent);
 }
 
 .definitions {
@@ -12,4 +12,5 @@
 
 .num {
   font-weight: 700;
+  color: var(--color-accent);
 }
