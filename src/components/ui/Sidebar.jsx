@@ -5,6 +5,7 @@ import styles from './Sidebar.module.css'
 const links = [
   { id: 'home', label: 'Home' },
   { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
 ]
 
 export default function Sidebar({ active }) {

@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 import Sidebar from './components/ui/Sidebar.jsx'
 import Entry from './components/sections/Entry.jsx'
 import Experience from './components/sections/Experience.jsx'
+import Projects from './components/sections/Projects.jsx'
 import { useActiveSection } from './hooks/useActiveSection.js'
 import styles from './App.module.css'
 
-const SECTIONS = ['home', 'experience']
+const SECTIONS = ['home', 'experience', 'projects']
 
 export default function App() {
   const active = useActiveSection(SECTIONS)
@@ -25,6 +26,7 @@ export default function App() {
       <main className={styles.main}>
         <Entry />
         <Experience />
+        <Projects />
       </main>
     </div>
   )
