@@ -8,11 +8,11 @@
 
 :root {
   /* ---- color ---- */
-  --color-bg: #6b2944;          /* deep wine background */
-  --color-text: #ffffff;        /* primary text */
-  --color-text-muted: #d9c2cb;  /* inactive nav links */
-  --color-rule: rgba(255, 255, 255, 0.65); /* the vertical divider line */
-  --color-accent: #e8b86d;       /* warm gold
+  --color-bg: #162013;          /* deep forest green */
+  --color-text: #e8efe6;        /* light sage white */
+  --color-text-muted: #7a927a;  /* muted sage */
+  --color-rule: rgba(232, 239, 230, 0.3);
+  --color-accent: #e8c860;      /* warm yellow-gold */
   /* ---- type ---- */
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
 
