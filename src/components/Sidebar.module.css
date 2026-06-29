@@ -1,5 +1,8 @@
 .sidebar {
-  position: relative;
+  position: sticky;             /* stays pinned while sections scroll past */
+  top: 0;
+  align-self: flex-start;
+  height: 100dvh;
   flex: 0 0 12rem;
   display: flex;
   flex-direction: column;

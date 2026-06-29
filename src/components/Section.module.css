@@ -1,0 +1,8 @@
+.section {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;      /* center content vertically, like the hero */
+  padding: var(--page-padding);
+  padding-left: 4rem;           /* gap from the divider */
+}

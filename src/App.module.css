@@ -1,15 +1,12 @@
-/* Top-level page layout: full-viewport hero, sidebar + centered entry. */
+/* Top-level page layout: sticky sidebar + stacked full-height sections. */
 
 .page {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;   /* let the sidebar stick instead of stretching */
   min-height: 100dvh;
 }
 
 .main {
   flex: 1;
-  display: flex;
-  align-items: center;        /* vertically center the entry */
-  padding: var(--page-padding);
-  padding-left: 4rem;
+  min-width: 0;              /* allow content to shrink instead of overflow */
 }
