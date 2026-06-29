@@ -1,5 +1,5 @@
 .entry {
-  max-width: 30rem;
+  max-width: 60rem;
 }
 
 .headword {
@@ -10,7 +10,8 @@
 }
 
 .definitions {
-  margin-top: 1.5rem;
+  max-width: 40rem;
+  margin-top: 1rem;
   font-weight: 300;
 }
 
