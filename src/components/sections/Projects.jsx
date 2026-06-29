@@ -3,29 +3,17 @@ import styles from './Projects.module.css'
 
 const projects = [
   {
-    name: 'lexica',
+    name: 'polymarket trader visualization',
     pos: 'n.',
-    def: 'a word-game trainer that drills high-value scrabble plays; designed to build pattern recognition and vocabulary under competitive conditions.',
-    stack: 'React · TypeScript',
-    href: 'https://github.com/VirtualMe64',
-    cite: 'github',
-  },
-  {
-    name: 'this entry',
-    pos: 'n.',
-    def: 'the dictionary-themed personal site you are reading right now; an experiment in making résumé content feel like reference material.',
-    stack: 'React · Vite',
-    href: 'https://github.com/VirtualMe64/my-site',
-    cite: 'source',
-  },
-  {
-    name: 'signals',
-    pos: 'n.',
-    def: 'a small service for watching how systems behave under load; exposes metrics and visualizes request patterns over time.',
-    stack: 'Go · Postgres',
-    href: 'https://github.com/VirtualMe64',
-    cite: 'github',
-  },
+    def: 'a k-means analysis of millions of polymarket trades; clusters active traders into behavioral archetypes — i.e. gamblers, grinders, and specialists — and exposes them through a configurable d3 scatterplot with per-trader tooltips.',
+    stack: 'Python · D3.js',
+    links: [
+      { label: 'site', href: 'https://virtualme64.github.io/polymarket-trader-analysis/viz/' },
+      { label: 'source', href: 'https://github.com/VirtualMe64/polymarket-trader-analysis' },
+      { label: 'doc', href: 'https://github.com/VirtualMe64/polymarket-trader-analysis/blob/main/DOC/team010poster.pdf' },
+      { label: 'report', href: 'https://github.com/VirtualMe64/polymarket-trader-analysis/blob/main/DOC/report.pdf'}
+    ],
+  }
 ]
 
 const rows = []
@@ -51,9 +39,15 @@ export default function Projects() {
                   <p className={styles.def}>{project.def}</p>
                   <footer className={styles.cardFoot}>
                     <span className={styles.stack}>{project.stack}</span>
-                    <a className={styles.seeAlso} href={project.href} target="_blank" rel="noreferrer">
-                      see also: {project.cite}
-                    </a>
+                    <span className={styles.seeAlso}>
+                      see also:{' '}
+                      {project.links.map((link, i) => (
+                        <span key={link.label}>
+                          <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+                          {i < project.links.length - 1 && ', '}
+                        </span>
+                      ))}
+                    </span>
                   </footer>
                 </article>
               ))}

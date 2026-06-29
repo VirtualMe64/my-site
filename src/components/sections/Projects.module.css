@@ -85,10 +85,15 @@
   font-size: 0.85rem;
   font-style: italic;
   color: var(--color-text-muted);
+  text-align: right;
+}
+
+.seeAlso a {
+  color: var(--color-text-muted);
   transition: color 0.2s ease;
 }
 
-.seeAlso:hover {
+.seeAlso a:hover {
   color: var(--color-text);
   text-decoration: underline;
   text-decoration-style: dotted;
