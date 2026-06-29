@@ -1,0 +1,43 @@
+.entry {
+  max-width: var(--content-max-width);
+}
+
+.headword {
+  font-size: var(--fs-headword);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-headword);
+  /* the signature dictionary underline */
+  display: inline;
+  padding-bottom: var(--space-2);
+  border-bottom: 3px solid var(--color-text);
+}
+
+.sep {
+  /* interpunct dots sit a touch lighter than the letters */
+  color: var(--color-text);
+}
+
+.meta {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.pron {
+  margin-right: var(--space-2);
+}
+
+.pos {
+  font-weight: var(--fw-bold);
+}
+
+.definitions {
+  margin-top: var(--space-4);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+}
+
+.num {
+  font-weight: var(--fw-bold);
+}

@@ -1,0 +1,15 @@
+/* Top-level page layout: full-viewport hero, sidebar + centered entry. */
+
+.page {
+  display: flex;
+  align-items: stretch;
+  min-height: 100dvh;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;        /* vertically center the entry */
+  padding: var(--page-padding);
+  padding-left: var(--content-offset);
+}
