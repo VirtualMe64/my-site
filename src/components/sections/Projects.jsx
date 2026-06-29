@@ -3,9 +3,9 @@ import styles from './Projects.module.css'
 
 const projects = [
   {
-    name: 'polymarket trader visualization',
+    name: 'Polymarket Trader Visualization',
     pos: 'n.',
-    def: 'a k-means analysis of millions of polymarket trades; clusters active traders into behavioral archetypes — i.e. gamblers, grinders, and specialists — and exposes them through a configurable d3 scatterplot with per-trader tooltips.',
+    def: 'A k-means analysis of millions of Polymarket trades; clusters active traders into behavioral archetypes — i.e. gamblers, grinders, and specialists — and exposes them through a configurable D3 scatterplot with per-trader tooltips.',
     stack: 'Python · D3.js',
     links: [
       { label: 'site', href: 'https://virtualme64.github.io/polymarket-trader-analysis/viz/' },
@@ -40,7 +40,7 @@ export default function Projects() {
                   <footer className={styles.cardFoot}>
                     <span className={styles.stack}>{project.stack}</span>
                     <span className={styles.seeAlso}>
-                      see also:{' '}
+                      See also:{' '}
                       {project.links.map((link, i) => (
                         <span key={link.label}>
                           <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
