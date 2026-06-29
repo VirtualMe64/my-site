@@ -1,28 +1,39 @@
 .sidebar {
-  flex: 0 0 var(--sidebar-width);
+  position: relative;
+  flex: 0 0 12rem;
   display: flex;
   flex-direction: column;
   justify-content: center;      /* vertically center nav, aligned with entry */
-  gap: var(--space-3);
+  gap: 1rem;
   padding: var(--page-padding);
-  border-right: 1px solid color-mix(in srgb, var(--color-rule) calc(var(--rule-opacity) * 100%), transparent);
+}
+
+/* the vertical divider — inset from the top so it doesn't reach the edge */
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 4rem;
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  background: var(--color-rule);
 }
 
 .section {
-  font-weight: var(--fw-bold);
+  font-weight: 700;
   font-style: italic;
-  font-size: var(--fs-nav);
+  font-size: 1.125rem;
 }
 
 .list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 0.5rem;
 }
 
 .link {
-  font-size: var(--fs-nav);
+  font-size: 1.125rem;
   color: var(--color-text-muted);
   transition: color 0.15s ease;
 }

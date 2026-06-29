@@ -1,46 +1,21 @@
 /*
- * theme.css — central design tokens.
+ * theme.css — shared design tokens.
  *
- * Everything visual (color, type, spacing, layout) is a CSS custom property
- * here. Components never hardcode values; they reference var(--token), so you
- * can re-skin the whole site by editing this one file.
+ * Only values that are reused across components (or that you'll want to tweak
+ * globally) live here: colors, the font, and the page padding. One-off values
+ * stay inline in the component that uses them.
  */
 
 :root {
   /* ---- color ---- */
   --color-bg: #6b2944;          /* deep wine background */
   --color-text: #ffffff;        /* primary text */
-  --color-text-muted: #d9c2cb;  /* softer text (inactive nav, captions) */
-  --color-accent: var(--color-text); /* reserved for a future accent; white for now */
-  --color-rule: #ffffff;        /* the vertical divider line */
-  --rule-opacity: 0.65;         /* lets the rule sit back a touch */
+  --color-text-muted: #d9c2cb;  /* inactive nav links */
+  --color-rule: rgba(255, 255, 255, 0.65); /* the vertical divider line */
 
-  /* ---- typography ---- */
+  /* ---- type ---- */
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
 
-  --fs-headword: clamp(2.5rem, 6vw, 4rem); /* scales with viewport width */
-  --fs-body: clamp(1rem, 1.4vw, 1.25rem);
-  --fs-nav: 1.125rem;
-
-  --fw-light: 300;
-  --fw-regular: 400;
-  --fw-bold: 700;
-
-  --lh-tight: 1.1;
-  --lh-body: 1.6;
-  --tracking-headword: 0.01em;
-
-  /* ---- spacing scale ---- */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 1rem;
-  --space-4: 1.5rem;
-  --space-5: 2.5rem;
-  --space-6: 4rem;
-
-  /* ---- layout ---- */
-  --sidebar-width: 12rem;       /* left nav column */
-  --content-max-width: 30rem;   /* keeps the dictionary entry readable */
-  --content-offset: 4rem;       /* gap between divider and entry */
-  --page-padding: 2rem;
+  /* ---- shared layout ---- */
+  --page-padding: 2rem;         /* outer padding, sidebar + main */
 }

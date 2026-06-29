@@ -1,17 +1,15 @@
 import styles from './Sidebar.module.css'
 
-export default function Sidebar({ items, active }) {
+export default function Sidebar() {
   return (
     <nav className={styles.sidebar} aria-label="Primary">
-      <span className={styles.section}>{active}</span>
+      <span className={styles.section}>Index</span>
       <ul className={styles.list}>
-        {items.map((item) => (
-          <li key={item.label}>
-            <a className={styles.link} href={item.href}>
-              {item.label}
-            </a>
-          </li>
-        ))}
+        <li><a className={styles.link} href="#home">Home</a></li>
+        <li><a className={styles.link} href="#experience">Experience</a></li>
+        <li><a className={styles.link} href="#projects">Projects</a></li>
+        <li><a className={styles.link} href="#skills">Skills</a></li>
+        <li><a className={styles.link} href="#contact">Contact</a></li>
       </ul>
     </nav>
   )

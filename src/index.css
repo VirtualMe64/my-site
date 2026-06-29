@@ -23,8 +23,8 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-serif);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.6;
 }
 
 a {

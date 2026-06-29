@@ -6,7 +6,7 @@ A dictionary-inspired personal site. Single-page React app built with Vite.
 
 - **Vite + React** — fast dev server, zero-config build, auto-detected by Vercel
 - **CSS Modules** — scoped, real CSS per component (`*.module.css`)
-- **Design tokens** — all colors, type, and spacing live in `src/styles/theme.css`
+- **Design tokens** — shared colors + the font live in `src/styles/theme.css`; one-off values stay inline in each component
 
 ## Develop
 
@@ -21,10 +21,9 @@ npm run preview  # preview the build locally
 
 | What | File |
 | --- | --- |
-| Colors / fonts / spacing | `src/styles/theme.css` |
-| Site copy (name, nav, definitions) | `src/content.js` |
+| Shared colors + font | `src/styles/theme.css` |
 | Page layout | `src/App.jsx`, `src/App.module.css` |
 | Components | `src/components/` |
 
-To re-skin the site, edit the tokens in `theme.css` — nothing else hardcodes
-colors or fonts.
+To recolor or change the font, edit the tokens in `theme.css` — nothing else
+hardcodes a color or the font family.

@@ -1,50 +1,18 @@
-import { Fragment } from 'react'
 import styles from './Entry.module.css'
 
-// Joins syllables with an interpunct (·), except where a syllable begins with a
-// space — there we break to a new word instead. e.g. ['sam','my',' taub','man']
-// renders as "sam·my taub·man".
-function Headword({ syllables }) {
-  return (
-    <h1 className={styles.headword}>
-      {syllables.map((syllable, i) => {
-        const isWordBreak = syllable.startsWith(' ')
-        return (
-          <Fragment key={i}>
-            {i > 0 && (
-              <span className={styles.sep} aria-hidden="true">
-                {isWordBreak ? ' ' : '·'}
-              </span>
-            )}
-            {syllable.trim()}
-          </Fragment>
-        )
-      })}
-    </h1>
-  )
-}
-
-export default function Entry({ entry }) {
-  const { syllables, pronunciation, partOfSpeech, definitions } = entry
-
+export default function Entry() {
   return (
     <article className={styles.entry}>
-      <Headword syllables={syllables} />
-
-      {(pronunciation || partOfSpeech) && (
-        <p className={styles.meta}>
-          {pronunciation && <span className={styles.pron}>{pronunciation}</span>}
-          {partOfSpeech && <span className={styles.pos}>{partOfSpeech}</span>}
-        </p>
-      )}
+      <h1 className={styles.headword}>
+        sam<span aria-hidden="true">·</span>my
+        {' '}
+        taub<span aria-hidden="true">·</span>man
+      </h1>
 
       <p className={styles.definitions}>
-        {definitions.map((def, i) => (
-          <Fragment key={i}>
-            <span className={styles.num}>{i + 1}.</span> {def}
-            {i < definitions.length - 1 && ' '}
-          </Fragment>
-        ))}
+        <span className={styles.num}>1.</span> some copy about being a coder{' '}
+        <span className={styles.num}>2.</span> some copy about being interested in stuff{' '}
+        <span className={styles.num}>3.</span> some copy about liking work games
       </p>
     </article>
   )
