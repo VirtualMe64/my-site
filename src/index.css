@@ -53,5 +53,16 @@ section {
 @media (max-width: 640px) {
   section {
     padding: 4rem var(--page-padding);
+    scroll-margin-top: 4rem;
+  }
+
+  body {
+    font-size: 0.85rem;
+  }
+
+  #home {
+    min-height: 100svh;
+    justify-content: flex-start;
+    padding-top: 10rem;
   }
 }

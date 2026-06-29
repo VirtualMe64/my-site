@@ -64,7 +64,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    padding: calc(1rem + env(safe-area-inset-top)) var(--page-padding) 1rem;
+    padding: calc(.25rem + env(safe-area-inset-top)) var(--page-padding) .75rem;
     background: var(--color-bg);
   }
 
@@ -84,12 +84,10 @@
     gap: 1.5rem;
   }
 
-  .link {
-    font-size: 0.95rem;
-  }
-
+  .link,
   .active {
     font-size: 0.95rem;
+    font-weight: 700;
     transform: none;
   }
 }
