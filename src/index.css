@@ -49,3 +49,9 @@ section {
 #home {
   min-height: 100dvh;
 }
+
+@media (max-width: 640px) {
+  section {
+    padding: 4rem var(--page-padding);
+  }
+}

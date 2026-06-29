@@ -16,13 +16,6 @@
   background: var(--color-rule);
 }
 
-@media (max-width: 640px) {
-  .sidebar {
-    flex-basis: 8rem;
-    padding: 1rem;
-  }
-}
-
 .list {
   position: sticky;
   top: 4rem;
@@ -59,6 +52,44 @@
     transition: color 0.2s ease;
   }
   .active {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    flex: none;
+    width: 100%;
+    align-self: auto;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: calc(1rem + env(safe-area-inset-top)) var(--page-padding) 1rem;
+    background: var(--color-bg);
+  }
+
+  .sidebar::after {
+    top: auto;
+    bottom: 0;
+    left: 0%;
+    right: 0%;
+    width: auto;
+    height: 1px;
+  }
+
+  .list {
+    position: static;
+    flex-direction: row;
+    margin-top: 0;
+    gap: 1.5rem;
+  }
+
+  .link {
+    font-size: 0.95rem;
+  }
+
+  .active {
+    font-size: 0.95rem;
     transform: none;
   }
 }

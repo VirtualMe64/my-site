@@ -10,3 +10,10 @@
   flex: 1;
   min-width: 0;              /* allow content to shrink instead of overflow */
 }
+
+@media (max-width: 640px) {
+  .page {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
