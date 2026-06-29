@@ -61,20 +61,13 @@
     flex: none;
     width: 100%;
     align-self: auto;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    padding: calc(.25rem + env(safe-area-inset-top)) var(--page-padding) .75rem;
-    background: var(--color-bg);
+    position: static;
+    padding: 1rem var(--page-padding) .75rem;
+    border-bottom: 1px solid var(--color-rule);
   }
 
   .sidebar::after {
-    top: auto;
-    bottom: 0;
-    left: 0%;
-    right: 0%;
-    width: auto;
-    height: 1px;
+    display: none;
   }
 
   .list {
