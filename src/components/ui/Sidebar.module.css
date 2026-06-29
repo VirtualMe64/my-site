@@ -1,0 +1,62 @@
+.sidebar {
+  align-self: stretch;          /* full page height so the list can travel */
+  flex: 0 0 12rem;
+  position: relative;
+  padding: var(--page-padding);
+}
+
+/* the vertical divider — inset from the top so it doesn't reach the edge */
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 4rem;
+  bottom: 4rem;
+  right: 0;
+  width: 1px;
+  background: var(--color-rule);
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    flex-basis: 8rem;
+    padding: 1rem;
+  }
+}
+
+.list {
+  position: sticky;
+  top: 4rem;
+  margin-top: calc(50dvh - 8rem); /* start roughly centered in the hero */
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.link {
+  display: inline-block;
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-text);
+}
+
+/* the section currently in view */
+.active {
+  color: var(--color-text);
+  font-weight: 700;
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: color 0.2s ease;
+  }
+  .active {
+    transform: none;
+  }
+}

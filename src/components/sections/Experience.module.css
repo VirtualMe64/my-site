@@ -1,0 +1,43 @@
+.experience {
+  max-width: 60rem;
+}
+
+.gloss {
+  margin-top: .5rem;
+  font-weight: 300;
+}
+
+.roles {
+  list-style: none;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.company {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.company a:hover {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.meta {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.roleDesc {
+  font-size: 1rem;
+}
+
+.roleDesc a {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}

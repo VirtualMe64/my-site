@@ -17,3 +17,6 @@ npm-debug.log*
 .env
 .env.*
 !.env.example
+
+# personal scratch notes
+IDEAS.md

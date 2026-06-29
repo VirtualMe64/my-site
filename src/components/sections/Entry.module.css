@@ -1,12 +1,7 @@
 .entry {
   max-width: 60rem;
-}
-
-.headword {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: 0.01em;
+  /* scales the hero Headword up from its default section size */
+  --headword-size: clamp(2.5rem, 6vw, 4rem);
 }
 
 .definitions {
