@@ -5,12 +5,12 @@
   padding: var(--page-padding);
 }
 
-/* the vertical divider — inset from the top so it doesn't reach the edge */
+/* the vertical divider — inset from the top, flush with the bottom */
 .sidebar::after {
   content: '';
   position: absolute;
   top: 4rem;
-  bottom: 4rem;
+  bottom: 0;
   right: 0;
   width: 1px;
   background: var(--color-rule);
