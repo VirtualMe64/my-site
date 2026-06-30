@@ -37,7 +37,7 @@ const projects = [
   {
     name: 'Sprint Analysis Dashboard',
     pos: 'n.',
-    def: <>An analysis pipeline and dashboard for sprinter gait and form, built as a Junior Design project with <a href="https://demotu.org" target="_blank" rel="noreferrer">Demotu</a>. Placed 3rd out of ~50 student groups in the final showcase. <em>Source not available due to confidentiality agreement with Demotu.</em></>,
+    def: <>An analysis pipeline and dashboard for sprinter gait and form, built as a Junior Design project with <a href="https://www.demotuapp.com" target="_blank" rel="noreferrer">Demotu</a>. Placed 3rd out of ~50 student groups in the final showcase. <em>Source not available due to confidentiality agreement with Demotu.</em></>,
     stack: 'Python · React',
     links: [ {
       label: 'article', href: 'https://www.cc.gatech.edu/news/student-innovation-shines-spring-2025-cs-junior-design-capstone-expo#3rd'
