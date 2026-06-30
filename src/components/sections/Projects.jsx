@@ -3,6 +3,24 @@ import styles from './Projects.module.css'
 
 const projects = [
   {
+    name: 'Advent of FPGA',
+    pos: 'n.',
+    def: <>A collection of hardware implementations and writeups solving 8 of 12 Advent of Code 2025 problems, written in Hardcaml as part of Jane Street's <a href="https://blog.janestreet.com/advent-of-fpga-challenge-2025/" target="_blank" rel="noreferrer">'Advent of FPGA' challenge</a>.</>,
+    stack: 'OCaml · Hardcaml',
+    links: [
+      { label: 'source', href: 'https://github.com/VirtualMe64/aoc-hardcaml' }
+    ]
+  },
+  {
+    name: 'Flux Slides',
+    pos: 'n.',
+    def: 'A developer-first slideshow app allowing you to make presentations using Markdown and LaTeX, built on a custom written Markdown parser.',
+    stack: 'TypeScript · Svelte',
+    links: [
+      { label: 'site', href: 'https://flux-slides.vercel.app/' }
+    ]
+  },
+  {
     name: 'Polymarket Trader Visualization',
     pos: 'n.',
     def: 'A k-means analysis of millions of Polymarket trades; clusters active traders into behavioral archetypes — i.e. gamblers, grinders, and specialists — and exposes them through a configurable D3 scatterplot with per-trader tooltips.',
@@ -42,24 +60,6 @@ const projects = [
     links: [ {
       label: 'article', href: 'https://www.cc.gatech.edu/news/student-innovation-shines-spring-2025-cs-junior-design-capstone-expo#3rd'
     } ]
-  },
-  {
-    name: 'Flux Slides',
-    pos: 'n.',
-    def: 'A developer-first slideshow app allowing you to make presentations using Markdown and LaTeX, built on a custom written Markdown parser.',
-    stack: 'TypeScript · Svelte',
-    links: [
-      { label: 'site', href: 'https://flux-slides.vercel.app/' }
-    ]
-  },
-  {
-    name: 'Advent of FPGA',
-    pos: 'n.',
-    def: <>A collection of hardware implementations and writeups solving 8 of 12 Advent of Code 2025 problems, written in Hardcaml as part of Jane Street's <a href="https://blog.janestreet.com/advent-of-fpga-challenge-2025/" target="_blank" rel="noreferrer">'Advent of FPGA' challenge</a>.</>,
-    stack: 'OCaml · Hardcaml',
-    links: [
-      { label: 'source', href: 'https://github.com/VirtualMe64/aoc-hardcaml' }
-    ]
   },
   {
     name: 'SwingML',
