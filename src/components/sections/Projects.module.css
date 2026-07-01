@@ -49,7 +49,7 @@
 }
 
 .name {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
 }
 
@@ -70,6 +70,11 @@
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.def a:hover {
+  color: var(--color-accent);
 }
 
 .cardFoot {
@@ -99,7 +104,7 @@
 }
 
 .seeAlso a:hover {
-  color: var(--color-text);
+  color: var(--color-accent);
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 3px;
