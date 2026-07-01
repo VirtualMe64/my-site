@@ -1,5 +1,5 @@
 ---
-import { words, scrabbleScore } from '../data/scrabble.js'
+import { words, scrabbleScore } from '../content/scrabble.js'
 
 // The static HTML gets a deterministic fallback word (and the build-time
 // year); the client script below swaps in the values for the visitor's date.
@@ -20,7 +20,7 @@ const year = new Date().getFullYear()
 </footer>
 
 <script>
-  import { wordOfTheDay, scrabbleScore } from '../data/scrabble.js'
+  import { wordOfTheDay, scrabbleScore } from '../content/scrabble.js'
 
   const word = wordOfTheDay()
   document.querySelector('[data-word]').textContent = word.text
