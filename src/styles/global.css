@@ -1,6 +1,6 @@
-/* Global baseline. Component-specific styling lives in *.module.css files. */
+/* Global baseline. Component-specific styling lives in each .astro file. */
 
-@import './styles/theme.css';
+@import './theme.css';
 
 *,
 *::before,

@@ -1,0 +1,102 @@
+---
+import Headword from './Headword.astro'
+
+const a = (text, href) => `<a href="${href}" target="_blank" rel="noreferrer">${text}</a>`
+
+const roles = [
+  { company: 'Stripe', url: 'https://stripe.com', title: 'Software Engineer', dates: 'Incoming August 2026',
+    description: `Will be working on ${a('agentic payments', 'https://docs.stripe.com/agentic-commerce')}` },
+  { company: 'Georgia Tech', url: 'https://www.cc.gatech.edu/', title: 'Graduate Teaching Assistant', dates: 'August 2025 - May 2026',
+    description: `Taught students about ${a('graduate-level algorithms', 'https://omscs.gatech.edu/cs-6515-intro-graduate-algorithms')} and ${a('introductory robotics', 'https://dellaert.github.io/25F-3630/')}` },
+  { company: 'Stripe', url: 'https://stripe.com', title: 'Software Engineering Intern', dates: 'May 2025 - August 2025',
+    description: `Improved evidence gathering for ${a('smart disputes', 'https://docs.stripe.com/disputes/smart-disputes')}` },
+  { company: 'Georgia Tech', url: 'https://www.cc.gatech.edu/', title: 'Senior Teaching Assistant', dates: 'August 2023 - May 2025',
+    description: `Helped run Georgia Tech's ${a('intro discrete math course', 'https://faculty.cc.gatech.edu/~ladha/S24/2050/')} for several hundred students per semester.<br />Also was the sole TA for ${a('intro to AI', 'https://europe.gatech.edu/sites/default/files/2024-01/CS%203600%20Syllabus.pdf')} over the summer` },
+  { company: 'iD Tech Camps', url: 'https://www.idtech.com/', title: 'Lead Instructor', dates: 'June 2023 - August 2023',
+    description: `Taught campers about ${a('Python', 'https://www.idtech.com/courses/python-coding-101')} and ${a('Java', 'https://www.idtech.com/courses/java-coding-build-mods-with-minecraft')} coding` },
+]
+---
+
+<section id="experience">
+  <div class="experience">
+    <Headword pos="n.">
+      ex<span aria-hidden="true">·</span>pe<span aria-hidden="true">·</span>ri<span aria-hidden="true">·</span>ence
+    </Headword>
+
+    <p class="gloss">places i've worked.</p>
+
+    <ol class="roles">
+      {roles.map((role) => (
+        <li>
+          <p class="company" set:html={role.url ? a(role.company, role.url) : role.company} />
+          <p class="meta">{role.title}<span aria-hidden="true"> · </span>{role.dates}</p>
+          <p class="roleDesc" set:html={role.description} />
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .experience {
+    max-width: 60rem;
+  }
+
+  .gloss {
+    margin-top: .5rem;
+    font-weight: 300;
+  }
+
+  .roles {
+    list-style: none;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .company {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  /* link markup comes from set:html, so it needs :global */
+  .company :global(a:hover) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+
+  .meta {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+
+  .roleDesc {
+    font-size: 1rem;
+  }
+
+  .roleDesc :global(a) {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .roleDesc :global(a:hover) {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .company {
+      font-size: 1rem;
+    }
+
+    .meta,
+    .roleDesc {
+      font-size: 0.85rem;
+    }
+  }
+</style>
