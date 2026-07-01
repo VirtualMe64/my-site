@@ -16,6 +16,23 @@
   /* ---- type ---- */
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
 
+  /* ---- type scale ---- */
+  --text-sm: 0.85rem;      /* pos tags, stacks, small labels */
+  --text-base: 1rem;       /* descriptions, links, footer text */
+  --text-md: 1.125rem;     /* sidebar nav, project card titles */
+  --text-lg: 1.2rem;       /* company names */
+  --headword-size: clamp(1.75rem, 4vw, 2.75rem);
+  --headword-size-hero: 2.5rem;
+
   /* ---- shared layout ---- */
   --page-padding: 2rem;         /* outer padding, sidebar + main */
+}
+
+/* the whole site's type shrinks together on small screens */
+@media (max-width: 640px) {
+  :root {
+    --text-base: 0.85rem;
+    --text-md: 0.95rem;
+    --text-lg: 1rem;
+  }
 }

@@ -1,12 +1,13 @@
----
-import Headword from './Headword.astro'
----
-
+<!-- The hero is the site's one hand-rolled dictionary entry: its text lives
+     here rather than in src/content/ so it can be literal, readable markup. -->
 <section id="home">
   <div class="entry">
-    <Headword as="h1" pos="n. proper">
+    <!-- the interpunct spans must stay aria-hidden so screen readers hear
+         "Sammy Taubman", not the syllable breaks -->
+    <h1 class="headword">
       Sam<span aria-hidden="true">·</span>my Taub<span aria-hidden="true">·</span>man
-    </Headword>
+      <span class="pos">n. proper</span>
+    </h1>
 
     <p class="definitions">
       <span class="num">1.</span> a software engineer at Stripe, helping agents pay for things
@@ -20,8 +21,7 @@ import Headword from './Headword.astro'
 <style>
   .entry {
     max-width: 60rem;
-    --headword-size: 2.5rem;
-    --headword-color: var(--color-accent);
+    --headword-size: var(--headword-size-hero);
   }
 
   .definitions {
