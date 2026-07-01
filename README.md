@@ -34,18 +34,19 @@ npm run preview  # preview the build locally
 | --- | --- |
 | Work history | `src/content/roles.js` |
 | Projects | `src/content/projects.js` |
-| Section index, hero definitions, contact links, head metadata | `src/content/site.js` |
+| Section index, contact links | `src/content/site.js` |
 | Scrabble word list + scoring | `src/content/scrabble.js` |
 | Colors, font, type scale | `src/styles/theme.css` |
 | Global baseline + shared headword/link styles | `src/styles/global.css` |
-| Page head + layout + section order | `src/pages/index.astro` |
+| Page head (title, description, OG tags) + layout + section order | `src/pages/index.astro` |
 | Dictionary-entry section shell | `src/components/Section.astro` |
-| Hero (the one hand-rolled `<h1>` entry) | `src/components/Entry.astro` |
+| Hero — hand-rolled `<h1>` and definitions, literal markup by design | `src/components/Entry.astro` |
 | Scroll-spy nav | `src/components/Sidebar.astro` (inline `<script>`) |
 | Word of the day | `src/components/Footer.astro` (inline `<script>`) |
 | `[text](url)` link rendering for content strings | `src/lib/md.js` |
 
-Updating the resume means editing `src/content/` and nothing else. Role and
+Updating the resume means editing `src/content/` — with one deliberate
+exception: the hero's text is literal markup in `Entry.astro`. Role and
 project descriptions support Markdown-style `[text](url)` links (converted at
 build time; external links get `target`/`rel` automatically) plus literal
 `<em>`/`<br />` where needed.

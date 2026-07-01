@@ -1,20 +1,19 @@
----
-import { hero } from '../content/site.js'
----
-
+<!-- The hero is the site's one hand-rolled dictionary entry: its text lives
+     here rather than in src/content/ so it can be literal, readable markup. -->
 <section id="home">
   <div class="entry">
     <!-- the interpunct spans must stay aria-hidden so screen readers hear
          "Sammy Taubman", not the syllable breaks -->
     <h1 class="headword">
       Sam<span aria-hidden="true">·</span>my Taub<span aria-hidden="true">·</span>man
-      <span class="pos">{hero.pos}</span>
+      <span class="pos">n. proper</span>
     </h1>
 
     <p class="definitions">
-      {hero.definitions.map((def, i) => (
-        <><span class="num">{i + 1}.</span> {def}{' '}</>
-      ))}
+      <span class="num">1.</span> a software engineer at Stripe, helping agents pay for things
+      <span class="num">2.</span> a programmer with 10 years of experience who is passionate about learning how things work
+      <span class="num">3.</span> a former Georgia Tech student and current Georgia Tech football fan
+      <span class="num">4.</span> a lover of word games, especially Scrabble
     </p>
   </div>
 </section>

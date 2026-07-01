@@ -1,13 +1,7 @@
-// Site-wide content: head metadata, the section index (which drives both the
-// sidebar and each section's dictionary-entry header), the hero definitions,
-// and the contact links. Components render this; edit here to change the site.
-
-export const meta = {
-  title: 'Sammy Taubman',
-  description: 'Sammy Taubman — a software engineer at Stripe, helping agents pay for things.',
-  url: 'https://staubman.vercel.app/',
-  ogImage: 'https://staubman.vercel.app/og-image.png',
-}
+// Site-wide content: the section index (which drives both the sidebar and
+// each section's dictionary-entry header) and the contact links. The hero's
+// text and the head metadata are deliberately NOT here — they live inline in
+// Entry.astro and index.astro.
 
 export const sections = [
   { id: 'home', label: 'Home' }, // hero — rendered by Entry.astro, not Section.astro
@@ -17,16 +11,6 @@ export const sections = [
 ]
 
 export const getSection = (id) => sections.find((s) => s.id === id)
-
-export const hero = {
-  pos: 'n. proper',
-  definitions: [
-    'a software engineer at Stripe, helping agents pay for things',
-    'a programmer with 10 years of experience who is passionate about learning how things work',
-    'a former Georgia Tech student and current Georgia Tech football fan',
-    'a lover of word games, especially Scrabble',
-  ],
-}
 
 export const contact = [
   { label: 'Email', href: 'mailto:staubman1@gmail.com', display: 'staubman1@gmail.com' },
