@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import styles from './Footer.module.css'
+// Scrabble word-of-the-day data and helpers. Imported both at build time (to
+// bake a fallback word into the static HTML) and by the footer's client
+// script (to show the word for the visitor's actual date).
 
-const words = [
+export const words = [
   { text: 'AA', def: 'rough, cindery lava.' },
   { text: 'ZA', def: 'a pizza.' },
   { text: 'QI', def: 'the vital force that in Chinese thought is inherent in all things.' },
@@ -50,7 +51,7 @@ const LETTER_SCORES = {
   U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10,
 }
 
-function scrabbleScore(text) {
+export function scrabbleScore(text) {
   return [...text.toUpperCase()].reduce((sum, letter) => sum + (LETTER_SCORES[letter] ?? 0), 0)
 }
 
@@ -65,29 +66,6 @@ function hashDate(date) {
   return Math.abs(hash)
 }
 
-export default function Footer() {
-  // The prerendered HTML has to match the client's first paint exactly, and
-  // the build date usually differs from the visitor's date — so the initial
-  // render uses constants and the date-based values swap in after mount.
-  const [word, setWord] = useState(words[0])
-  const [year, setYear] = useState(2026)
-
-  useEffect(() => {
-    setWord(words[hashDate(new Date()) % words.length])
-    setYear(new Date().getFullYear())
-  }, [])
-
-  return (
-    <footer className={styles.footer}>
-      <div className={styles.line}>
-        <p className={styles.label}>Scrabble word of the day:</p>
-        <p className={styles.row}>
-          <span className={styles.word}>{word.text}</span>{' '}
-          <span className={styles.score}>({scrabbleScore(word.text)})</span>{' '}
-          <span className={styles.def}>{word.def}</span>
-        </p>
-        <p className={styles.copy}>&copy; {year} Sammy Taubman</p>
-      </div>
-    </footer>
-  )
+export function wordOfTheDay(date = new Date()) {
+  return words[hashDate(date) % words.length]
 }

@@ -1,0 +1,34 @@
+---
+// A headword styled like a dictionary entry: the word (written inline with
+// interpunct dots) followed by an italic part-of-speech tag. Size is driven by
+// the --headword-size custom property, so a caller can scale it up (e.g. the
+// hero) just by setting that property in its own CSS.
+const { pos, as: Tag = 'h2' } = Astro.props
+---
+
+<Tag class="headword"><slot />{pos && <span class="pos"> {pos}</span>}</Tag>
+
+<style>
+  .headword {
+    /* default section size; callers can scale up via --headword-size */
+    font-size: var(--headword-size, clamp(1.75rem, 4vw, 2.75rem));
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    color: var(--headword-color, var(--color-accent));
+  }
+
+  /* the syllable-break interpuncts — a gold fleck in every section title.
+     They arrive through the slot, so they carry the caller's style scope. */
+  .headword :global([aria-hidden='true']) {
+    color: var(--color-accent);
+  }
+
+  .pos {
+    margin-left: 0.35em;
+    font-size: 0.45em;   /* relative, so it scales with the headword */
+    font-weight: 400;
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+</style>
