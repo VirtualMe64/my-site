@@ -76,8 +76,8 @@ export default function Footer() {
           <span className={styles.score}>({scrabbleScore(word.text)})</span>{' '}
           <span className={styles.def}>{word.def}</span>
         </p>
+        <p className={styles.copy}>&copy; {new Date().getFullYear()} Sammy Taubman</p>
       </div>
-      <p className={styles.copy}>&copy; {new Date().getFullYear()} Sammy Taubman</p>
     </footer>
   )
 }
