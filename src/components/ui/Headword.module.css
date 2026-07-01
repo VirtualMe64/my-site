@@ -1,6 +1,6 @@
 .headword {
   /* default section size; callers can scale up via --headword-size */
-  font-size: var(--headword-size, clamp(1.75rem, 4vw, 2.75rem));
+  font-size: var(--headword-size, 1.4rem);
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: 0.01em;
@@ -14,7 +14,7 @@
 
 .pos {
   margin-left: 0.35em;
-  font-size: 0.45em;   /* relative, so it scales with the headword */
+  font-size: 0.5em;   /* relative, so it scales with the headword */
   font-weight: 400;
   font-style: italic;
   color: var(--color-text-muted);

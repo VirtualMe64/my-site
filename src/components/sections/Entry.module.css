@@ -1,6 +1,6 @@
 .entry {
   max-width: 60rem;
-  --headword-size: 2.5rem;
+  --headword-size: 2rem;
   --headword-color: var(--color-accent);
 }
 

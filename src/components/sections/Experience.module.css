@@ -16,7 +16,7 @@
 }
 
 .company {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -28,13 +28,13 @@
 }
 
 .meta {
-  font-size: 1rem;
+  font-size: 0.78rem;
   font-style: italic;
   color: var(--color-text-muted);
 }
 
 .roleDesc {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .roleDesc a {
@@ -50,10 +50,9 @@
 
 @media (max-width: 640px) {
   .company {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
-  .meta,
   .roleDesc {
     font-size: 0.85rem;
   }

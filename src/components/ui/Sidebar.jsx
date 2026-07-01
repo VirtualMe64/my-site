@@ -12,19 +12,25 @@ const links = [
 export default function Sidebar({ active }) {
   return (
     <nav className={styles.sidebar} aria-label="Primary">
-      <ul className={styles.list}>
-        {links.map((link) => (
-          <li key={link.id}>
-            <a
-              href={`#${link.id}`}
-              className={active === link.id ? styles.active : styles.link}
-              aria-current={active === link.id ? 'true' : undefined}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div className={styles.rail}>
+        <div className={styles.identity}>
+          <a href="#home" className={styles.name}>Sammy Taubman</a>
+          <p className={styles.tag}>software engineer</p>
+        </div>
+        <ul className={styles.list}>
+          {links.map((link) => (
+            <li key={link.id}>
+              <a
+                href={`#${link.id}`}
+                className={active === link.id ? styles.active : styles.link}
+                aria-current={active === link.id ? 'true' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }

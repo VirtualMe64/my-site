@@ -49,19 +49,19 @@
 }
 
 .name {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
 .pos {
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-style: italic;
   color: var(--color-text-muted);
 }
 
 .def {
   font-weight: 300;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   line-height: 1.5;
   flex: 1;
 }
@@ -85,14 +85,14 @@
 
 .stack {
   width: 50%;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
   font-style: italic;
 }
 
 .seeAlso {
   width: 50%;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-style: italic;
   color: var(--color-text-muted);
   text-align: right;

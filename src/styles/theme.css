@@ -8,9 +8,9 @@
 
 :root {
   /* ---- color ---- */
-  --color-bg: #162013;          /* deep forest green */
+  --color-bg: #0e100f;          /* near-black (faint green undertone) */
   --color-text: #e8efe6;        /* light sage white */
-  --color-text-muted: #7a927a;  /* muted sage */
+  --color-text-muted: #8c8c86;  /* neutral grey */
   --color-rule: rgba(232, 239, 230, 0.3);
   --color-accent: #e8c860;      /* warm yellow-gold */
   /* ---- type ---- */
