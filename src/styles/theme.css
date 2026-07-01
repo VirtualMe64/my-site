@@ -1,20 +1,23 @@
 /*
  * theme.css — shared design tokens.
  *
- * Only values that are reused across components (or that you'll want to tweak
- * globally) live here: colors, the font, and the page padding. One-off values
- * stay inline in the component that uses them.
+ * Experiment: near-monochrome palette + monospace-forward type, inspired by
+ * gholtz.app / zang.dev. Gold is kept as the single accent, used sparingly.
  */
 
 :root {
-  /* ---- color ---- */
-  --color-bg: #162013;          /* deep forest green */
-  --color-text: #e8efe6;        /* light sage white */
-  --color-text-muted: #7a927a;  /* muted sage */
-  --color-rule: rgba(232, 239, 230, 0.3);
-  --color-accent: #e8c860;      /* warm yellow-gold */
+  /* ---- color: near-monochrome, one accent ---- */
+  --color-bg: #0e100f;          /* near-black with a faint green undertone */
+  --color-text: #e7e9e5;        /* off-white */
+  --color-text-muted: #869187;  /* muted gray-green (secondary text) */
+  --color-rule: rgba(231, 233, 229, 0.12);
+  --color-accent: #e8c860;      /* gold — the ONE accent, used sparingly */
+
   /* ---- type ---- */
-  --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* kept as an alias so nothing breaks if a stray reference remains */
+  --font-serif: var(--font-mono);
 
   /* ---- shared layout ---- */
   --page-padding: 2rem;         /* outer padding, sidebar + main */

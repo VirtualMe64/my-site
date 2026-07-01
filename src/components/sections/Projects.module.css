@@ -3,12 +3,15 @@
 }
 
 .gloss {
-  margin-top: 1rem;
-  font-weight: 300;
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
 }
 
 .grid {
-  margin-top: 1rem;
+  margin-top: 2rem;
   position: relative;
   border-bottom: 1px solid var(--color-rule);
 }
@@ -49,20 +52,32 @@
 }
 
 .name {
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
+/* part-of-speech rendered as a technical annotation: [n.] */
 .pos {
-  font-size: 0.85rem;
-  font-style: italic;
+  font-family: var(--font-mono);
+  margin-left: 0.4em;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
 }
 
+.pos::before {
+  content: '[';
+}
+
+.pos::after {
+  content: ']';
+}
+
 .def {
-  font-weight: 300;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--color-text);
   flex: 1;
 }
 
@@ -80,20 +95,19 @@
 .cardFoot {
   display: flex;
   align-items: baseline;
-  margin-top: 0.25rem;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
 .stack {
   width: 50%;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
-  font-style: italic;
 }
 
 .seeAlso {
   width: 50%;
-  font-size: 0.85rem;
-  font-style: italic;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
   text-align: right;
 }

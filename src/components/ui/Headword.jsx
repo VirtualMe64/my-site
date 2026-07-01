@@ -8,7 +8,7 @@ export default function Headword({ children, pos, as: Tag = 'h2' }) {
   return (
     <Tag className={styles.headword}>
       {children}
-      {pos && <span className={styles.pos}> {pos}</span>}
+      {pos && <span className={styles.pos}>{pos}</span>}
     </Tag>
   )
 }

@@ -1,21 +1,30 @@
 .headword {
+  font-family: var(--font-mono);
   /* default section size; callers can scale up via --headword-size */
-  font-size: var(--headword-size, clamp(1.75rem, 4vw, 2.75rem));
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: 0.01em;
-  color: var(--headword-color, var(--color-accent));
+  font-size: var(--headword-size, 1.4rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--headword-color, var(--color-text));
 }
 
-/* the syllable-break interpuncts — a gold fleck in every section title */
+/* the syllable-break interpuncts — a small gold fleck in each title */
 .headword [aria-hidden='true'] {
   color: var(--color-accent);
 }
 
+/* part-of-speech tag, rendered like a technical annotation: [n.] */
 .pos {
-  margin-left: 0.35em;
-  font-size: 0.45em;   /* relative, so it scales with the headword */
-  font-weight: 400;
-  font-style: italic;
+  margin-left: 0.5em;
+  font-size: 0.5em;
+  font-weight: 500;
   color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.pos::before {
+  content: '[';
+}
+
+.pos::after {
+  content: ']';
 }

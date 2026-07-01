@@ -1,16 +1,19 @@
 .entry {
   max-width: 60rem;
-  --headword-size: 2.5rem;
-  --headword-color: var(--color-accent);
+  --headword-size: 2rem;
+  --headword-color: var(--color-accent);   /* the hero name — the one big gold moment */
 }
 
 .definitions {
-  max-width: 40rem;
-  margin-top: 1rem;
-  font-weight: 300;
+  font-family: var(--font-sans);
+  max-width: 42rem;
+  margin-top: 1.25rem;
+  font-weight: 400;
+  color: var(--color-text);
 }
 
 .num {
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-weight: 500;
   color: var(--color-accent);
 }

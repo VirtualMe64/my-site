@@ -3,38 +3,46 @@
 }
 
 .gloss {
-  margin-top: .5rem;
-  font-weight: 300;
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
 }
 
 .roles {
   list-style: none;
-  margin-top: 2rem;
+  margin-top: 2.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
 }
 
 .company {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.company a {
+  transition: color 0.2s ease;
 }
 
 .company a:hover {
   color: var(--color-accent);
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 3px;
 }
 
 .meta {
-  font-size: 1rem;
-  font-style: italic;
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
   color: var(--color-text-muted);
 }
 
 .roleDesc {
-  font-size: 1rem;
+  font-family: var(--font-sans);
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  color: var(--color-text);
 }
 
 .roleDesc a {
@@ -50,10 +58,9 @@
 
 @media (max-width: 640px) {
   .company {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
-  .meta,
   .roleDesc {
     font-size: 0.85rem;
   }
