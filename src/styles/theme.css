@@ -8,11 +8,11 @@
 
 :root {
   /* ---- color ---- */
-  --color-bg: #0e100f;          /* near-black (faint green undertone) */
-  --color-text: #e8efe6;        /* light sage white */
-  --color-text-muted: #8c8c86;  /* neutral grey */
+  --color-bg: #1a1e1a;          /* deep forest green */
+  --color-text: #e0e4e0;        /* light sage white */
+  --color-text-muted: #8a9a8d;  /* neutral grey */
   --color-rule: rgba(232, 239, 230, 0.3);
-  --color-accent: #e8c860;      /* warm yellow-gold */
+  --color-accent: #8bc493;      /* warm yellow-gold */
   /* ---- type ---- */
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
 
