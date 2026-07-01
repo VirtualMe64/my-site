@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import styles from './Footer.module.css'
 
 const words = [
@@ -64,9 +65,18 @@ function hashDate(date) {
   return Math.abs(hash)
 }
 
-const word = words[hashDate(new Date()) % words.length]
-
 export default function Footer() {
+  // The prerendered HTML has to match the client's first paint exactly, and
+  // the build date usually differs from the visitor's date — so the initial
+  // render uses constants and the date-based values swap in after mount.
+  const [word, setWord] = useState(words[0])
+  const [year, setYear] = useState(2026)
+
+  useEffect(() => {
+    setWord(words[hashDate(new Date()) % words.length])
+    setYear(new Date().getFullYear())
+  }, [])
+
   return (
     <footer className={styles.footer}>
       <div className={styles.line}>
@@ -76,7 +86,7 @@ export default function Footer() {
           <span className={styles.score}>({scrabbleScore(word.text)})</span>{' '}
           <span className={styles.def}>{word.def}</span>
         </p>
-        <p className={styles.copy}>&copy; {new Date().getFullYear()} Sammy Taubman</p>
+        <p className={styles.copy}>&copy; {year} Sammy Taubman</p>
       </div>
     </footer>
   )
