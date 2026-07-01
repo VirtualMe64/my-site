@@ -1,0 +1,96 @@
+---
+import { words, scrabbleScore } from '../data/scrabble.js'
+
+// The static HTML gets a deterministic fallback word (and the build-time
+// year); the client script below swaps in the values for the visitor's date.
+const fallback = words[0]
+const year = new Date().getFullYear()
+---
+
+<footer class="footer">
+  <div class="line">
+    <p class="label">Scrabble word of the day:</p>
+    <p class="row">
+      <span class="word" data-word>{fallback.text}</span>
+      <span class="score" data-score>({scrabbleScore(fallback.text)})</span>
+      <span class="def" data-def>{fallback.def}</span>
+    </p>
+    <p class="copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
+  </div>
+</footer>
+
+<script>
+  import { wordOfTheDay, scrabbleScore } from '../data/scrabble.js'
+
+  const word = wordOfTheDay()
+  document.querySelector('[data-word]').textContent = word.text
+  document.querySelector('[data-score]').textContent = `(${scrabbleScore(word.text)})`
+  document.querySelector('[data-def]').textContent = word.def
+  document.querySelector('[data-year]').textContent = String(new Date().getFullYear())
+</script>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-rule);
+    padding: var(--page-padding);
+    min-height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .label {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .word {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .score {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .def {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+
+  .copy {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .label,
+    .word,
+    .score,
+    .def,
+    .copy {
+      font-size: 0.85rem;
+    }
+  }
+</style>

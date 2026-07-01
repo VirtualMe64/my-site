@@ -1,0 +1,77 @@
+---
+import '../styles/global.css'
+import Sidebar from '../components/Sidebar.astro'
+import Footer from '../components/Footer.astro'
+import Entry from '../components/Entry.astro'
+import Experience from '../components/Experience.astro'
+import Projects from '../components/Projects.astro'
+import Contact from '../components/Contact.astro'
+
+const description = 'Sammy Taubman — a software engineer at Stripe, helping agents pay for things.'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Sammy Taubman</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Twitter (link previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sammy Taubman" />
+    <meta property="og:url" content="https://staubman.vercel.app/" />
+    <meta property="og:title" content="Sammy Taubman" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://staubman.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sammy Taubman" />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://staubman.vercel.app/og-image.png" />
+
+    <!-- Hanuman: serif used throughout the site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanuman:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="page">
+      <Sidebar />
+      <main>
+        <Entry />
+        <Experience />
+        <Projects />
+        <Contact />
+      </main>
+    </div>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Top-level page layout: sticky sidebar + stacked full-height sections. */
+  .page {
+    display: flex;
+    align-items: flex-start;   /* let the sidebar stick instead of stretching */
+    min-height: 100dvh;
+  }
+
+  main {
+    flex: 1;
+    min-width: 0;              /* allow content to shrink instead of overflow */
+  }
+
+  @media (max-width: 640px) {
+    .page {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

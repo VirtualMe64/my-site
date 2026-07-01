@@ -5,6 +5,9 @@ node_modules
 dist
 dist-ssr
 
+# astro generated types
+.astro
+
 # logs
 *.log
 npm-debug.log*
