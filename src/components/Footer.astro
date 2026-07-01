@@ -56,41 +56,31 @@ const year = new Date().getFullYear()
   }
 
   .label {
-    font-size: 1rem;
+    font-size: var(--text-base);
     color: var(--color-text-muted);
   }
 
   .word {
-    font-size: 1rem;
+    font-size: var(--text-base);
     font-weight: 700;
     color: var(--color-accent);
   }
 
   .score {
-    font-size: 1rem;
+    font-size: var(--text-base);
     font-weight: 400;
     color: var(--color-text-muted);
   }
 
   .def {
-    font-size: 1rem;
+    font-size: var(--text-base);
     font-style: italic;
     color: var(--color-text-muted);
   }
 
   .copy {
     margin-top: 1rem;
-    font-size: 1rem;
+    font-size: var(--text-base);
     color: var(--color-text-muted);
-  }
-
-  @media (max-width: 640px) {
-    .label,
-    .word,
-    .score,
-    .def,
-    .copy {
-      font-size: 0.85rem;
-    }
   }
 </style>
