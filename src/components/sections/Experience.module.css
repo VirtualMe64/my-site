@@ -21,6 +21,7 @@
 }
 
 .company a:hover {
+  color: var(--color-accent);
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 3px;
@@ -40,6 +41,11 @@
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.roleDesc a:hover {
+  color: var(--color-accent);
 }
 
 @media (max-width: 640px) {

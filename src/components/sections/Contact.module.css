@@ -30,9 +30,11 @@
 
 .row a {
   font-size: 1rem;
+  transition: color 0.2s ease;
 }
 
 .row a:hover {
+  color: var(--color-accent);
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 3px;

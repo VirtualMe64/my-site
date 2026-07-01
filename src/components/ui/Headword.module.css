@@ -4,7 +4,12 @@
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: 0.01em;
-  color: var(--headword-color, var(--color-text));
+  color: var(--headword-color, var(--color-accent));
+}
+
+/* the syllable-break interpuncts — a gold fleck in every section title */
+.headword [aria-hidden='true'] {
+  color: var(--color-accent);
 }
 
 .pos {
