@@ -1,39 +1,22 @@
 ---
-import Headword from './Headword.astro'
-import { contact } from '../content/site.js'
+import Section from './Section.astro'
+import { getSection, contact } from '../content/site.js'
 ---
 
-<section id="contact">
-  <div class="contact">
-    <Headword pos="n.">
-      con<span aria-hidden="true">·</span>tact
-    </Headword>
-
-    <p class="gloss">ways to reach me.</p>
-
-    <ul class="links">
-      {contact.map((link) => (
-        <li class="row">
-          <span class="label">{link.label}</span>
-          <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-            {link.display}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
-</section>
+<Section {...getSection('contact')}>
+  <ul class="links">
+    {contact.map((link) => (
+      <li class="row">
+        <span class="label">{link.label}</span>
+        <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
+          {link.display}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Section>
 
 <style>
-  .contact {
-    max-width: 60rem;
-  }
-
-  .gloss {
-    margin-top: .5rem;
-    font-weight: 300;
-  }
-
   .links {
     list-style: none;
     margin-top: 2rem;
@@ -57,14 +40,6 @@ import { contact } from '../content/site.js'
 
   .row a {
     font-size: var(--text-base);
-    transition: color 0.2s ease;
-  }
-
-  .row a:hover {
-    color: var(--color-accent);
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
   }
 
   @media (max-width: 640px) {

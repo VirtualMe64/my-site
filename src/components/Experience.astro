@@ -1,39 +1,23 @@
 ---
-import Headword from './Headword.astro'
+import Section from './Section.astro'
+import { getSection } from '../content/site.js'
 import { roles } from '../content/roles.js'
 import { md } from '../lib/md.js'
 ---
 
-<section id="experience">
-  <div class="experience">
-    <Headword pos="n.">
-      ex<span aria-hidden="true">·</span>pe<span aria-hidden="true">·</span>ri<span aria-hidden="true">·</span>ence
-    </Headword>
-
-    <p class="gloss">places i've worked.</p>
-
-    <ol class="roles">
-      {roles.map((role) => (
-        <li>
-          <p class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></p>
-          <p class="meta">{role.title}<span aria-hidden="true"> · </span>{role.dates}</p>
-          <p class="roleDesc" set:html={md(role.description)} />
-        </li>
-      ))}
-    </ol>
-  </div>
-</section>
+<Section {...getSection('experience')}>
+  <ol class="roles">
+    {roles.map((role) => (
+      <li>
+        <p class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></p>
+        <p class="meta">{role.title}<span aria-hidden="true"> · </span>{role.dates}</p>
+        <p class="roleDesc" set:html={md(role.description)} />
+      </li>
+    ))}
+  </ol>
+</Section>
 
 <style>
-  .experience {
-    max-width: 60rem;
-  }
-
-  .gloss {
-    margin-top: .5rem;
-    font-weight: 300;
-  }
-
   .roles {
     list-style: none;
     margin-top: 2rem;
@@ -47,14 +31,6 @@ import { md } from '../lib/md.js'
     font-weight: 700;
   }
 
-  /* link markup comes from set:html, so it needs :global */
-  .company :global(a:hover) {
-    color: var(--color-accent);
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
-  }
-
   .meta {
     font-size: var(--text-base);
     font-style: italic;
@@ -65,14 +41,11 @@ import { md } from '../lib/md.js'
     font-size: var(--text-base);
   }
 
+  /* description links are underlined at rest; hover styling is global.
+     :global because the markup comes from set:html */
   .roleDesc :global(a) {
     text-decoration: underline;
     text-decoration-style: dotted;
     text-underline-offset: 3px;
-    transition: color 0.2s ease;
-  }
-
-  .roleDesc :global(a:hover) {
-    color: var(--color-accent);
   }
 </style>
