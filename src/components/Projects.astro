@@ -173,19 +173,19 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
   }
 
   .name {
-    font-size: 1.05rem;
+    font-size: var(--text-md);
     font-weight: 700;
   }
 
   .pos {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-style: italic;
     color: var(--color-text-muted);
   }
 
   .def {
     font-weight: 300;
-    font-size: 0.95rem;
+    font-size: var(--text-base);
     line-height: 1.5;
     flex: 1;
   }
@@ -210,14 +210,14 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
 
   .stack {
     width: 50%;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
     font-style: italic;
   }
 
   .seeAlso {
     width: 50%;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-style: italic;
     color: var(--color-text-muted);
     text-align: right;
@@ -236,10 +236,6 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
   }
 
   @media (max-width: 640px) {
-    .def {
-      font-size: 0.85rem;
-    }
-
     .grid::before {
       display: none;
     }

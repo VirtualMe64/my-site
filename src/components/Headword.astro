@@ -10,8 +10,8 @@ const { pos, as: Tag = 'h2' } = Astro.props
 
 <style>
   .headword {
-    /* default section size; callers can scale up via --headword-size */
-    font-size: var(--headword-size, clamp(1.75rem, 4vw, 2.75rem));
+    /* sized from theme.css; callers can scale up via --headword-size */
+    font-size: var(--headword-size);
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: 0.01em;
