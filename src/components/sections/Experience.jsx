@@ -4,8 +4,8 @@ import styles from './Experience.module.css'
 const a = (text, href) => <a href={href} target="_blank" rel="noreferrer">{text}</a>
 
 const roles = [
-    {company: "Stripe", url: "https://stripe.com", title: "Software Engineer", dates: "August 2026 - Present",
-      description: <>(Will soon be) working on {a('agentic payments', 'https://docs.stripe.com/agentic-commerce')}</>},
+    {company: "Stripe", url: "https://stripe.com", title: "Software Engineer", dates: "Incoming August 2026",
+      description: <>Will be working on {a('agentic payments', 'https://docs.stripe.com/agentic-commerce')}</>},
     {company: "Georgia Tech", url: "https://www.cc.gatech.edu/", title: "Graduate Teaching Assistant", dates: "August 2025 - May 2026",
       description: <>Taught students about {a('graduate-level algorithms', 'https://omscs.gatech.edu/cs-6515-intro-graduate-algorithms')} and {a('introductory robotics', 'https://dellaert.github.io/25F-3630/')}</>},
     {company: "Stripe", url: "https://stripe.com", title: "Software Engineering Intern", dates: "May 2025 - August 2025",
