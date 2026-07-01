@@ -1,0 +1,37 @@
+---
+import Headword from './Headword.astro'
+---
+
+<section id="home">
+  <div class="entry">
+    <Headword as="h1" pos="n. proper">
+      Sam<span aria-hidden="true">·</span>my Taub<span aria-hidden="true">·</span>man
+    </Headword>
+
+    <p class="definitions">
+      <span class="num">1.</span> a software engineer at Stripe, helping agents pay for things
+      <span class="num">2.</span> a programmer with 10 years of experience who is passionate about learning how things work
+      <span class="num">3.</span> a former Georgia Tech student and current Georgia Tech football fan
+      <span class="num">4.</span> a lover of word games, especially Scrabble
+    </p>
+  </div>
+</section>
+
+<style>
+  .entry {
+    max-width: 60rem;
+    --headword-size: 2.5rem;
+    --headword-color: var(--color-accent);
+  }
+
+  .definitions {
+    max-width: 40rem;
+    margin-top: 1rem;
+    font-weight: 300;
+  }
+
+  .num {
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+</style>

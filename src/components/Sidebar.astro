@@ -1,0 +1,142 @@
+---
+// Local to the component (not a separate content file) so the nav and its
+// scroll-spy script stay in one readable place.
+const links = [
+  { id: 'home', label: 'Home' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'contact', label: 'Contact' },
+]
+---
+
+<nav class="sidebar" aria-label="Primary">
+  <ul class="list">
+    {links.map((link, i) => (
+      <li>
+        <a
+          href={`#${link.id}`}
+          class:list={['link', { active: i === 0 }]}
+          aria-current={i === 0 ? 'true' : undefined}
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  // Scroll-spy: highlight the link whose section crosses a thin band across
+  // the middle of the viewport.
+  const links = [...document.querySelectorAll('nav[aria-label="Primary"] a[href^="#"]')]
+
+  function setActive(id) {
+    for (const link of links) {
+      const active = link.getAttribute('href') === `#${id}`
+      link.classList.toggle('active', active)
+      if (active) link.setAttribute('aria-current', 'true')
+      else link.removeAttribute('aria-current')
+    }
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setActive(entry.target.id)
+      }
+    },
+    { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
+  )
+
+  for (const link of links) {
+    const section = document.querySelector(link.getAttribute('href'))
+    if (section) observer.observe(section)
+  }
+</script>
+
+<style>
+  .sidebar {
+    align-self: stretch;          /* full page height so the list can travel */
+    flex: 0 0 12rem;
+    position: relative;
+    padding: var(--page-padding);
+  }
+
+  /* the vertical divider — inset from the top, flush with the bottom */
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    top: 4rem;
+    bottom: 0;
+    right: 0;
+    width: 1px;
+    background: var(--color-rule);
+  }
+
+  .list {
+    position: sticky;
+    top: 4rem;
+    margin-top: calc(50dvh - 8rem); /* start roughly centered in the hero */
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .link {
+    display: inline-block;
+    font-size: 1.125rem;
+    color: var(--color-text);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    color: var(--color-accent);
+  }
+
+  /* the section currently in view */
+  .link.active {
+    color: var(--color-accent);
+    font-weight: 700;
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link {
+      transition: color 0.2s ease;
+    }
+    .link.active {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sidebar {
+      flex: none;
+      width: 100%;
+      align-self: auto;
+      position: static;
+      padding: 1rem var(--page-padding) .75rem;
+      border-bottom: 1px solid var(--color-rule);
+    }
+
+    .sidebar::after {
+      display: none;
+    }
+
+    .list {
+      position: static;
+      flex-direction: row;
+      margin-top: 0;
+      gap: 1.5rem;
+    }
+
+    .link,
+    .link.active {
+      font-size: 0.95rem;
+      font-weight: 700;
+      transform: none;
+    }
+  }
+</style>
