@@ -1,44 +1,22 @@
 ---
-import Headword from './Headword.astro'
-
-const links = [
-  { label: 'Email', href: 'mailto:staubman1@gmail.com', display: 'staubman1@gmail.com' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sammytaubman/', display: 'linkedin.com/in/sammytaubman' },
-  { label: 'GitHub', href: 'https://github.com/VirtualMe64', display: 'github.com/VirtualMe64' },
-]
+import Section from './Section.astro'
+import { getSection, contact } from '../content/site.js'
 ---
 
-<section id="contact">
-  <div class="contact">
-    <Headword pos="n.">
-      con<span aria-hidden="true">·</span>tact
-    </Headword>
-
-    <p class="gloss">ways to reach me.</p>
-
-    <ul class="links">
-      {links.map((link) => (
-        <li class="row">
-          <span class="label">{link.label}</span>
-          <a href={link.href} target={link.href.startsWith('mailto:') ? undefined : '_blank'} rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}>
-            {link.display}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
-</section>
+<Section {...getSection('contact')}>
+  <ul class="links">
+    {contact.map((link) => (
+      <li class="row">
+        <span class="label">{link.label}</span>
+        <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
+          {link.display}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Section>
 
 <style>
-  .contact {
-    max-width: 60rem;
-  }
-
-  .gloss {
-    margin-top: .5rem;
-    font-weight: 300;
-  }
-
   .links {
     list-style: none;
     margin-top: 2rem;
@@ -55,31 +33,18 @@ const links = [
 
   .label {
     flex: 0 0 6rem;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-style: italic;
     color: var(--color-text-muted);
   }
 
   .row a {
-    font-size: 1rem;
-    transition: color 0.2s ease;
-  }
-
-  .row a:hover {
-    color: var(--color-accent);
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
+    font-size: var(--text-base);
   }
 
   @media (max-width: 640px) {
     .label {
       flex-basis: 4.5rem;
-      font-size: 0.75rem;
-    }
-
-    .row a {
-      font-size: 0.85rem;
     }
   }
 </style>

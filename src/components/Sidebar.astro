@@ -1,17 +1,12 @@
 ---
-// Local to the component (not a separate content file) so the nav and its
-// scroll-spy script stay in one readable place.
-const links = [
-  { id: 'home', label: 'Home' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'contact', label: 'Contact' },
-]
+// The nav derives from the same sections list that drives the section
+// headers, so the two can't fall out of sync.
+import { sections } from '../content/site.js'
 ---
 
 <nav class="sidebar" aria-label="Primary">
   <ul class="list">
-    {links.map((link, i) => (
+    {sections.map((link, i) => (
       <li>
         <a
           href={`#${link.id}`}
@@ -85,7 +80,7 @@ const links = [
 
   .link {
     display: inline-block;
-    font-size: 1.125rem;
+    font-size: var(--text-md);
     color: var(--color-text);
     transition: color 0.2s ease, transform 0.2s ease;
   }
@@ -134,7 +129,6 @@ const links = [
 
     .link,
     .link.active {
-      font-size: 0.95rem;
       font-weight: 700;
       transform: none;
     }

@@ -1,0 +1,27 @@
+---
+// A dictionary-entry section: headword (interpunct dots split from the ·s in
+// `word` and hidden from screen readers), part-of-speech tag, gloss line, and
+// the section body in the default slot. Always an <h2> — the hero is the one
+// exception and hand-rolls its <h1> in Entry.astro.
+const { id, word, pos, gloss } = Astro.props
+const parts = word.split('·')
+---
+
+<section id={id}>
+  <div class="inner">
+    <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span aria-hidden="true">·</span>}{part}</>)} <span class="pos">{pos}</span></h2>
+    <p class="gloss">{gloss}</p>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .inner {
+    max-width: 60rem;
+  }
+
+  .gloss {
+    margin-top: 0.5rem;
+    font-weight: 300;
+  }
+</style>
