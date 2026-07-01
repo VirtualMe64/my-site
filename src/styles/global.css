@@ -39,6 +39,35 @@ a {
   text-decoration: none;
 }
 
+/* content links (everything under <main>): accent + dotted underline on hover */
+main a {
+  transition: color 0.2s ease;
+}
+
+main a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+/* dictionary headwords — shared by the hero's h1 and Section's h2s */
+.headword {
+  font-size: var(--headword-size);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--color-accent);
+}
+
+.headword .pos {
+  margin-left: 0.35em;
+  font-size: 0.45em;   /* relative, so it scales with the headword */
+  font-weight: 400;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
 section {
   display: flex;
   flex-direction: column;

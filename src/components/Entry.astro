@@ -1,13 +1,15 @@
 ---
-import Headword from './Headword.astro'
 import { hero } from '../content/site.js'
 ---
 
 <section id="home">
   <div class="entry">
-    <Headword as="h1" pos={hero.pos}>
+    <!-- the interpunct spans must stay aria-hidden so screen readers hear
+         "Sammy Taubman", not the syllable breaks -->
+    <h1 class="headword">
       Sam<span aria-hidden="true">·</span>my Taub<span aria-hidden="true">·</span>man
-    </Headword>
+      <span class="pos">{hero.pos}</span>
+    </h1>
 
     <p class="definitions">
       {hero.definitions.map((def, i) => (
@@ -21,7 +23,6 @@ import { hero } from '../content/site.js'
   .entry {
     max-width: 60rem;
     --headword-size: var(--headword-size-hero);
-    --headword-color: var(--color-accent);
   }
 
   .definitions {
