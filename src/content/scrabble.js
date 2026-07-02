@@ -55,10 +55,14 @@ export function scrabbleScore(text) {
   return [...text.toUpperCase()].reduce((sum, letter) => sum + (LETTER_SCORES[letter] ?? 0), 0)
 }
 
-// Deterministic pick based on the calendar date, so it changes once a day
-// but stays the same for everyone looking on a given day.
+// Deterministic pick based on the visitor's local calendar date, so the word
+// changes at their midnight (not UTC's) and stays the same all day.
 function hashDate(date) {
-  const str = date.toISOString().slice(0, 10)
+  const str = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-')
   let hash = 0
   for (let i = 0; i < str.length; i++) {
     hash = (hash * 31 + str.charCodeAt(i)) | 0
