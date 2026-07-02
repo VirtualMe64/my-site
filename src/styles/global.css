@@ -62,7 +62,7 @@ main a:hover {
 
 .headword .pos {
   margin-left: 0.35em;
-  font-size: 0.45em;   /* relative, so it scales with the headword */
+  font-size: 0.55em;   /* relative, so it scales with the headword */
   font-weight: 400;
   font-style: italic;
   color: var(--color-text-muted);
