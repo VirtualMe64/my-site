@@ -56,20 +56,23 @@ export function scrabbleScore(text) {
 }
 
 // Deterministic pick based on the visitor's local calendar date, so the word
-// changes at their midnight (not UTC's) and stays the same all day.
+// changes at their midnight (not UTC's) and stays the same all day. The date
+// integer goes through a bit mixer so consecutive days land on unrelated
+// words — a plain rolling string hash changes by exactly 1 per day, which
+// just walks the list in order.
 function hashDate(date) {
-  const str = [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, '0'),
-    String(date.getDate()).padStart(2, '0'),
-  ].join('-')
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash * 31 + str.charCodeAt(i)) | 0
-  }
-  return Math.abs(hash)
+  const n = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate()
+  let hash = Math.imul(n ^ (n >>> 16), 0x85ebca6b)
+  hash = Math.imul(hash ^ (hash >>> 13), 0xc2b2ae35)
+  hash ^= hash >>> 16
+  return hash >>> 0
 }
 
 export function wordOfTheDay(date = new Date()) {
-  return words[hashDate(date) % words.length]
+  const index = hashDate(date) % words.length
+  // avoid showing the same word two days in a row: if today's raw pick
+  // matches yesterday's, step forward one word
+  const yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1)
+  const previous = hashDate(yesterday) % words.length
+  return words[index === previous ? (index + 1) % words.length : index]
 }
