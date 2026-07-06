@@ -5,9 +5,12 @@ import { sections } from '../content/site.js'
 ---
 
 <nav class="sidebar" aria-label="Primary">
+  <a class="logo" href="#home" aria-label="Home">
+    <img src="/favicon.svg" alt="" width="28" height="28" />
+  </a>
   <ul class="list">
     {sections.map((link, i) => (
-      <li>
+      <li class:list={{ home: link.id === 'home' }}>
         <a
           href={`#${link.id}`}
           class:list={['link', { active: i === 0 }]}
@@ -22,8 +25,8 @@ import { sections } from '../content/site.js'
 
 <script>
   // Scroll-spy: highlight the link whose section crosses a thin band across
-  // the middle of the viewport.
-  const links = [...document.querySelectorAll('nav[aria-label="Primary"] a[href^="#"]')]
+  // the middle of the viewport. Scoped to .list so the logo link stays out.
+  const links = [...document.querySelectorAll('nav[aria-label="Primary"] .list a[href^="#"]')]
 
   function setActive(id) {
     for (const link of links) {
@@ -55,6 +58,16 @@ import { sections } from '../content/site.js'
     flex: 0 0 12rem;
     position: relative;
     padding: var(--page-padding);
+  }
+
+  /* desktop: hidden for now — top-left placement is still under evaluation
+     (see git history for the absolute-positioned version) */
+  .logo {
+    display: none;
+  }
+
+  .logo img {
+    display: block;
   }
 
   /* the vertical divider — inset from the top, flush with the bottom */
@@ -112,11 +125,28 @@ import { sections } from '../content/site.js'
       width: 100%;
       align-self: auto;
       position: static;
-      padding: 1rem var(--page-padding) .75rem;
+      padding: .875rem var(--page-padding);
       border-bottom: 1px solid var(--color-rule);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;   /* logo left, links right */
     }
 
     .sidebar::after {
+      display: none;
+    }
+
+    /* mobile: the tile IS the Home link — the text link hides to save width */
+    .logo {
+      display: block;
+    }
+
+    .logo img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .list .home {
       display: none;
     }
 
@@ -127,9 +157,10 @@ import { sections } from '../content/site.js'
       gap: 1.5rem;
     }
 
+    /* regular weight at rest so bold means "you are here" (the base
+       .link.active rule already bolds the active link) */
     .link,
     .link.active {
-      font-weight: 700;
       transform: none;
     }
   }
