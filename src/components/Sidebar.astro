@@ -60,29 +60,14 @@ import { sections } from '../content/site.js'
     padding: var(--page-padding);
   }
 
-  /* desktop: the logo mark sits in the page's top-left corner */
+  /* desktop: hidden for now — top-left placement is still under evaluation
+     (see git history for the absolute-positioned version) */
   .logo {
-    position: absolute;
-    top: var(--page-padding);
-    left: var(--page-padding);
-    display: block;
-    transition: transform 0.2s ease;
+    display: none;
   }
 
   .logo img {
     display: block;
-  }
-
-  .logo:hover,
-  .logo:focus-visible {
-    transform: scale(1.08);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .logo:hover,
-    .logo:focus-visible {
-      transform: none;
-    }
   }
 
   /* the vertical divider — inset from the top, flush with the bottom */
@@ -153,7 +138,7 @@ import { sections } from '../content/site.js'
 
     /* mobile: the tile IS the Home link — the text link hides to save width */
     .logo {
-      position: static;
+      display: block;
     }
 
     .logo img {
