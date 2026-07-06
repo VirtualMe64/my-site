@@ -5,6 +5,9 @@ import { sections } from '../content/site.js'
 ---
 
 <nav class="sidebar" aria-label="Primary">
+  <a class="logo" href="#home" aria-label="Home">
+    <img src="/favicon.svg" alt="" width="28" height="28" />
+  </a>
   <ul class="list">
     {sections.map((link, i) => (
       <li>
@@ -22,8 +25,8 @@ import { sections } from '../content/site.js'
 
 <script>
   // Scroll-spy: highlight the link whose section crosses a thin band across
-  // the middle of the viewport.
-  const links = [...document.querySelectorAll('nav[aria-label="Primary"] a[href^="#"]')]
+  // the middle of the viewport. Scoped to .list so the logo link stays out.
+  const links = [...document.querySelectorAll('nav[aria-label="Primary"] .list a[href^="#"]')]
 
   function setActive(id) {
     for (const link of links) {
@@ -55,6 +58,31 @@ import { sections } from '../content/site.js'
     flex: 0 0 12rem;
     position: relative;
     padding: var(--page-padding);
+  }
+
+  /* desktop: the logo mark sits in the page's top-left corner */
+  .logo {
+    position: absolute;
+    top: var(--page-padding);
+    left: var(--page-padding);
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .logo img {
+    display: block;
+  }
+
+  .logo:hover,
+  .logo:focus-visible {
+    transform: scale(1.08);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo:hover,
+    .logo:focus-visible {
+      transform: none;
+    }
   }
 
   /* the vertical divider — inset from the top, flush with the bottom */
@@ -114,10 +142,23 @@ import { sections } from '../content/site.js'
       position: static;
       padding: 1rem var(--page-padding) .75rem;
       border-bottom: 1px solid var(--color-rule);
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
     }
 
     .sidebar::after {
       display: none;
+    }
+
+    /* mobile: the logo joins the bar, left of the links */
+    .logo {
+      position: static;
+    }
+
+    .logo img {
+      width: 22px;
+      height: 22px;
     }
 
     .list {
