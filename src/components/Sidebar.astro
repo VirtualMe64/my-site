@@ -10,7 +10,7 @@ import { sections } from '../content/site.js'
   </a>
   <ul class="list">
     {sections.map((link, i) => (
-      <li>
+      <li class:list={{ home: link.id === 'home' }}>
         <a
           href={`#${link.id}`}
           class:list={['link', { active: i === 0 }]}
@@ -151,14 +151,18 @@ import { sections } from '../content/site.js'
       display: none;
     }
 
-    /* mobile: the logo joins the bar, left of the links */
+    /* mobile: the tile IS the Home link — the text link hides to save width */
     .logo {
       position: static;
     }
 
     .logo img {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .list .home {
+      display: none;
     }
 
     .list {
