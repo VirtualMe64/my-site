@@ -140,7 +140,7 @@ import { sections } from '../content/site.js'
       width: 100%;
       align-self: auto;
       position: static;
-      padding: 1rem var(--page-padding) .75rem;
+      padding: .875rem var(--page-padding);
       border-bottom: 1px solid var(--color-rule);
       display: flex;
       align-items: center;
@@ -172,9 +172,10 @@ import { sections } from '../content/site.js'
       gap: 1.5rem;
     }
 
+    /* regular weight at rest so bold means "you are here" (the base
+       .link.active rule already bolds the active link) */
     .link,
     .link.active {
-      font-weight: 700;
       transform: none;
     }
   }
