@@ -3,7 +3,8 @@
 A dictionary-inspired personal site, built with Astro as a fully static page.
 
 Each section is styled as a dictionary entry (headword + interpunct syllables +
-part-of-speech), stacked one viewport tall, with a sticky sidebar index. The
+part-of-speech), stacked one viewport tall, with a sidebar index pinned to the
+top left. The
 sections are Home, Experience, Projects, and Contact.
 
 ## Stack
