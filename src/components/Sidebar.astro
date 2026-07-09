@@ -125,11 +125,15 @@ import { sections } from '../content/site.js'
     color: var(--color-text);
   }
 
-  /* sized so the tiles optically match the nav links' cap height */
+  /* sized so the tiles optically match the nav links' cap height. the
+     nudge up compensates for text's visual center sitting above its
+     geometric center (caps up top, only a thin descender band below) —
+     a dead-centered mark reads as too low next to it */
   .logo svg {
     display: block;
     width: 3rem;
     height: auto;
+    transform: translateY(-2px);
   }
 
   .list {
