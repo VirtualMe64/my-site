@@ -12,6 +12,7 @@
   --color-text: #e8efe6;        /* light sage white */
   --color-text-muted: #7a927a;  /* muted sage */
   --color-rule: rgba(232, 239, 230, 0.3);
+  --color-wash: rgba(232, 239, 230, 0.045); /* faint hover background */
   --color-accent: #e8c860;      /* warm yellow-gold */
   /* ---- type ---- */
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
@@ -21,6 +22,7 @@
   --text-base: 1rem;       /* descriptions, links, footer text */
   --text-md: 1.125rem;     /* sidebar nav, project card titles */
   --text-lg: 1.2rem;       /* company names */
+  --text-xl: 1.5rem;       /* sidebar guide-word mark */
   --headword-size: clamp(1.75rem, 4vw, 2.75rem);
   --headword-size-hero: 2.5rem;
 
@@ -34,5 +36,13 @@
     --text-base: 0.85rem;
     --text-md: 0.95rem;
     --text-lg: 1rem;
+  }
+}
+
+/* desktop: the hero's h1 outranks the section headwords (still a constant,
+   just a bigger one at this breakpoint) */
+@media (min-width: 641px) {
+  :root {
+    --headword-size-hero: 3.25rem;
   }
 }

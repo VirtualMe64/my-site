@@ -34,7 +34,10 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
 
 <style>
   .grid {
-    margin-top: 1rem;
+    /* the grid (and its rules) extends 1rem past the text column on both
+       sides, so the hover wash ends where the rules do and the card text
+       stays aligned with the headword */
+    margin: 1rem -1rem 0;
     position: relative;
     border-bottom: 1px solid var(--color-rule);
   }
@@ -59,15 +62,34 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
   }
 
   .card {
-    padding: 1.5rem 2rem 1.5rem 0;
+    padding: 1.5rem 2rem 1.5rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
+  /* hovering a card highlights its entry, like running a finger down the page */
+  @media (hover: hover) {
+    .card {
+      transition: background-color 0.2s ease;
+    }
+
+    .name {
+      transition: color 0.2s ease;
+    }
+
+    .card:hover {
+      background-color: var(--color-wash);
+    }
+
+    .card:hover .name {
+      color: var(--color-accent);
+    }
+  }
+
   .card:nth-child(2) {
     padding-left: 2rem;
-    padding-right: 0;
+    padding-right: 1rem;
   }
 
   .name {
@@ -130,8 +152,14 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
       grid-template-columns: 1fr;
     }
 
+    .grid {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
     .card {
       padding-right: 0;
+      padding-left: 0;
     }
 
     .card:nth-child(2) {

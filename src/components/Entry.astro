@@ -9,11 +9,15 @@
       <span class="pos">n. proper</span>
     </h1>
 
-    <p class="definitions">
-      <span class="num">1.</span> a software engineer at Stripe, helping agents pay for things
-      <span class="num">2.</span> a programmer with 10 years of experience who is passionate about learning how things work
-      <span class="num">3.</span> a former Georgia Tech student and current Georgia Tech football fan
-      <span class="num">4.</span> a lover of word games, especially Scrabble
+    <ol class="definitions">
+      <li><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</li>
+      <li><span class="num">2.</span> a programmer with 10 years of experience who is passionate about learning how things work</li>
+      <li><span class="num">3.</span> a former Georgia Tech student and current Georgia Tech football fan</li>
+      <li><span class="num">4.</span> a lover of word games, especially Scrabble</li>
+    </ol>
+
+    <p class="seeAlso">
+      See also: <a href="#experience">experience</a>
     </p>
   </div>
 </section>
@@ -25,14 +29,56 @@
     --pos-size: 0.45em;   /* the hero headword is big enough already */
   }
 
+  /* desktop: each sense on its own line, numbers hanging in the margin */
   .definitions {
+    list-style: none;
     max-width: 40rem;
-    margin-top: 1rem;
+    margin-top: 1.25rem;
     font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .definitions li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;   /* wrapped lines align after the sense number */
+  }
+
+  /* mobile keeps the senses run together in one block, as before */
+  @media (max-width: 640px) {
+    .definitions {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .definitions li {
+      display: inline;
+      padding-left: 0;
+      text-indent: 0;
+    }
+
+    .definitions li + li::before {
+      content: ' ';
+      white-space: pre;
+    }
   }
 
   .num {
     font-weight: 700;
     color: var(--color-accent);
+  }
+
+  /* cross-reference — same size as the senses above, muted italic so it
+     still reads as an aside */
+  .seeAlso {
+    margin-top: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-text-muted);
+  }
+
+  .seeAlso a {
+    color: var(--color-text-muted);
   }
 </style>
