@@ -6,11 +6,24 @@ import { sections } from '../content/site.js'
 
 <nav class="sidebar" aria-label="Primary">
   <div class="rail">
-    <!-- desktop anchor: a guide-word mark — the name styled like a small
-         headword. the mobile bar keeps the tile instead (media query below) -->
-    <a href="#home" class="name">Sam<span aria-hidden="true">·</span>my</a>
-    <a class="logo" href="#home" aria-label="Home">
-      <img src="/favicon.svg" alt="" width="20" height="20" />
+    <!-- the brand link: the Scrabble-rack mark plus the guide-word name.
+         desktop shows both; mobile keeps just the rack (media query below).
+         the mark is inlined (not the favicon <img>) so its viewBox can crop
+         to the tiles and its fill can follow the link's hover color. -->
+    <a href="#home" class="brand" aria-label="Home">
+      <svg class="mark" viewBox="0 7.5 32 17.5" width="35" height="19" aria-hidden="true">
+        <g transform="rotate(-5 8.25 15.75)">
+          <rect x="1" y="8.5" width="14.5" height="14.5" rx="2.5" fill="currentColor"/>
+          <text x="7.9" y="15.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="700" fill="#162013">S</text>
+          <text x="14.1" y="21.6" text-anchor="end" font-family="Georgia, 'Times New Roman', serif" font-size="4.5" font-weight="700" fill="#162013">1</text>
+        </g>
+        <g transform="rotate(4 23.75 16.75)">
+          <rect x="16.5" y="9.5" width="14.5" height="14.5" rx="2.5" fill="currentColor"/>
+          <text x="23.4" y="16.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="700" fill="#162013">T</text>
+          <text x="29.6" y="22.6" text-anchor="end" font-family="Georgia, 'Times New Roman', serif" font-size="4.5" font-weight="700" fill="#162013">1</text>
+        </g>
+      </svg>
+      <span class="name">Sam<span aria-hidden="true">·</span>my</span>
     </a>
     <ul class="list">
       {sections.map((link, i) => (
@@ -83,30 +96,31 @@ import { sections } from '../content/site.js'
     top: 3rem;
   }
 
-  .name {
-    display: inline-block;
+  /* gold at rest; hovering shifts the whole mark — name and tiles (the tile
+     rects fill with currentColor) — to sage together */
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
     margin-bottom: 1.25rem;
-    font-size: var(--text-xl);
-    font-weight: 700;
-    letter-spacing: 0.01em;   /* match the headwords */
     color: var(--color-accent);
     transition: color 0.2s ease;
   }
 
-  .name:hover,
-  .name:focus-visible {
+  .brand:hover,
+  .brand:focus-visible {
     color: var(--color-text);
   }
 
-  /* the tile is mobile-only */
-  .logo {
-    display: none;
+  .mark {
+    display: block;
+    flex: none;
   }
 
-  .logo img {
-    display: block;
-    width: 20px;
-    height: 20px;
+  .name {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: 0.01em;   /* match the headwords */
   }
 
   .list {
@@ -165,14 +179,14 @@ import { sections } from '../content/site.js'
       justify-content: space-between;   /* logo left, links right */
     }
 
-    /* mobile: the name is desktop-only; the tile IS the Home link — the
-       text link hides to save width */
-    .name {
-      display: none;
+    /* mobile: the name is desktop-only; the rack alone is the Home link —
+       the text hides to save width */
+    .brand {
+      margin-bottom: 0;
     }
 
-    .logo {
-      display: block;
+    .name {
+      display: none;
     }
 
     .list .home {
