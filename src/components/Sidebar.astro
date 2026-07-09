@@ -6,12 +6,12 @@ import { sections } from '../content/site.js'
 
 <nav class="sidebar" aria-label="Primary">
   <div class="rail">
-    <!-- the brand link: the Scrabble-rack mark plus the guide-word name.
-         desktop shows both; mobile keeps just the rack (media query below).
-         the mark is inlined (not the favicon <img>) so its viewBox can crop
-         to the tiles and its fill can follow the link's hover color. -->
+    <!-- the brand link: the Scrabble-rack mark, sized per breakpoint in the
+         styles below. it's inlined (not the favicon <img>) so its viewBox
+         can crop to the tiles and its fill can follow the link's hover
+         color. -->
     <a href="#home" class="brand" aria-label="Home">
-      <svg class="mark" viewBox="0 7.5 32 17.5" width="35" height="19" aria-hidden="true">
+      <svg class="mark" viewBox="0 7.5 32 17.5" aria-hidden="true">
         <g transform="rotate(-5 8.25 15.75)">
           <rect x="1" y="8.5" width="14.5" height="14.5" rx="2.5" fill="currentColor"/>
           <text x="7.9" y="15.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="700" fill="#162013">S</text>
@@ -23,7 +23,6 @@ import { sections } from '../content/site.js'
           <text x="29.6" y="22.6" text-anchor="end" font-family="Georgia, 'Times New Roman', serif" font-size="4.5" font-weight="700" fill="#162013">1</text>
         </g>
       </svg>
-      <span class="name">Sam<span aria-hidden="true">·</span>my</span>
     </a>
     <ul class="list">
       {sections.map((link, i) => (
@@ -96,12 +95,10 @@ import { sections } from '../content/site.js'
     top: 3rem;
   }
 
-  /* gold at rest; hovering shifts the whole mark — name and tiles (the tile
-     rects fill with currentColor) — to sage together */
+  /* gold at rest; hovering shifts the tiles (their rects fill with
+     currentColor) to sage */
   .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+    display: inline-block;
     margin-bottom: 1.25rem;
     color: var(--color-accent);
     transition: color 0.2s ease;
@@ -112,15 +109,11 @@ import { sections } from '../content/site.js'
     color: var(--color-text);
   }
 
+  /* desktop: a large standalone icon where the wordmark used to be */
   .mark {
     display: block;
-    flex: none;
-  }
-
-  .name {
-    font-size: var(--text-xl);
-    font-weight: 700;
-    letter-spacing: 0.01em;   /* match the headwords */
+    width: 5rem;
+    height: auto;
   }
 
   .list {
@@ -179,14 +172,15 @@ import { sections } from '../content/site.js'
       justify-content: space-between;   /* logo left, links right */
     }
 
-    /* mobile: the name is desktop-only; the rack alone is the Home link —
-       the text hides to save width */
+    /* mobile: the rack shrinks to sit in the bar — sized so the tiles
+       optically match the nav links' cap height, centered by the rail's
+       align-items */
     .brand {
       margin-bottom: 0;
     }
 
-    .name {
-      display: none;
+    .mark {
+      width: 3rem;
     }
 
     .list .home {
