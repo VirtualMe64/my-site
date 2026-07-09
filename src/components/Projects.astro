@@ -139,8 +139,16 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
     text-align: right;
   }
 
+  /* underlined at rest so it reads as a link; hover bolds instead */
   .seeAlso a {
     color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+
+  .seeAlso a:hover {
+    font-weight: 700;
   }
 
   @media (max-width: 640px) {

@@ -78,7 +78,15 @@
     color: var(--color-text-muted);
   }
 
+  /* underlined at rest so it reads as a link; hover bolds instead */
   .seeAlso a {
     color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+
+  .seeAlso a:hover {
+    font-weight: 700;
   }
 </style>
