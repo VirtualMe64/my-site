@@ -173,14 +173,17 @@ import { sections } from '../content/site.js'
     }
 
     /* mobile: the rack shrinks to sit in the bar — sized so the tiles
-       optically match the nav links' cap height, centered by the rail's
-       align-items */
+       optically match the nav links' cap height. the nudge up compensates
+       for text's visual center sitting above its geometric center (caps up
+       top, only a thin descender band below) — a dead-centered mark reads
+       as too low next to it */
     .brand {
       margin-bottom: 0;
     }
 
     .mark {
       width: 3rem;
+      transform: translateY(-2px);
     }
 
     .list .home {
