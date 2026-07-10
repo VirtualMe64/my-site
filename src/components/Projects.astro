@@ -14,12 +14,12 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
       <div class="row">
         {row.map((project) => (
           <article class="card">
-            <p class="name">{project.name} <span class="pos">{project.pos}</span></p>
+            <p class="name">{project.name}</p>
             <p class="def" set:html={md(project.def)} />
             <footer class="cardFoot">
               <span class="stack">{project.stack}</span>
               <span class="seeAlso">
-                See also:{' '}
+                see:{' '}
                 {project.links.map((link, i) => (
                   <span><a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>{i < project.links.length - 1 && ', '}</span>
                 ))}

@@ -6,15 +6,11 @@ import { sections } from '../content/site.js'
 
 <nav class="sidebar" aria-label="Primary">
   <div class="rail">
-    <!-- desktop anchor: a guide-word mark — the name styled like a small
-         headword. the mobile bar keeps the rack mark instead (media query
-         below). the mark is inlined rather than reusing the favicon <img>:
-         the favicon's square viewBox has dead space above/below the tiles
-         that would render it undersized, and inlining lets the tile rects
-         fill with currentColor so the link can hover-shift like the name -->
-    <a href="#home" class="name">Sam<span aria-hidden="true">·</span>my</a>
-    <a class="logo" href="#home" aria-label="Home">
-      <svg viewBox="0 7.5 32 17.5" aria-hidden="true">
+    <!-- the brand is the two-tile rack alone — the wordmark's job is done
+         by the hero's cross now. inlined (not the favicon <img>) so the
+         viewBox crops to the tiles and the rects follow the hover color -->
+    <a href="#home" class="brand" aria-label="Home">
+      <svg class="mark" viewBox="0 7.5 32 17.5" aria-hidden="true">
         <g transform="rotate(-5 8.25 15.75)">
           <rect x="1" y="8.5" width="14.5" height="14.5" rx="2.5" fill="currentColor"/>
           <text x="7.9" y="15.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="700" fill="#162013">S</text>
@@ -45,7 +41,7 @@ import { sections } from '../content/site.js'
 
 <script>
   // Scroll-spy: highlight the link whose section crosses a thin band across
-  // the middle of the viewport. Scoped to .list so the logo link stays out.
+  // the middle of the viewport. Scoped to .list so the brand link stays out.
   const links = [...document.querySelectorAll('nav[aria-label="Primary"] .list a[href^="#"]')]
 
   function setActive(id) {
@@ -98,42 +94,24 @@ import { sections } from '../content/site.js'
     top: 3rem;
   }
 
-  .name {
+  /* gold at rest; hovering shifts the tiles (their rects fill with
+     currentColor) to sage */
+  .brand {
     display: inline-block;
     margin-bottom: 1.25rem;
-    font-size: var(--text-xl);
-    font-weight: 700;
-    letter-spacing: 0.01em;   /* match the headwords */
     color: var(--color-accent);
     transition: color 0.2s ease;
   }
 
-  .name:hover,
-  .name:focus-visible {
+  .brand:hover,
+  .brand:focus-visible {
     color: var(--color-text);
   }
 
-  /* the rack is mobile-only; gold at rest, sage on hover like the name */
-  .logo {
-    display: none;
-    color: var(--color-accent);
-    transition: color 0.2s ease;
-  }
-
-  .logo:hover,
-  .logo:focus-visible {
-    color: var(--color-text);
-  }
-
-  /* sized so the tiles optically match the nav links' cap height. the
-     nudge up compensates for text's visual center sitting above its
-     geometric center (caps up top, only a thin descender band below) —
-     a dead-centered mark reads as too low next to it */
-  .logo svg {
+  .mark {
     display: block;
-    width: 3rem;
+    width: 5rem;
     height: auto;
-    transform: translateY(-2px);
   }
 
   .list {
@@ -156,9 +134,11 @@ import { sections } from '../content/site.js'
     color: var(--color-accent);
   }
 
-  /* the section currently in view: bold + shifted — gold stays the mark's */
+  /* the section currently in view: gold + bold + shifted, like the tile
+     words it points at */
   .link.active {
     font-weight: 700;
+    color: var(--color-accent);
     transform: translateX(4px);
   }
 
@@ -189,17 +169,19 @@ import { sections } from '../content/site.js'
       position: static;
       display: flex;
       align-items: center;
-      justify-content: space-between;   /* logo left, links right */
+      justify-content: space-between;   /* rack left, links right */
     }
 
-    /* mobile: the name is desktop-only; the tile IS the Home link — the
-       text link hides to save width */
-    .name {
-      display: none;
+    /* mobile: the rack shrinks into the bar — sized so the tiles optically
+       match the nav links' cap height; nudged up because text's visual
+       center sits above its geometric center */
+    .brand {
+      margin-bottom: 0;
     }
 
-    .logo {
-      display: block;
+    .mark {
+      width: 3rem;
+      transform: translateY(-2px);
     }
 
     .list .home {
@@ -211,9 +193,8 @@ import { sections } from '../content/site.js'
       gap: 1.5rem;
     }
 
-    /* regular weight at rest so bold means "you are here" (the base
-       .link.active rule already bolds the active link); no x-shift in the
-       horizontal bar */
+    /* regular weight at rest so bold means "you are here"; no x-shift in
+       the horizontal bar */
     .link {
       font-weight: 400;
     }

@@ -1,15 +1,20 @@
 ---
-// A dictionary-entry section: headword (interpunct dots split from the ·s in
-// `word` and hidden from screen readers), part-of-speech tag, gloss line, and
-// the section body in the default slot. Always an <h2> — the hero is the one
-// exception and hand-rolls its <h1> in Entry.astro.
-const { id, word, pos, gloss } = Astro.props
-const parts = word.split('·')
+// A section is a played word: the label spelled in tiles, its real Scrabble
+// score jotted beside it, then the gloss and the section body. The h2 stays
+// screen-reader-friendly via aria-label; the tiles are decoration.
+import TileWord from './TileWord.astro'
+import { scrabbleScore } from '../content/scrabble.js'
+
+const { id, label, gloss } = Astro.props
+const played = label.toUpperCase()
 ---
 
 <section id={id}>
   <div class="inner">
-    <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span aria-hidden="true">·</span>}{part}</>)} <span class="pos">{pos}</span></h2>
+    <h2 class="play" aria-label={label}>
+      <TileWord word={played} spin={played.length} />
+      <span class="score" aria-hidden="true">— {scrabbleScore(played)}</span>
+    </h2>
     <p class="gloss">{gloss}</p>
     <slot />
   </div>
@@ -20,8 +25,24 @@ const parts = word.split('·')
     max-width: 60rem;
   }
 
+  .play {
+    --tile: clamp(1.6rem, 3.2vw, 2.5rem);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .score {
+    font-size: var(--text-md);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
   .gloss {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     font-weight: 300;
+    font-style: italic;
+    color: var(--color-text-muted);
   }
 </style>
