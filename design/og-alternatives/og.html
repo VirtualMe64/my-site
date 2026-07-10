@@ -101,10 +101,12 @@
   </div>
 </div>
 
-<!-- D: the cross as a played move — board grid, premium squares, scores -->
-<div class="frame" id="d">
-  <div class="grid"></div>
-</div>
+<!-- D: an opening play on a real board — TAUBMAN across the center row
+     (T on the double-letter square, covering the center star), SAMMY down
+     through the first A, its Y landing on a double-word square. Premium
+     squares sit at their true board positions (rows 5-12 of a standard
+     15x15), colored like the real board but muted into the site palette. -->
+<div class="frame" id="d"></div>
 
 <script>
   const SCORES = { A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10 }
@@ -160,44 +162,71 @@
     tile(rack, 'T', 66, 4, 60, 4)
   }
 
-  // D: board grid + premium squares + move scores
+  // D: an opening play on a slice of a real board.
+  // The frame shows board rows 5-12, all 15 columns, of a standard board.
+  // TAUBMAN sits across row 8 (the starting row), columns 4-10: T on the
+  // double-letter square at (8,4), the fifth letter M covering the center
+  // star. SAMMY runs down column 5, rows 7-11, sharing the A at (8,5), and
+  // its Y lands on the double-word square at (11,5). Both words score 24.
   {
     const frame = document.getElementById('d')
-    const size = 72, gap = 6, pitch = size + gap
-    const y0 = (630 - (7 * pitch - gap)) / 2
-    const xV = 600 - 36
+    const pitch = 78, inset = 2, cell = pitch - 2 * inset
+    const ROW0 = 5 // topmost visible board row
+    const xy = (col, row) => [15 + (col - 1) * pitch + inset, 3 + (row - ROW0) * pitch + inset]
 
-    // align the grid to the tile pitch (half-gap outside each tile)
-    const grid = frame.querySelector('.grid')
-    grid.style.backgroundPosition = `${(xV - gap / 2) % pitch}px ${(y0 - gap / 2) % pitch}px, ${(xV - gap / 2) % pitch}px ${(y0 - gap / 2) % pitch}px`
-
-    // a few premium squares peeking out around the move
-    const premium = [
-      { col: -3, row: 4, tint: 'rgba(232, 200, 96, 0.16)', label: 'DOUBLE WORD SCORE', color: 'rgba(232, 200, 96, 0.55)' },
-      { col: 2, row: 1, tint: 'rgba(232, 239, 230, 0.10)', label: 'TRIPLE LETTER SCORE', color: 'rgba(232, 239, 230, 0.45)' },
-      { col: 1, row: 6, tint: 'rgba(232, 200, 96, 0.10)', label: 'DOUBLE LETTER SCORE', color: 'rgba(232, 200, 96, 0.45)' },
+    // true premium-square positions for rows 5-12 of a standard board
+    const PREMIUMS = [
+      ['DWS', 5, 5], ['DWS', 11, 5],
+      ['TLS', 2, 6], ['TLS', 6, 6], ['TLS', 10, 6], ['TLS', 14, 6],
+      ['DLS', 3, 7], ['DLS', 7, 7], ['DLS', 9, 7], ['DLS', 13, 7],
+      ['TWS', 1, 8], ['DLS', 4, 8], ['STAR', 8, 8], ['DLS', 12, 8], ['TWS', 15, 8],
+      ['DLS', 3, 9], ['DLS', 7, 9], ['DLS', 9, 9], ['DLS', 13, 9],
+      ['TLS', 2, 10], ['TLS', 6, 10], ['TLS', 10, 10], ['TLS', 14, 10],
+      ['DWS', 5, 11], ['DWS', 11, 11],
+      ['DWS', 4, 12], ['DWS', 12, 12],
     ]
-    for (const p of premium) {
+    // real board color-coding, muted into the site palette
+    const STYLE = {
+      TWS: { bg: 'rgba(196, 88, 72, 0.42)', label: 'TRIPLE WORD SCORE' },
+      DWS: { bg: 'rgba(206, 130, 124, 0.30)', label: 'DOUBLE WORD SCORE' },
+      TLS: { bg: 'rgba(84, 128, 172, 0.42)', label: 'TRIPLE LETTER SCORE' },
+      DLS: { bg: 'rgba(132, 172, 192, 0.28)', label: 'DOUBLE LETTER SCORE' },
+      STAR: { bg: 'rgba(206, 130, 124, 0.30)', label: '★' },
+    }
+
+    // plain cells first, then premium squares, then the tiles on top —
+    // the tiles' slight tilt lets covered squares peek out at the corners
+    for (let row = ROW0; row < ROW0 + 8; row++) {
+      for (let col = 1; col <= 15; col++) {
+        const [x, y] = xy(col, row)
+        const el = document.createElement('div')
+        el.className = 'premium'
+        el.style.cssText = `left:${x}px; top:${y}px; width:${cell}px; height:${cell}px; background:rgba(232, 239, 230, 0.04);`
+        frame.appendChild(el)
+      }
+    }
+    for (const [kind, col, row] of PREMIUMS) {
+      const { bg, label } = STYLE[kind]
+      const [x, y] = xy(col, row)
       const el = document.createElement('div')
       el.className = 'premium'
-      el.style.cssText = `left:${xV + p.col * pitch + 0.5}px; top:${y0 + p.row * pitch + 0.5}px; background:${p.tint};`
-      el.innerHTML = `<span style="color:${p.color}">${p.label.replace(' ', '<br>').replace(' ', '<br>')}</span>`
+      el.style.cssText = `left:${x}px; top:${y}px; width:${cell}px; height:${cell}px; background:${bg};`
+      const big = kind === 'STAR' ? 'font-size:34px;' : ''
+      el.innerHTML = `<span style="color:rgba(232, 239, 230, 0.62); ${big}">${label.replaceAll(' ', '<br>')}</span>`
       frame.appendChild(el)
     }
 
-    cross(frame, xV, y0, size, gap)
+    const [xT, yT] = xy(4, 8)
+    word(frame, 'TAUBMAN', xT, yT, 'across', cell, 2 * inset)
+    const [xS, yS] = xy(5, 7)
+    word(frame, 'SAMMY', xS, yS, 'down', cell, 2 * inset, 1) // the A at (8,5) is TAUBMAN's
 
-    // move scores, jotted beside each word
-    const s1 = document.createElement('div')
-    s1.className = 'score'
-    s1.style.cssText = `left:${xV - 2 * pitch - 12}px; top:${y0 + 5 * pitch + 10}px; font-size:26px;`
-    s1.textContent = 'sammy — 12'
-    frame.appendChild(s1)
-    const s2 = document.createElement('div')
-    s2.className = 'score'
-    s2.style.cssText = `left:${xV + pitch + 14}px; top:${y0 + 6 * pitch - 40}px; font-size:26px;`
-    s2.textContent = 'taubman — 11'
-    frame.appendChild(s2)
+    // the move, jotted across the empty cells top-right
+    const score = document.createElement('div')
+    score.className = 'score'
+    score.style.cssText = `right:40px; top:26px; font-size:25px;`
+    score.textContent = 'taubman — 24 · sammy — 24'
+    frame.appendChild(score)
   }
 </script>
 </body>
