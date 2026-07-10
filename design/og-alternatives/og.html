@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OG image candidates — Sammy Taubman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@300;400;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #162013;
+    --text: #e8efe6;
+    --muted: #7a927a;
+    --gold: #e8c860;
+  }
+  body { background: #000; font-family: 'Hanuman', Georgia, 'Times New Roman', serif; }
+  .frame {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    background: var(--bg);
+    overflow: hidden;
+    margin: 20px auto;
+  }
+  .tile {
+    position: absolute;
+    background: var(--gold);
+    border-radius: 9px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg);
+    font-weight: 700;
+  }
+  .tile .value {
+    position: absolute;
+    right: 8%;
+    bottom: 3%;
+    font-size: 28%;
+    line-height: 1;
+  }
+  /* dictionary-entry text bits, shared by the text variants */
+  .headword { color: var(--gold); font-weight: 700; line-height: 1.1; }
+  .headword .pos { color: var(--muted); font-style: italic; font-weight: 400; }
+  .sense { color: var(--text); font-weight: 300; line-height: 1.45; }
+  .sense .num { color: var(--gold); font-weight: 700; }
+  .aside { color: var(--muted); font-style: italic; font-weight: 300; }
+  /* board flavor for variant D */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(to right, rgba(232, 239, 230, 0.055) 0 1px, transparent 1px 78px),
+      repeating-linear-gradient(to bottom, rgba(232, 239, 230, 0.055) 0 1px, transparent 1px 78px);
+  }
+  .premium {
+    position: absolute;
+    width: 71px;
+    height: 71px;
+    border-radius: 4px;
+  }
+  .premium span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .score { position: absolute; color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- A: the cross, pure -->
+<div class="frame" id="a"></div>
+
+<!-- B: cross left, dictionary entry right -->
+<div class="frame" id="b">
+  <div style="position:absolute; left:590px; top:170px; width:560px;">
+    <div class="headword" style="font-size:58px;">Sam·my Taub·man <span class="pos" style="font-size:26px; white-space:nowrap;">n. proper</span></div>
+    <div class="sense" style="font-size:27px; margin-top:28px;"><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</div>
+    <div class="sense" style="font-size:27px; margin-top:14px;"><span class="num">4.</span> a lover of word games, especially Scrabble</div>
+    <div class="aside" style="font-size:22px; margin-top:34px;">staubman.vercel.app</div>
+  </div>
+</div>
+
+<!-- C: the dictionary entry, no cross (rack mark up top) -->
+<div class="frame" id="c">
+  <div style="position:absolute; left:110px; top:90px; width:1000px;">
+    <div id="c-rack" style="position:relative; height:64px;"></div>
+    <div class="headword" style="font-size:84px; margin-top:26px;">Sam·my Taub·man <span class="pos" style="font-size:34px;">n. proper</span></div>
+    <div class="sense" style="font-size:31px; margin-top:30px; max-width:900px;"><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</div>
+    <div class="sense" style="font-size:31px; margin-top:12px;"><span class="num">2.</span> a lover of word games, especially Scrabble</div>
+    <div class="aside" style="font-size:24px; margin-top:44px;">See also: staubman.vercel.app</div>
+  </div>
+</div>
+
+<!-- D: an opening play on a real board — TAUBMAN across the center row
+     (T on the double-letter square, covering the center star), SAMMY down
+     through the first A, its Y landing on a double-word square. Premium
+     squares sit at their true board positions (rows 5-12 of a standard
+     15x15), colored like the real board but muted into the site palette. -->
+<div class="frame" id="d"></div>
+
+<script>
+  const SCORES = { A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10 }
+  // deterministic hand-placed jitter, one entry per tile drawn
+  const TILT = [-2, 1.6, -1.1, 2.1, -1.7, 1.2, -2.2, 0.9, 1.9, -0.8, 1.4, -1.3]
+  let tiltIndex = 0
+
+  function tile(frame, letter, x, y, size, tilt) {
+    const el = document.createElement('div')
+    el.className = 'tile'
+    el.style.cssText = `left:${x}px; top:${y}px; width:${size}px; height:${size}px; font-size:${size * 0.58}px; transform:rotate(${tilt}deg);`
+    el.innerHTML = `${letter}<span class="value">${SCORES[letter]}</span>`
+    frame.appendChild(el)
+  }
+
+  // draw a word; skip lets the crossing tile be drawn only once
+  function word(frame, text, x0, y0, dir, size, gap, skip = -1) {
+    const pitch = size + gap
+    ;[...text].forEach((letter, i) => {
+      if (i === skip) return
+      const x = dir === 'across' ? x0 + i * pitch : x0
+      const y = dir === 'down' ? y0 + i * pitch : y0
+      tile(frame, letter, x, y, size, TILT[tiltIndex++ % TILT.length])
+    })
+  }
+
+  // SAMMY crosses TAUBMAN at the M: TAUBMAN's 5th letter (index 4),
+  // SAMMY's first M (index 2)
+  function cross(frame, xV, y0, size, gap) {
+    const pitch = size + gap
+    word(frame, 'TAUBMAN', xV, y0, 'down', size, gap)
+    word(frame, 'SAMMY', xV - 2 * pitch, y0 + 4 * pitch, 'across', size, gap, 2)
+  }
+
+  // A: pure cross, centered. vertical word 7 tiles tall
+  {
+    const size = 72, gap = 6, pitch = size + gap
+    const y0 = (630 - (7 * pitch - gap)) / 2
+    cross(document.getElementById('a'), 600 - 36, y0, size, gap) // center the cross's bounding box
+  }
+
+  // B: cross on the left, entry text right
+  {
+    const size = 66, gap = 6, pitch = size + gap
+    const y0 = (630 - (7 * pitch - gap)) / 2
+    cross(document.getElementById('b'), 300, y0, size, gap)
+  }
+
+  // C: the rack mark above the headword
+  {
+    const rack = document.getElementById('c-rack')
+    tile(rack, 'S', 0, 0, 60, -5)
+    tile(rack, 'T', 66, 4, 60, 4)
+  }
+
+  // D: an opening play on a slice of a real board.
+  // The frame shows board rows 5-12, all 15 columns, of a standard board.
+  // TAUBMAN sits across row 8 (the starting row), columns 4-10: T on the
+  // double-letter square at (8,4), the fifth letter M covering the center
+  // star. SAMMY runs down column 5, rows 7-11, sharing the A at (8,5), and
+  // its Y lands on the double-word square at (11,5). Both words score 24.
+  {
+    const frame = document.getElementById('d')
+    const pitch = 92, inset = 2, cell = pitch - 2 * inset
+    // camera: board columns 1-13, rows 6-12 — the play sits center-frame,
+    // rows 6 and 12 bleeding slightly off the top/bottom edges like a crop
+    const ROW0 = 6, COLS = 13, ROWS = 7
+    const xy = (col, row) => [2 + (col - 1) * pitch + inset, -7 + (row - ROW0) * pitch + inset]
+
+    // true premium-square positions for rows 5-12 of a standard board
+    const PREMIUMS = [
+      ['DWS', 5, 5], ['DWS', 11, 5],
+      ['TLS', 2, 6], ['TLS', 6, 6], ['TLS', 10, 6], ['TLS', 14, 6],
+      ['DLS', 3, 7], ['DLS', 7, 7], ['DLS', 9, 7], ['DLS', 13, 7],
+      ['TWS', 1, 8], ['DLS', 4, 8], ['STAR', 8, 8], ['DLS', 12, 8], ['TWS', 15, 8],
+      ['DLS', 3, 9], ['DLS', 7, 9], ['DLS', 9, 9], ['DLS', 13, 9],
+      ['TLS', 2, 10], ['TLS', 6, 10], ['TLS', 10, 10], ['TLS', 14, 10],
+      ['DWS', 5, 11], ['DWS', 11, 11],
+      ['DWS', 4, 12], ['DWS', 12, 12],
+    ]
+    // real board color-coding, muted into the site palette — kept faint so
+    // the tiles stay the focus and the board reads as texture behind them
+    const STYLE = {
+      TWS: { bg: 'rgba(196, 88, 72, 0.20)', label: 'TRIPLE WORD SCORE' },
+      DWS: { bg: 'rgba(206, 130, 124, 0.14)', label: 'DOUBLE WORD SCORE' },
+      TLS: { bg: 'rgba(84, 128, 172, 0.19)', label: 'TRIPLE LETTER SCORE' },
+      DLS: { bg: 'rgba(132, 172, 192, 0.13)', label: 'DOUBLE LETTER SCORE' },
+      STAR: { bg: 'rgba(206, 130, 124, 0.14)', label: '★' },
+    }
+
+    // plain cells first, then premium squares, then the tiles on top —
+    // the tiles' slight tilt lets covered squares peek out at the corners
+    for (let row = ROW0; row < ROW0 + ROWS; row++) {
+      for (let col = 1; col <= COLS; col++) {
+        const [x, y] = xy(col, row)
+        const el = document.createElement('div')
+        el.className = 'premium'
+        el.style.cssText = `left:${x}px; top:${y}px; width:${cell}px; height:${cell}px; background:rgba(232, 239, 230, 0.04);`
+        frame.appendChild(el)
+      }
+    }
+    for (const [kind, col, row] of PREMIUMS) {
+      if (col > COLS || row < ROW0 || row >= ROW0 + ROWS) continue
+      const { bg, label } = STYLE[kind]
+      const [x, y] = xy(col, row)
+      const el = document.createElement('div')
+      el.className = 'premium'
+      el.style.cssText = `left:${x}px; top:${y}px; width:${cell}px; height:${cell}px; background:${bg};`
+      const big = kind === 'STAR' ? 'font-size:34px;' : ''
+      el.innerHTML = `<span style="color:rgba(232, 239, 230, 0.30); ${big}">${label.replaceAll(' ', '<br>')}</span>`
+      frame.appendChild(el)
+    }
+
+    const [xT, yT] = xy(4, 8)
+    word(frame, 'TAUBMAN', xT, yT, 'across', cell, 2 * inset)
+    const [xS, yS] = xy(5, 7)
+    word(frame, 'SAMMY', xS, yS, 'down', cell, 2 * inset, 1) // the A at (8,5) is TAUBMAN's
+  }
+</script>
+</body>
+</html>
