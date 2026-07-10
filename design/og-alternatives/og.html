@@ -27,7 +27,7 @@
     position: absolute;
     background: var(--gold);
     border-radius: 9px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,9 +170,11 @@
   // its Y lands on the double-word square at (11,5). Both words score 24.
   {
     const frame = document.getElementById('d')
-    const pitch = 78, inset = 2, cell = pitch - 2 * inset
-    const ROW0 = 5 // topmost visible board row
-    const xy = (col, row) => [15 + (col - 1) * pitch + inset, 3 + (row - ROW0) * pitch + inset]
+    const pitch = 92, inset = 2, cell = pitch - 2 * inset
+    // camera: board columns 1-13, rows 6-12 — the play sits center-frame,
+    // rows 6 and 12 bleeding slightly off the top/bottom edges like a crop
+    const ROW0 = 6, COLS = 13, ROWS = 7
+    const xy = (col, row) => [2 + (col - 1) * pitch + inset, -7 + (row - ROW0) * pitch + inset]
 
     // true premium-square positions for rows 5-12 of a standard board
     const PREMIUMS = [
@@ -196,8 +198,8 @@
 
     // plain cells first, then premium squares, then the tiles on top —
     // the tiles' slight tilt lets covered squares peek out at the corners
-    for (let row = ROW0; row < ROW0 + 8; row++) {
-      for (let col = 1; col <= 15; col++) {
+    for (let row = ROW0; row < ROW0 + ROWS; row++) {
+      for (let col = 1; col <= COLS; col++) {
         const [x, y] = xy(col, row)
         const el = document.createElement('div')
         el.className = 'premium'
@@ -206,6 +208,7 @@
       }
     }
     for (const [kind, col, row] of PREMIUMS) {
+      if (col > COLS || row < ROW0 || row >= ROW0 + ROWS) continue
       const { bg, label } = STYLE[kind]
       const [x, y] = xy(col, row)
       const el = document.createElement('div')
@@ -220,13 +223,6 @@
     word(frame, 'TAUBMAN', xT, yT, 'across', cell, 2 * inset)
     const [xS, yS] = xy(5, 7)
     word(frame, 'SAMMY', xS, yS, 'down', cell, 2 * inset, 1) // the A at (8,5) is TAUBMAN's
-
-    // the move, jotted across the empty cells top-right
-    const score = document.createElement('div')
-    score.className = 'score'
-    score.style.cssText = `right:40px; top:26px; font-size:25px;`
-    score.textContent = 'taubman — 24 · sammy — 24'
-    frame.appendChild(score)
   }
 </script>
 </body>
