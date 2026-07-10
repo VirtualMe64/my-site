@@ -28,10 +28,63 @@ html {
 body {
   min-height: 100dvh;
   background-color: var(--color-bg);
+  /* the page IS the board: a 72px cell grid with a few premium squares
+     scattered at fixed spots (cell-aligned, faded like the og image), all
+     background-attachment fixed so the content scrolls over a board that
+     stays put. iOS ignores fixed attachment and scrolls it — fine too. */
+  background-image:
+    linear-gradient(rgba(196, 88, 72, 0.10), rgba(196, 88, 72, 0.10)),
+    linear-gradient(rgba(84, 128, 172, 0.10), rgba(84, 128, 172, 0.10)),
+    linear-gradient(rgba(206, 130, 124, 0.09), rgba(206, 130, 124, 0.09)),
+    linear-gradient(rgba(132, 172, 192, 0.08), rgba(132, 172, 192, 0.08)),
+    linear-gradient(rgba(84, 128, 172, 0.09), rgba(84, 128, 172, 0.09)),
+    linear-gradient(rgba(206, 130, 124, 0.08), rgba(206, 130, 124, 0.08)),
+    repeating-linear-gradient(to right, var(--color-grid) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(to bottom, var(--color-grid) 0 1px, transparent 1px 72px);
+  background-size: 71px 71px, 71px 71px, 71px 71px, 71px 71px, 71px 71px, 71px 71px, auto, auto;
+  background-position: 145px 145px, 649px 361px, 937px 73px, 289px 577px, 793px 649px, 433px 217px, 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat;
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-serif);
   font-size: clamp(1rem, 1.4vw, 1.25rem);
   line-height: 1.6;
+}
+
+/* ---- scrabble tiles ----
+   Unscoped on purpose: rendered by Tile.astro/TileWord.astro AND rebuilt in
+   the footer's client script, which can't reach Astro-scoped styles.
+   Size comes from --tile on any ancestor; --tilt is per-tile jitter. */
+.tileWord {
+  display: inline-flex;
+  gap: calc(var(--tile, 3rem) * 0.08);
+  vertical-align: middle;
+}
+
+.tile {
+  position: relative;
+  flex: none;
+  width: var(--tile, 3rem);
+  height: var(--tile, 3rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-radius: calc(var(--tile, 3rem) * 0.12);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+  font-weight: 700;
+  font-size: calc(var(--tile, 3rem) * 0.55);
+  line-height: 1;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.tile .value {
+  position: absolute;
+  right: calc(var(--tile, 3rem) * 0.09);
+  bottom: calc(var(--tile, 3rem) * 0.07);
+  font-size: calc(var(--tile, 3rem) * 0.22);
+  font-weight: 700;
 }
 
 a {
@@ -49,24 +102,6 @@ main a:hover {
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 3px;
-}
-
-/* dictionary headwords — shared by the hero's h1 and Section's h2s */
-.headword {
-  font-size: var(--headword-size);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: 0.01em;
-  color: var(--color-accent);
-}
-
-.headword .pos {
-  margin-left: 0.35em;
-  /* relative, so it scales with the headword; the hero dials it back down */
-  font-size: var(--pos-size, 0.55em);
-  font-weight: 400;
-  font-style: italic;
-  color: var(--color-text-muted);
 }
 
 section {

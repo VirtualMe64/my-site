@@ -1,0 +1,11 @@
+---
+// One Scrabble tile: the letter dead-center, its real point value in the
+// bottom-right corner. Visual styling lives in global.css (.tile) so the
+// footer's client script can build identical tiles at runtime.
+import { LETTER_SCORES } from '../content/scrabble.js'
+
+const { letter, tilt = 0 } = Astro.props
+const upper = letter.toUpperCase()
+---
+
+<span class="tile" style={`--tilt: ${tilt}deg`}>{upper}<span class="value">{LETTER_SCORES[upper] ?? 0}</span></span>

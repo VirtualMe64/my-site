@@ -1,76 +1,107 @@
-<!-- The hero is the site's one hand-rolled dictionary entry: its text lives
-     here rather than in src/content/ so it can be literal, readable markup. -->
+---
+// The hero is the og image made live: TAUBMAN played across, SAMMY down
+// through the A, with the senses beside it like a score sheet. The h1 is
+// the cross itself — screen readers get "Sammy Taubman" via aria-label.
+import Tile from './Tile.astro'
+import { scrabbleScore } from '../content/scrabble.js'
+
+const TILTS = [-2, 1.6, -1.1, 2.1, -1.7, 1.2, -2.2, 0.9, 1.9, -0.8, 1.4, -1.3]
+const across = [...'TAUBMAN']
+const down = [['S', 1], ['M', 3], ['M', 4], ['Y', 5]] // column 2; the A on row 2 is TAUBMAN's
+---
+
 <section id="home">
   <div class="entry">
-    <!-- the interpunct spans must stay aria-hidden so screen readers hear
-         "Sammy Taubman", not the syllable breaks -->
-    <h1 class="headword">
-      Sam<span aria-hidden="true">·</span>my Taub<span aria-hidden="true">·</span>man
-      <span class="pos">n. proper</span>
-    </h1>
+    <div class="play">
+      <h1 class="cross" aria-label="Sammy Taubman">
+        <span class="board" aria-hidden="true">
+          {across.map((letter, i) => (
+            <span style={`grid-area: 2 / ${i + 1}`}><Tile letter={letter} tilt={TILTS[i % TILTS.length]} /></span>
+          ))}
+          {down.map(([letter, row], i) => (
+            <span style={`grid-area: ${row} / 2`}><Tile letter={letter} tilt={TILTS[(i + 7) % TILTS.length]} /></span>
+          ))}
+        </span>
+      </h1>
+      <p class="moveScore" aria-hidden="true">taubman — {scrabbleScore('TAUBMAN')} · sammy — {scrabbleScore('SAMMY')}</p>
+    </div>
 
-    <ol class="definitions">
-      <li><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</li>
-      <li><span class="num">2.</span> a programmer with 10 years of experience who is passionate about learning how things work</li>
-      <li><span class="num">3.</span> a former Georgia Tech student and current Georgia Tech football fan</li>
-      <li><span class="num">4.</span> a lover of word games, especially Scrabble</li>
-    </ol>
+    <div class="senses">
+      <ol class="definitions">
+        <li><span class="num" aria-hidden="true">1</span><span>a software engineer at Stripe, helping agents pay for things</span></li>
+        <li><span class="num" aria-hidden="true">2</span><span>a programmer with 10 years of experience who is passionate about learning how things work</span></li>
+        <li><span class="num" aria-hidden="true">3</span><span>a former Georgia Tech student and current Georgia Tech football fan</span></li>
+        <li><span class="num" aria-hidden="true">4</span><span>a lover of word games, especially Scrabble</span></li>
+      </ol>
 
-    <p class="seeAlso">
-      See also: <a href="#experience">experience</a>
-    </p>
+      <p class="seeAlso">
+        next play: <a href="#experience">experience</a>
+      </p>
+    </div>
   </div>
 </section>
 
 <style>
   .entry {
-    max-width: 60rem;
-    --headword-size: var(--headword-size-hero);
-    --pos-size: 0.45em;   /* the hero headword is big enough already */
+    --tile: clamp(2rem, 4.2vw, 3.1rem);
+    max-width: 64rem;
+    display: flex;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
   }
 
-  /* desktop: each sense on its own line, numbers hanging in the margin */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(7, var(--tile));
+    grid-auto-rows: var(--tile);
+    gap: calc(var(--tile) * 0.08);
+  }
+
+  /* the move, jotted under the play like on the og image */
+  .moveScore {
+    margin-top: 1rem;
+    font-size: var(--text-base);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  .senses {
+    max-width: 34rem;
+  }
+
   .definitions {
     list-style: none;
-    max-width: 40rem;
-    margin-top: 1.25rem;
-    font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.75rem;
+    font-weight: 300;
   }
 
   .definitions li {
-    padding-left: 1.5em;
-    text-indent: -1.5em;   /* wrapped lines align after the sense number */
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
   }
 
-  /* mobile keeps the senses run together in one block, as before */
-  @media (max-width: 640px) {
-    .definitions {
-      display: block;
-      margin-top: 1rem;
-    }
-
-    .definitions li {
-      display: inline;
-      padding-left: 0;
-      text-indent: 0;
-    }
-
-    .definitions li + li::before {
-      content: ' ';
-      white-space: pre;
-    }
-  }
-
+  /* sense numbers as little blank tiles */
   .num {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    transform: translateY(0.2em);   /* optically align with the first text line */
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-radius: 0.25em;
+    font-size: 0.8em;
     font-weight: 700;
-    color: var(--color-accent);
   }
 
-  /* cross-reference — same size as the senses above, muted italic so it
-     still reads as an aside */
+  /* cross-reference — muted italic so it reads as an aside */
   .seeAlso {
     margin-top: 1.5rem;
     font-style: italic;
@@ -78,7 +109,6 @@
     color: var(--color-text-muted);
   }
 
-  /* underlined at rest so it reads as a link; hover bolds instead */
   .seeAlso a {
     color: var(--color-text-muted);
     text-decoration: underline;
@@ -88,5 +118,13 @@
 
   .seeAlso a:hover {
     font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .entry {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2.5rem;
+    }
   }
 </style>

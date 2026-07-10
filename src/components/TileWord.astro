@@ -1,0 +1,13 @@
+---
+// A word played in tiles. Purely visual (aria-hidden) — callers put the
+// accessible text on their own element (aria-label on the heading, etc).
+// `spin` offsets the jitter sequence so different words tilt differently.
+import Tile from './Tile.astro'
+
+const { word, spin = 0 } = Astro.props
+const TILTS = [-2, 1.6, -1.1, 2.1, -1.7, 1.2, -2.2, 0.9, 1.9, -0.8, 1.4, -1.3]
+---
+
+<span class="tileWord" aria-hidden="true">
+  {[...word].map((letter, i) => <Tile letter={letter} tilt={TILTS[(i + spin) % TILTS.length]} />)}
+</span>
