@@ -187,13 +187,14 @@
       ['DWS', 5, 11], ['DWS', 11, 11],
       ['DWS', 4, 12], ['DWS', 12, 12],
     ]
-    // real board color-coding, muted into the site palette
+    // real board color-coding, muted into the site palette — kept faint so
+    // the tiles stay the focus and the board reads as texture behind them
     const STYLE = {
-      TWS: { bg: 'rgba(196, 88, 72, 0.42)', label: 'TRIPLE WORD SCORE' },
-      DWS: { bg: 'rgba(206, 130, 124, 0.30)', label: 'DOUBLE WORD SCORE' },
-      TLS: { bg: 'rgba(84, 128, 172, 0.42)', label: 'TRIPLE LETTER SCORE' },
-      DLS: { bg: 'rgba(132, 172, 192, 0.28)', label: 'DOUBLE LETTER SCORE' },
-      STAR: { bg: 'rgba(206, 130, 124, 0.30)', label: '★' },
+      TWS: { bg: 'rgba(196, 88, 72, 0.20)', label: 'TRIPLE WORD SCORE' },
+      DWS: { bg: 'rgba(206, 130, 124, 0.14)', label: 'DOUBLE WORD SCORE' },
+      TLS: { bg: 'rgba(84, 128, 172, 0.19)', label: 'TRIPLE LETTER SCORE' },
+      DLS: { bg: 'rgba(132, 172, 192, 0.13)', label: 'DOUBLE LETTER SCORE' },
+      STAR: { bg: 'rgba(206, 130, 124, 0.14)', label: '★' },
     }
 
     // plain cells first, then premium squares, then the tiles on top —
@@ -215,7 +216,7 @@
       el.className = 'premium'
       el.style.cssText = `left:${x}px; top:${y}px; width:${cell}px; height:${cell}px; background:${bg};`
       const big = kind === 'STAR' ? 'font-size:34px;' : ''
-      el.innerHTML = `<span style="color:rgba(232, 239, 230, 0.62); ${big}">${label.replaceAll(' ', '<br>')}</span>`
+      el.innerHTML = `<span style="color:rgba(232, 239, 230, 0.30); ${big}">${label.replaceAll(' ', '<br>')}</span>`
       frame.appendChild(el)
     }
 
