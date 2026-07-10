@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OG image candidates — Sammy Taubman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@300;400;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #162013;
+    --text: #e8efe6;
+    --muted: #7a927a;
+    --gold: #e8c860;
+  }
+  body { background: #000; font-family: 'Hanuman', Georgia, 'Times New Roman', serif; }
+  .frame {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    background: var(--bg);
+    overflow: hidden;
+    margin: 20px auto;
+  }
+  .tile {
+    position: absolute;
+    background: var(--gold);
+    border-radius: 9px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg);
+    font-weight: 700;
+  }
+  .tile .value {
+    position: absolute;
+    right: 8%;
+    bottom: 3%;
+    font-size: 28%;
+    line-height: 1;
+  }
+  /* dictionary-entry text bits, shared by the text variants */
+  .headword { color: var(--gold); font-weight: 700; line-height: 1.1; }
+  .headword .pos { color: var(--muted); font-style: italic; font-weight: 400; }
+  .sense { color: var(--text); font-weight: 300; line-height: 1.45; }
+  .sense .num { color: var(--gold); font-weight: 700; }
+  .aside { color: var(--muted); font-style: italic; font-weight: 300; }
+  /* board flavor for variant D */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(to right, rgba(232, 239, 230, 0.055) 0 1px, transparent 1px 78px),
+      repeating-linear-gradient(to bottom, rgba(232, 239, 230, 0.055) 0 1px, transparent 1px 78px);
+  }
+  .premium {
+    position: absolute;
+    width: 71px;
+    height: 71px;
+    border-radius: 4px;
+  }
+  .premium span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .score { position: absolute; color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- A: the cross, pure -->
+<div class="frame" id="a"></div>
+
+<!-- B: cross left, dictionary entry right -->
+<div class="frame" id="b">
+  <div style="position:absolute; left:590px; top:170px; width:560px;">
+    <div class="headword" style="font-size:58px;">Sam·my Taub·man <span class="pos" style="font-size:26px; white-space:nowrap;">n. proper</span></div>
+    <div class="sense" style="font-size:27px; margin-top:28px;"><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</div>
+    <div class="sense" style="font-size:27px; margin-top:14px;"><span class="num">4.</span> a lover of word games, especially Scrabble</div>
+    <div class="aside" style="font-size:22px; margin-top:34px;">staubman.vercel.app</div>
+  </div>
+</div>
+
+<!-- C: the dictionary entry, no cross (rack mark up top) -->
+<div class="frame" id="c">
+  <div style="position:absolute; left:110px; top:90px; width:1000px;">
+    <div id="c-rack" style="position:relative; height:64px;"></div>
+    <div class="headword" style="font-size:84px; margin-top:26px;">Sam·my Taub·man <span class="pos" style="font-size:34px;">n. proper</span></div>
+    <div class="sense" style="font-size:31px; margin-top:30px; max-width:900px;"><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</div>
+    <div class="sense" style="font-size:31px; margin-top:12px;"><span class="num">2.</span> a lover of word games, especially Scrabble</div>
+    <div class="aside" style="font-size:24px; margin-top:44px;">See also: staubman.vercel.app</div>
+  </div>
+</div>
+
+<!-- D: the cross as a played move — board grid, premium squares, scores -->
+<div class="frame" id="d">
+  <div class="grid"></div>
+</div>
+
+<script>
+  const SCORES = { A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10 }
+  // deterministic hand-placed jitter, one entry per tile drawn
+  const TILT = [-2, 1.6, -1.1, 2.1, -1.7, 1.2, -2.2, 0.9, 1.9, -0.8, 1.4, -1.3]
+  let tiltIndex = 0
+
+  function tile(frame, letter, x, y, size, tilt) {
+    const el = document.createElement('div')
+    el.className = 'tile'
+    el.style.cssText = `left:${x}px; top:${y}px; width:${size}px; height:${size}px; font-size:${size * 0.58}px; transform:rotate(${tilt}deg);`
+    el.innerHTML = `${letter}<span class="value">${SCORES[letter]}</span>`
+    frame.appendChild(el)
+  }
+
+  // draw a word; skip lets the crossing tile be drawn only once
+  function word(frame, text, x0, y0, dir, size, gap, skip = -1) {
+    const pitch = size + gap
+    ;[...text].forEach((letter, i) => {
+      if (i === skip) return
+      const x = dir === 'across' ? x0 + i * pitch : x0
+      const y = dir === 'down' ? y0 + i * pitch : y0
+      tile(frame, letter, x, y, size, TILT[tiltIndex++ % TILT.length])
+    })
+  }
+
+  // SAMMY crosses TAUBMAN at the M: TAUBMAN's 5th letter (index 4),
+  // SAMMY's first M (index 2)
+  function cross(frame, xV, y0, size, gap) {
+    const pitch = size + gap
+    word(frame, 'TAUBMAN', xV, y0, 'down', size, gap)
+    word(frame, 'SAMMY', xV - 2 * pitch, y0 + 4 * pitch, 'across', size, gap, 2)
+  }
+
+  // A: pure cross, centered. vertical word 7 tiles tall
+  {
+    const size = 72, gap = 6, pitch = size + gap
+    const y0 = (630 - (7 * pitch - gap)) / 2
+    cross(document.getElementById('a'), 600 - 36, y0, size, gap) // center the cross's bounding box
+  }
+
+  // B: cross on the left, entry text right
+  {
+    const size = 66, gap = 6, pitch = size + gap
+    const y0 = (630 - (7 * pitch - gap)) / 2
+    cross(document.getElementById('b'), 300, y0, size, gap)
+  }
+
+  // C: the rack mark above the headword
+  {
+    const rack = document.getElementById('c-rack')
+    tile(rack, 'S', 0, 0, 60, -5)
+    tile(rack, 'T', 66, 4, 60, 4)
+  }
+
+  // D: board grid + premium squares + move scores
+  {
+    const frame = document.getElementById('d')
+    const size = 72, gap = 6, pitch = size + gap
+    const y0 = (630 - (7 * pitch - gap)) / 2
+    const xV = 600 - 36
+
+    // align the grid to the tile pitch (half-gap outside each tile)
+    const grid = frame.querySelector('.grid')
+    grid.style.backgroundPosition = `${(xV - gap / 2) % pitch}px ${(y0 - gap / 2) % pitch}px, ${(xV - gap / 2) % pitch}px ${(y0 - gap / 2) % pitch}px`
+
+    // a few premium squares peeking out around the move
+    const premium = [
+      { col: -3, row: 4, tint: 'rgba(232, 200, 96, 0.16)', label: 'DOUBLE WORD SCORE', color: 'rgba(232, 200, 96, 0.55)' },
+      { col: 2, row: 1, tint: 'rgba(232, 239, 230, 0.10)', label: 'TRIPLE LETTER SCORE', color: 'rgba(232, 239, 230, 0.45)' },
+      { col: 1, row: 6, tint: 'rgba(232, 200, 96, 0.10)', label: 'DOUBLE LETTER SCORE', color: 'rgba(232, 200, 96, 0.45)' },
+    ]
+    for (const p of premium) {
+      const el = document.createElement('div')
+      el.className = 'premium'
+      el.style.cssText = `left:${xV + p.col * pitch + 0.5}px; top:${y0 + p.row * pitch + 0.5}px; background:${p.tint};`
+      el.innerHTML = `<span style="color:${p.color}">${p.label.replace(' ', '<br>').replace(' ', '<br>')}</span>`
+      frame.appendChild(el)
+    }
+
+    cross(frame, xV, y0, size, gap)
+
+    // move scores, jotted beside each word
+    const s1 = document.createElement('div')
+    s1.className = 'score'
+    s1.style.cssText = `left:${xV - 2 * pitch - 12}px; top:${y0 + 5 * pitch + 10}px; font-size:26px;`
+    s1.textContent = 'sammy — 12'
+    frame.appendChild(s1)
+    const s2 = document.createElement('div')
+    s2.className = 'score'
+    s2.style.cssText = `left:${xV + pitch + 14}px; top:${y0 + 6 * pitch - 40}px; font-size:26px;`
+    s2.textContent = 'taubman — 11'
+    frame.appendChild(s2)
+  }
+</script>
+</body>
+</html>
