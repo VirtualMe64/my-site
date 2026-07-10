@@ -4,6 +4,9 @@ Personal site for Sammy Taubman — staubman.vercel.app. Static Astro site,
 one page, no framework JS beyond two small inline scripts (scroll-spy nav,
 Scrabble word-of-the-day).
 
+**Check `TODO.md`** for open threads and ideas Sammy wants to pursue —
+update it as items land or new ideas come up.
+
 ## Git conventions
 
 - **Add `Co-authored-by: Sammy Taubman <staubman1@gmail.com>` to every
