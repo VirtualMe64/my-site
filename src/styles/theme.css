@@ -13,6 +13,7 @@
   --color-text-muted: #7a927a;  /* muted sage */
   --color-rule: rgba(232, 239, 230, 0.3);
   --color-wash: rgba(232, 239, 230, 0.045); /* faint hover background */
+  --color-grid: rgba(232, 239, 230, 0.04);  /* scrabble-board grid lines */
   --color-accent: #e8c860;      /* warm yellow-gold */
   /* ---- type ---- */
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;

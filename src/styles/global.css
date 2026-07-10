@@ -28,6 +28,13 @@ html {
 body {
   min-height: 100dvh;
   background-color: var(--color-bg);
+  /* scrabble-board grid, whisper-quiet: 72px cells in faint sage. fixed so
+     the content scrolls over a board that stays put (iOS ignores fixed
+     attachment and scrolls the grid with the page — fine either way) */
+  background-image:
+    repeating-linear-gradient(to right, var(--color-grid) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(to bottom, var(--color-grid) 0 1px, transparent 1px 72px);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-serif);
   font-size: clamp(1rem, 1.4vw, 1.25rem);
