@@ -1,0 +1,89 @@
+<!-- Mobile-only "back to top" control. On desktop the nav stays pinned in the
+     sidebar, so there's always a way home; on mobile the top bar scrolls away
+     with the page and this takes its place. -->
+<button class="top" type="button" aria-label="Back to top" data-scroll-top>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V6" />
+    <path d="M6 12l6-6 6 6" />
+  </svg>
+</button>
+
+<script>
+  // Show the button only once the hero has left the viewport — the same
+  // IntersectionObserver approach the sidebar's scroll-spy uses.
+  const button = document.querySelector('[data-scroll-top]')
+  const hero = document.querySelector('#home')
+
+  if (button && hero) {
+    const observer = new IntersectionObserver(
+      ([entry]) => button.classList.toggle('visible', !entry.isIntersecting),
+      { threshold: 0 },
+    )
+    observer.observe(hero)
+
+    // `behavior` is left off deliberately: it falls back to the page's own
+    // `scroll-behavior: smooth`, which global.css already flattens under
+    // prefers-reduced-motion. One place decides how the page travels.
+    button.addEventListener('click', () => window.scrollTo({ top: 0 }))
+  }
+</script>
+
+<style>
+  .top {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .top {
+      position: fixed;
+      /* the page opts into viewport-fit=cover, so clear the home indicator */
+      right: calc(1.25rem + env(safe-area-inset-right));
+      bottom: calc(1.25rem + env(safe-area-inset-bottom));
+      z-index: 10;
+
+      display: grid;
+      place-items: center;
+      width: 2.75rem;              /* 44px — the minimum comfortable tap target */
+      height: 2.75rem;
+      border: 1px solid var(--color-rule);
+      border-radius: 50%;
+      background: var(--color-bg);
+      color: var(--color-accent);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);  /* lifts it off the section it covers */
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;    /* the :active state below does this job */
+
+      /* hidden until the hero scrolls away; visibility (not just opacity)
+         keeps it out of the tab order and the a11y tree while it's faded */
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(0.5rem);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    }
+
+    .top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    /* pressed, it flips like a tile turned face up: gold ground, dark mark */
+    .top:active {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .top svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
+  @media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+    .top {
+      transform: none;
+      transition: opacity 0.2s ease, visibility 0.2s;
+    }
+  }
+</style>
