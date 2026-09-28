@@ -6,8 +6,8 @@ export const roles = [
     company: 'Stripe',
     url: 'https://stripe.com',
     title: 'Software Engineer',
-    dates: 'Incoming August 2026',
-    description: 'Will be working on [agentic payments](https://docs.stripe.com/agentic-commerce)',
+    dates: 'August 2026 - present',
+    description: 'Working on [agentic payments](https://docs.stripe.com/agentic-commerce)',
   },
   {
     company: 'Georgia Tech',
