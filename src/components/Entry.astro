@@ -35,14 +35,18 @@
     max-width: 40rem;
     margin-top: 1.25rem;
     font-weight: 300;
+    text-wrap: pretty;     /* no stranded one-word last lines */
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
   }
 
+  /* the number gets its own column so each sense's text, wrapped lines
+     included, starts at one x — a text-indent hang can't, since the digits
+     are proportional ("1." is narrower than "4.") */
   .definitions li {
-    padding-left: 1.5em;
-    text-indent: -1.5em;   /* wrapped lines align after the sense number */
+    display: grid;
+    grid-template-columns: 1.5em 1fr;
   }
 
   /* mobile keeps the senses run together in one block, as before */
@@ -53,9 +57,7 @@
     }
 
     .definitions li {
-      display: inline;
-      padding-left: 0;
-      text-indent: 0;
+      display: inline;       /* also undoes the desktop grid */
     }
 
     .definitions li + li::before {
