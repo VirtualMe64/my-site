@@ -1,48 +1,53 @@
 /*
  * theme.css — shared design tokens.
  *
- * Only values that are reused across components (or that you'll want to tweak
- * globally) live here: colors, the font, and the page padding. One-off values
- * stay inline in the component that uses them.
+ * Deep green ground, warm ivory ink, one muted gold for marks and drawings.
+ * Two typefaces. Drawings are fine, even gold lines — an engraved dictionary
+ * plate, not a marker. One-off values stay inline in the component.
  */
 
 :root {
   /* ---- color ---- */
-  --color-bg: #162013;          /* deep forest green */
-  --color-text: #e8efe6;        /* light sage white */
-  --color-text-muted: #7a927a;  /* muted sage */
-  --color-rule: rgba(232, 239, 230, 0.3);
-  --color-wash: rgba(232, 239, 230, 0.045); /* faint hover background */
-  --color-accent: #e8c860;      /* warm yellow-gold */
+  --color-bg: #111d16;          /* deep green, almost black */
+  --color-text: #ece6d8;        /* warm ivory */
+  --color-text-muted: #94a397;  /* sage grey */
+  --color-rule: rgba(236, 230, 216, 0.13);
+  --color-wash: rgba(236, 230, 216, 0.035); /* faint hover background */
+  --color-ghost: rgba(236, 230, 216, 0.045); /* watermark syllables */
+  --color-accent: #d6b25e;      /* muted gold: marks, notes, drawings */
+  --color-tile: #ece2c8;        /* ivory Scrabble tile */
+  --color-tile-ink: #1b1a15;
+
   /* ---- type ---- */
-  --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
 
   /* ---- type scale ---- */
-  --text-sm: 0.85rem;      /* pos tags, stacks, small labels */
-  --text-base: 1rem;       /* descriptions, links, footer text */
-  --text-md: 1.125rem;     /* sidebar nav, project card titles */
-  --text-lg: 1.2rem;       /* company names */
-  --text-xl: 1.5rem;       /* sidebar guide-word mark */
-  --headword-size: clamp(1.75rem, 4vw, 2.75rem);
-  --headword-size-hero: 2.5rem;
+  --text-sm: 0.82rem;      /* labels, stacks, dates */
+  --text-base: 1rem;       /* descriptions, links */
+  --text-md: 1.1rem;       /* nav, project titles */
+  --text-lg: 1.6rem;       /* company names (serif) */
+  --text-note: 1.2rem;     /* margin notes (serif italic) */
+  --headword-size: clamp(2.6rem, 5vw, 3.8rem);
+  --headword-size-hero: 3rem;
 
   /* ---- shared layout ---- */
-  --page-padding: 2rem;         /* outer padding, sidebar + main */
+  --page-padding: 2rem;
+  --content-width: 64rem;
 }
 
-/* the whole site's type shrinks together on small screens */
 @media (max-width: 640px) {
   :root {
-    --text-base: 0.85rem;
-    --text-md: 0.95rem;
-    --text-lg: 1rem;
+    --text-base: 0.95rem;
+    --text-md: 1rem;
+    --text-lg: 1.4rem;
+    --text-note: 1.1rem;
+    --page-padding: 1.25rem;
   }
 }
 
-/* desktop: the hero's h1 outranks the section headwords (still a constant,
-   just a bigger one at this breakpoint) */
 @media (min-width: 641px) {
   :root {
-    --headword-size-hero: 3.25rem;
+    --headword-size-hero: clamp(3.6rem, 7vw, 5.6rem);
   }
 }

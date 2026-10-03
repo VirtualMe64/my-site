@@ -9,10 +9,17 @@ const year = new Date().getFullYear()
 
 <footer class="footer">
   <div class="line">
-    <p class="label">Scrabble word of the day:</p>
+    <p class="bracket label">scrabble word of the day</p>
+    <!-- the word played as tiles; the visually-hidden copy is what screen
+         readers get, since letter-by-letter tiles read badly -->
+    <p class="play">
+      <span class="sr" data-word>{fallback.text}</span>
+      <span class="tiles" aria-hidden="true" data-tiles>
+        {[...fallback.text].map((letter) => <span class="tile">{letter}<sub>{scrabbleScore(letter)}</sub></span>)}
+      </span>
+    </p>
     <p class="row">
-      <span class="word" data-word>{fallback.text}</span>
-      <span class="score" data-score>({scrabbleScore(fallback.text)})</span>
+      <span class="score" data-score>{scrabbleScore(fallback.text)} pts</span>
       <span class="def" data-def>{fallback.def}</span>
     </p>
     <p class="copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
@@ -23,8 +30,20 @@ const year = new Date().getFullYear()
   import { wordOfTheDay, scrabbleScore } from '../content/scrabble.js'
 
   const word = wordOfTheDay()
+  const tiles = document.querySelector('[data-tiles]')
+  const template = tiles.firstElementChild
+  tiles.replaceChildren(
+    ...[...word.text].map((letter) => {
+      // shallow clones keep Astro's scoped-style attribute
+      const tile = template.cloneNode(false)
+      const score = template.querySelector('sub').cloneNode(false)
+      score.textContent = String(scrabbleScore(letter))
+      tile.append(letter, score)
+      return tile
+    }),
+  )
   document.querySelector('[data-word]').textContent = word.text
-  document.querySelector('[data-score]').textContent = `(${scrabbleScore(word.text)})`
+  document.querySelector('[data-score]').textContent = `${scrabbleScore(word.text)} pts`
   document.querySelector('[data-def]').textContent = word.def
   document.querySelector('[data-year]').textContent = String(new Date().getFullYear())
 </script>
@@ -32,10 +51,8 @@ const year = new Date().getFullYear()
 <style>
   .footer {
     border-top: 1px solid var(--color-rule);
-    padding: var(--page-padding);
-    min-height: 10rem;
+    padding: 4rem var(--page-padding);
     display: flex;
-    align-items: center;
     justify-content: center;
   }
 
@@ -43,8 +60,47 @@ const year = new Date().getFullYear()
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.75rem;
     text-align: center;
+  }
+
+  .label {
+    text-transform: lowercase;
+  }
+
+  .tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem;
+    margin: 0.5rem 0 0.25rem;
+  }
+
+  .tile {
+    position: relative;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.3rem;
+    background: linear-gradient(160deg, #f4ecd8, var(--color-tile) 60%, #d9cba8);
+    color: var(--color-tile-ink);
+    box-shadow: 0 2px 0 #b9aa86, 0 8px 12px -6px rgba(0, 0, 0, 0.6);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* alternate tiny tilts so the row looks hand-placed on the rack */
+  .tile:nth-child(odd) { transform: rotate(-2deg); }
+  .tile:nth-child(3n) { transform: rotate(2.5deg); }
+
+  .tile sub {
+    position: absolute;
+    right: 0.18rem;
+    bottom: 0.12rem;
+    font-size: 0.45rem;
   }
 
   .row {
@@ -52,35 +108,57 @@ const year = new Date().getFullYear()
     flex-wrap: wrap;
     justify-content: center;
     align-items: baseline;
-    gap: 0.4em;
-  }
-
-  .label {
-    font-size: var(--text-base);
-    color: var(--color-text-muted);
-  }
-
-  .word {
-    font-size: var(--text-base);
-    font-weight: 700;
-    color: var(--color-accent);
+    gap: 0.5em;
+    max-width: 32rem;
   }
 
   .score {
-    font-size: var(--text-base);
-    font-weight: 400;
-    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
   }
 
   .def {
     font-size: var(--text-base);
     font-style: italic;
+    font-weight: 300;
     color: var(--color-text-muted);
   }
 
   .copy {
-    margin-top: 1rem;
-    font-size: var(--text-base);
+    margin-top: 1.5rem;
+    font-size: var(--text-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--color-text-muted);
+  }
+
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .tile {
+      width: 1.45rem;
+      height: 1.45rem;
+      font-size: 0.8rem;
+      border-radius: 0.2rem;
+    }
+
+    .tile sub {
+      font-size: 0.35rem;
+      right: 0.1rem;
+      bottom: 0.06rem;
+    }
+
+    .tiles {
+      gap: 0.2rem;
+    }
   }
 </style>

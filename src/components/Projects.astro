@@ -3,69 +3,57 @@ import Section from './Section.astro'
 import { getSection } from '../content/site.js'
 import { projects } from '../content/projects.js'
 import { md } from '../lib/md.js'
-
-const rows = []
-for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
 ---
 
 <Section {...getSection('projects')}>
   <div class="grid">
-    {rows.map((row) => (
-      <div class="row">
-        {row.map((project) => (
-          <article class="card">
-            <p class="name">{project.name} <span class="pos">{project.pos}</span></p>
-            <p class="def" set:html={md(project.def)} />
-            <footer class="cardFoot">
-              <span class="stack">{project.stack}</span>
-              <span class="seeAlso">
-                See also:{' '}
-                {project.links.map((link, i) => (
-                  <span><a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>{i < project.links.length - 1 && ', '}</span>
-                ))}
-              </span>
-            </footer>
-          </article>
-        ))}
-      </div>
+    {projects.map((project, i) => (
+      <article class="card">
+        <header class="cardHead">
+          <span class="box">{i + 1}</span>
+          <p class="name">{project.name} <span class="pos">{project.pos}</span></p>
+          {i === 0 && (
+            <span class="note newest" aria-hidden="true">
+              newest!
+              <svg class="scribble" viewBox="0 0 40 34" width="30"><path d="M36 4C22 6 10 14 6 28" /><path d="M2 20l4 9 8-5" /></svg>
+            </span>
+          )}
+        </header>
+        <p class="def" set:html={md(project.def)} />
+        <footer class="cardFoot">
+          <span class="stack">{project.stack}</span>
+          <span class="links">
+            {project.links.map((link) => (
+              <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+            ))}
+          </span>
+        </footer>
+      </article>
     ))}
   </div>
 </Section>
 
 <style>
   .grid {
-    /* the grid (and its rules) extends 1rem past the text column on both
-       sides, so the hover wash ends where the rules do and the card text
-       stays aligned with the headword */
-    margin: 1rem -1rem 0;
-    position: relative;
-    border-bottom: 1px solid var(--color-rule);
-  }
-
-  /* center vertical — spans full grid height regardless of row count */
-  .grid::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-0.5px);
-    width: 1px;
-    background: var(--color-rule);
-    pointer-events: none;
-  }
-
-  .row {
+    margin-top: 3rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     border-top: 1px solid var(--color-rule);
   }
 
   .card {
-    padding: 1.5rem 2rem 1.5rem 1rem;
+    position: relative;
+    padding: 1.75rem 2rem 1.75rem 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  /* right column: a center rule and mirrored padding */
+  .card:nth-child(even) {
+    padding: 1.75rem 0 1.75rem 2rem;
+    border-left: 1px solid var(--color-rule);
   }
 
   /* hovering a card highlights its entry, like running a finger down the page */
@@ -87,26 +75,46 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
     }
   }
 
-  .card:nth-child(2) {
-    padding-left: 2rem;
-    padding-right: 1rem;
+  .cardHead {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
   }
 
   .name {
-    font-size: var(--text-md);
-    font-weight: 700;
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 400;
+    line-height: 1.15;
+    text-wrap: balance;
   }
 
   .pos {
     font-size: var(--text-sm);
     font-style: italic;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--color-text-muted);
+  }
+
+  .newest {
+    right: 0;
+    top: -2.2rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.2rem;
+    transform: rotate(3deg);
+  }
+
+  .newest svg {
+    transform: scaleX(-1);
   }
 
   .def {
     font-weight: 300;
     font-size: var(--text-base);
-    line-height: 1.5;
+    line-height: 1.55;
     flex: 1;
   }
 
@@ -114,65 +122,55 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
      :global because the markup comes from set:html */
   .def :global(a) {
     text-decoration: underline;
-    text-decoration-style: dotted;
+    text-decoration-color: var(--color-rule);
     text-underline-offset: 3px;
   }
 
   .cardFoot {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: baseline;
+    gap: 0.5rem 1rem;
     margin-top: 0.25rem;
   }
 
   .stack {
-    width: 50%;
     font-size: var(--text-sm);
+    letter-spacing: 0.04em;
     color: var(--color-text-muted);
-    font-style: italic;
   }
 
-  .seeAlso {
-    width: 50%;
+  /* links: ivory with a quiet underline, each marked ↗ */
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.9rem;
     font-size: var(--text-sm);
-    font-style: italic;
-    color: var(--color-text-muted);
-    text-align: right;
+    letter-spacing: 0.06em;
   }
 
-  /* underlined at rest so it reads as a link; hover bolds instead */
-  .seeAlso a {
-    color: var(--color-text-muted);
+  .links a {
     text-decoration: underline;
-    text-decoration-style: dotted;
+    text-decoration-color: var(--color-rule);
     text-underline-offset: 3px;
   }
 
-  .seeAlso a:hover {
-    font-weight: 700;
-  }
+  .links a::after { content: ' ↗'; }
 
   @media (max-width: 640px) {
-    .grid::before {
-      display: none;
-    }
-
-    .row {
+    .grid {
       grid-template-columns: 1fr;
     }
 
-    .grid {
-      margin-left: 0;
-      margin-right: 0;
+    .card,
+    .card:nth-child(even) {
+      padding: 1.5rem 0;
+      border-left: none;
     }
 
-    .card {
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    .card:nth-child(2) {
-      padding-left: 0;
-      border-top: 1px solid var(--color-rule);
+    .newest {
+      top: -1.9rem;
     }
   }
 </style>
