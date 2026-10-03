@@ -2,7 +2,9 @@
 
 Personal site for Sammy Taubman — staubman.vercel.app. Static Astro site,
 one page, no framework JS beyond two small inline scripts (scroll-spy nav,
-Scrabble word-of-the-day).
+Scrabble word-of-the-day). Visual style: a "paper poster" (warm off-white,
+uppercase sans titles, giant ghost watermark words, red-pen annotations),
+adapted from a GT FSA eboard Instagram carousel.
 
 **Check `TODO.md`** for open threads and ideas Sammy wants to pursue —
 update it as items land or new ideas come up.
@@ -22,8 +24,9 @@ update it as items land or new ideas come up.
   tests or linter).
 - To eyeball changes, build and screenshot with the pre-installed
   Playwright Chromium at two widths: **1440px (desktop)** and **390px
-  (mobile)** — the layout switches at **640px** (sidebar becomes a
-  horizontal top bar).
+  (mobile)** — the main breakpoint is **640px**; the hero also restacks
+  at 960px. Google Fonts won't load in headless Chromium through the
+  sandbox proxy — route font requests through `curl` in the script.
 
 ## Concept: the whole site is a dictionary
 
@@ -42,7 +45,7 @@ speak one of those two languages.
   text is deliberately inline in `Entry.astro` instead.
 - `src/styles/theme.css` — shared design tokens only. One-off values stay
   inline in the component that uses them (deliberate convention).
-- `src/components/` — Sidebar (nav + logo), Entry (hero), Section/
+- `src/components/` — Nav (sticky top bar + logo), Entry (hero), Section/
   Experience/Projects/Contact, Footer (word of the day).
 - `design/` — **not part of the build.** Generator HTML + candidates for
   brand assets: `design/og-alternatives/og.html` regenerates the og image
@@ -51,19 +54,26 @@ speak one of those two languages.
 
 ## Design system
 
-- Colors (all in `theme.css`): bg `#162013` deep forest green, text
-  `#e8efe6` sage, muted `#7a927a`, accent `#e8c860` warm gold. Gold is for
-  marks/emphasis (headwords, sense numbers, active states).
-- Type: Hanuman (Google Fonts, weights 300/400/700), Georgia fallback —
-  also used inside the SVG logo assets.
+- Colors (all in `theme.css`): bg `#f7f5f0` warm paper (with an inline
+  SVG noise grain), ink `#1f1e1c`, muted `#77746e`, ghost `#e9e6df`
+  (watermark words, dot-matrix), accent `#a8363a` oxblood, tile `#efe4c8`.
+  Red is the "hand" layer only: annotations, `[ bracket ]` captions, the
+  signature, active nav brackets.
+- Type: Poppins (titles uppercase + letter-spaced, body 300/400), Caveat
+  for red-pen notes, Sacramento for the signature. Tiles use Georgia.
+- Poster vocabulary (global classes in `global.css`): `.bracket` red
+  bracket captions, `.box` boxed numerals for senses/list items, `.note` +
+  `.scribble` hand annotations (always `aria-hidden`; strokes use the
+  `#wobble` SVG filter defined once in `Entry.astro`). Section watermarks
+  stack the headword's syllables one per line (`ex / pe / ri / ence`).
 - The logo is a two-tile Scrabble rack (S₁ T₁), tiles tilted −5°/+4° so
-  they read hand-placed. It lives three places, deliberately not shared:
-  `public/favicon.svg` (square canvas) and two inline copies in
-  `Sidebar.astro` with the viewBox cropped to the tiles (`0 7.5 32 17.5`)
-  and rects filled with `currentColor` so the link hover shifts gold→sage.
+  they read hand-placed. It lives two places, deliberately not shared:
+  `public/favicon.svg` (square canvas, oxblood tiles) and an inline copy in
+  `Nav.astro` with the viewBox cropped to the tiles (`0 7.5 32 17.5`)
+  and rects filled with `currentColor` so the link hover shifts ink→red.
   Don't swap the inline copies for the favicon `<img>` — the square
   canvas's dead space renders it undersized (that was a shipped bug).
-- Optical alignment: the mobile-bar mark carries `translateY(-2px)`
+- Optical alignment: the nav-bar mark carries `translateY(-2px)`
   because dead-centering an icon next to text reads as too low. Keep such
   nudges; they're intentional, not drift.
 
