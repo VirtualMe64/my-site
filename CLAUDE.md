@@ -4,7 +4,7 @@ Personal site for Sammy Taubman — staubman.vercel.app. Static Astro site,
 one page, no framework JS beyond two small inline scripts (scroll-spy nav,
 Scrabble word-of-the-day). Visual style: deep green, warm ivory, one gold
 accent; Instrument Serif headwords; fine-line gold drawings and italic-serif
-margin notes (an engraved dictionary plate, not a marker); a black-and-white
+margin notes (an engraved dictionary plate, not a marker); a full-color
 portrait popping out of an engraved frame, with SAMMY played as tiles in an
 arc around it. The layout came from PR #16; the look is this branch's own.
 
@@ -54,8 +54,9 @@ speak one of those two languages.
   fine-line drawings, "see also"), Section (headword + gloss over ghost
   syllables, one per line: "ex / pe / ri / ence")/Experience/Projects/
   Contact, Footer (word of the day as tiles).
-- `public/me-print.webp` — the hero portrait: cut out of a night photo
-  (other people masked out), converted to a warm black-and-white print.
+- `public/me-cutout.webp` — the hero portrait, in color: cut out of a
+  night photo (other people and a shirt speck removed, magenta cast
+  neutralized). Sammy didn't like the black-and-white print version.
   Regenerate rather than hand-edit if the photo changes.
 - `design/` — **not part of the build.** Generator HTML + candidates for
   brand assets: `design/og-alternatives/og.html` regenerates the og image
