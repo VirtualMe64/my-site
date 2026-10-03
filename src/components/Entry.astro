@@ -31,14 +31,15 @@
         <p class="bracket kicker">software engineer &nbsp;·&nbsp; stripe</p>
       </div>
 
-      <!-- the "cutout": SAMMY played as tiles, real letter scores, with a
-           halftone blow-up of one M in a framed inset behind them -->
+      <!-- the "cutout": a photo of Sammy, cut out and popping out of a framed
+           dot-screen panel (head and hands break the frame), with SAMMY
+           played as tiles around it, real letter scores -->
       <div class="rack" aria-hidden="true">
-        <div class="inset"><span class="tile big">M<sub>3</sub></span></div>
+        <div class="inset"><img class="photo" src="/me-cutout.webp" alt="" width="698" height="900" /></div>
         <span class="tile" style="--x:0em; --y:5.4em; --r:-8deg">S<sub>1</sub></span>
         <span class="tile" style="--x:4.7em; --y:2.6em; --r:5deg">A<sub>1</sub></span>
         <span class="tile" style="--x:8.9em; --y:6.6em; --r:-3deg">M<sub>3</sub></span>
-        <span class="tile" style="--x:13.3em; --y:9.8em; --r:9deg">M<sub>3</sub></span>
+        <span class="tile" style="--x:13.3em; --y:11.6em; --r:9deg">M<sub>3</sub></span>
         <span class="tile" style="--x:5.4em; --y:10.6em; --r:-12deg">Y<sub>4</sub></span>
         <span class="note pts">
           <svg class="scribble" viewBox="0 0 70 30" width="54"><path d="M66 22C48 26 22 22 6 8" /><path d="M5 18L5 7l11 1" /></svg>
@@ -195,31 +196,27 @@
     font-size: 0.36em;
   }
 
-  /* framed halftone close-up (the poster's dot-screened detail crop): a
-     giant tile seen through a paper screen punched with dot holes */
+  /* the frame: a dot-screen panel (the poster's halftone texture) that the
+     photo sits in. clip-path lets the head and hands break out past the top
+     and sides while the bottom edge still crops the legs */
   .inset {
     position: absolute;
     right: 0;
-    top: 0;
-    width: 9.5em;
-    height: 12.5em;
+    top: 1.5em;
+    width: 10em;
+    height: 13em;
     border: 1.25px solid var(--color-text);
-    overflow: hidden;
+    background: radial-gradient(circle, var(--color-ghost) 1.6px, transparent 2.1px) 0 0 / 6px 6px;
+    clip-path: inset(-5em -4em 0 -4em);
   }
 
-  .inset::after {
-    content: '';
+  .photo {
     position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, transparent 1.5px, var(--color-bg) 2.2px) 0 0 / 5px 5px;
-  }
-
-  .tile.big {
-    left: -0.25em;
-    top: 0.1em;
-    --r: -6deg;
-    font-size: 7em;
-    box-shadow: none;
+    left: -2.6em;
+    top: -2.4em;
+    width: 15.2em;
+    height: auto;
+    filter: drop-shadow(0 6px 10px rgba(31, 30, 28, 0.16));
   }
 
   .pts {
