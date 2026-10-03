@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css'
-import Sidebar from '../components/Sidebar.astro'
+import Nav from '../components/Nav.astro'
 import Footer from '../components/Footer.astro'
 import Entry from '../components/Entry.astro'
 import Experience from '../components/Experience.astro'
@@ -15,6 +15,7 @@ const ogImage = 'https://staubman.vercel.app/og-image.png'
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="theme-color" content="#0d2b20" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Sammy Taubman</title>
@@ -34,45 +35,22 @@ const ogImage = 'https://staubman.vercel.app/og-image.png'
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <!-- Hanuman: serif used throughout the site -->
+    <!-- Fraunces: headwords; Instrument Sans: body; JetBrains Mono: metadata -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Hanuman:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,50&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <div class="page">
-      <Sidebar />
-      <main>
-        <Entry />
-        <Experience />
-        <Projects />
-        <Contact />
-      </main>
-    </div>
+    <Nav />
+    <main>
+      <Entry />
+      <Experience />
+      <Projects />
+      <Contact />
+    </main>
     <Footer />
   </body>
 </html>
-
-<style>
-  /* Top-level page layout: sticky sidebar + stacked full-height sections. */
-  .page {
-    display: flex;
-    align-items: flex-start;   /* let the sidebar stick instead of stretching */
-    min-height: 100dvh;
-  }
-
-  main {
-    flex: 1;
-    min-width: 0;              /* allow content to shrink instead of overflow */
-  }
-
-  @media (max-width: 640px) {
-    .page {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-</style>

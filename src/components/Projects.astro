@@ -2,177 +2,129 @@
 import Section from './Section.astro'
 import { getSection } from '../content/site.js'
 import { projects } from '../content/projects.js'
+import { scrabbleScore } from '../content/scrabble.js'
 import { md } from '../lib/md.js'
-
-const rows = []
-for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
 ---
 
-<Section {...getSection('projects')}>
-  <div class="grid">
-    {rows.map((row) => (
-      <div class="row">
-        {row.map((project) => (
-          <article class="card">
-            <p class="name">{project.name} <span class="pos">{project.pos}</span></p>
-            <p class="def" set:html={md(project.def)} />
-            <footer class="cardFoot">
-              <span class="stack">{project.stack}</span>
-              <span class="seeAlso">
-                See also:{' '}
-                {project.links.map((link, i) => (
-                  <span><a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>{i < project.links.length - 1 && ', '}</span>
-                ))}
-              </span>
-            </footer>
-          </article>
-        ))}
-      </div>
-    ))}
-  </div>
+<Section {...getSection('projects')} index={2}>
+  <!-- each project is a big cream tile; its corner tile is the name's first
+       letter with that letter's real Scrabble score -->
+  <ul class="grid">
+    {projects.map((project) => {
+      const initial = project.name[0].toUpperCase()
+      return (
+        <li class="card">
+          <span class="tile mini" aria-hidden="true">{initial}<sub>{scrabbleScore(initial)}</sub></span>
+          <h3 class="name">{project.name}</h3>
+          <p class="stack">{project.stack}</p>
+          <p class="def" set:html={md(project.def)} />
+          <p class="links">
+            {project.links.map((link) => (
+              <a href={link.href} target="_blank" rel="noreferrer">{link.label} ↗</a>
+            ))}
+          </p>
+        </li>
+      )
+    })}
+  </ul>
 </Section>
 
 <style>
   .grid {
-    /* the grid (and its rules) extends 1rem past the text column on both
-       sides, so the hover wash ends where the rules do and the card text
-       stays aligned with the headword */
-    margin: 1rem -1rem 0;
-    position: relative;
-    border-bottom: 1px solid var(--color-rule);
-  }
-
-  /* center vertical — spans full grid height regardless of row count */
-  .grid::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-0.5px);
-    width: 1px;
-    background: var(--color-rule);
-    pointer-events: none;
-  }
-
-  .row {
+    list-style: none;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    border-top: 1px solid var(--color-rule);
+    gap: 1.5rem;
   }
 
+  /* a tile-faced card: cream, with the darker lip below for thickness */
   .card {
-    padding: 1.5rem 2rem 1.5rem 1rem;
+    position: relative;
+    padding: 1.6rem 1.6rem 1.4rem;
+    border-radius: var(--radius);
+    background: var(--color-tile);
+    color: var(--color-tile-ink);
+    box-shadow: 0 5px 0 var(--color-tile-edge), 0 16px 28px -14px rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  /* hovering a card highlights its entry, like running a finger down the page */
   @media (hover: hover) {
-    .card {
-      transition: background-color 0.2s ease;
-    }
-
-    .name {
-      transition: color 0.2s ease;
-    }
-
     .card:hover {
-      background-color: var(--color-wash);
-    }
-
-    .card:hover .name {
-      color: var(--color-accent);
+      transform: translateY(-4px) rotate(-0.4deg);
+      box-shadow: 0 7px 0 var(--color-tile-edge), 0 24px 36px -16px rgba(0, 0, 0, 0.65);
     }
   }
 
-  .card:nth-child(2) {
-    padding-left: 2rem;
-    padding-right: 1rem;
+  .mini {
+    position: absolute;
+    top: 1.3rem;
+    right: 1.3rem;
+    font-size: 0.95rem;
+    background: var(--color-tw);
+    color: #fff;
+    box-shadow: 0 0.16em 0 #b44a3c;
   }
 
   .name {
-    font-size: var(--text-md);
-    font-weight: 700;
-  }
-
-  .pos {
-    font-size: var(--text-sm);
-    font-style: italic;
-    color: var(--color-text-muted);
-  }
-
-  .def {
-    font-weight: 300;
-    font-size: var(--text-base);
-    line-height: 1.5;
-    flex: 1;
-  }
-
-  /* definition links are underlined at rest; hover styling is global.
-     :global because the markup comes from set:html */
-  .def :global(a) {
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
-  }
-
-  .cardFoot {
-    display: flex;
-    align-items: baseline;
-    margin-top: 0.25rem;
+    padding-right: 3rem;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: 1.15;
   }
 
   .stack {
-    width: 50%;
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    font-style: italic;
+    margin-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: #6f6553;
   }
 
-  .seeAlso {
-    width: 50%;
-    font-size: var(--text-sm);
-    font-style: italic;
-    color: var(--color-text-muted);
-    text-align: right;
+  .def {
+    margin-top: 0.9rem;
+    flex: 1;
+    font-size: 0.95rem;
+    color: #3b362c;
   }
 
-  /* underlined at rest so it reads as a link; hover bolds instead */
-  .seeAlso a {
-    color: var(--color-text-muted);
+  .def :global(a) {
     text-decoration: underline;
-    text-decoration-style: dotted;
+    text-decoration-color: rgba(29, 26, 20, 0.3);
     text-underline-offset: 3px;
   }
 
-  .seeAlso a:hover {
-    font-weight: 700;
+  .def :global(a:hover) {
+    color: #b44a3c;
   }
 
-  @media (max-width: 640px) {
-    .grid::before {
-      display: none;
-    }
+  .links {
+    margin-top: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
 
-    .row {
-      grid-template-columns: 1fr;
-    }
+  /* link chips */
+  .links a {
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(29, 26, 20, 0.22);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
 
+  .links a:hover {
+    background: var(--color-tile-ink);
+    color: var(--color-tile);
+  }
+
+  @media (max-width: 760px) {
     .grid {
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    .card {
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    .card:nth-child(2) {
-      padding-left: 0;
-      border-top: 1px solid var(--color-rule);
+      grid-template-columns: 1fr;
     }
   }
 </style>

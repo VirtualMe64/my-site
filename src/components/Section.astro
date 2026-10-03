@@ -1,27 +1,48 @@
 ---
-// A dictionary-entry section: headword (interpunct dots split from the ·s in
-// `word` and hidden from screen readers), part-of-speech tag, gloss line, and
-// the section body in the default slot. Always an <h2> — the hero is the one
-// exception and hand-rolls its <h1> in Entry.astro.
+// A dictionary-entry section: the headword (interpunct dots split from the
+// ·s in `word` and hidden from screen readers), a mono line with the part of
+// speech and gloss, and the body. Wide screens put the header in a sticky
+// left column so the page reads like an open dictionary spread.
 const { id, word, pos, gloss } = Astro.props
 const parts = word.split('·')
+const index = String(Astro.props.index ?? '').padStart(2, '0')
 ---
 
-<section id={id}>
-  <div class="inner">
-    <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span aria-hidden="true">·</span>}{part}</>)} <span class="pos">{pos}</span></h2>
-    <p class="gloss">{gloss}</p>
-    <slot />
+<section id={id} class="block">
+  <div class="inner split">
+    <header class="head">
+      {Astro.props.index && <p class="mono">§ {index}</p>}
+      <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span class="dot" aria-hidden="true">·</span>}{part}</>)}</h2>
+      <p class="mono"><em>{pos}</em> &nbsp;{gloss}</p>
+    </header>
+    <div class="body"><slot /></div>
   </div>
 </section>
 
 <style>
-  .inner {
-    max-width: 60rem;
+  .split {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+    gap: 4rem;
+    align-items: start;
   }
 
-  .gloss {
-    margin-top: 0.5rem;
-    font-weight: 300;
+  .head {
+    position: sticky;
+    top: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  @media (max-width: 900px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .head {
+      position: static;
+    }
   }
 </style>

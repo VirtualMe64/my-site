@@ -2,7 +2,8 @@
 
 Personal site for Sammy Taubman — staubman.vercel.app. Static Astro site,
 one page, no framework JS beyond two small inline scripts (scroll-spy nav,
-Scrabble word-of-the-day).
+Scrabble word-of-the-day). Visual style: "the board" — Scrabble-board green,
+cream tile cards, premium-square accents, and a cutout photo in the hero.
 
 **Check `TODO.md`** for open threads and ideas Sammy wants to pursue —
 update it as items land or new ideas come up.
@@ -22,8 +23,9 @@ update it as items land or new ideas come up.
   tests or linter).
 - To eyeball changes, build and screenshot with the pre-installed
   Playwright Chromium at two widths: **1440px (desktop)** and **390px
-  (mobile)** — the layout switches at **640px** (sidebar becomes a
-  horizontal top bar).
+  (mobile)** — breakpoints at **960px** (hero stacks) and **640px**.
+  Google Fonts won't load in headless Chromium through the sandbox proxy —
+  route font requests through `curl` in the script.
 
 ## Concept: the whole site is a dictionary
 
@@ -36,14 +38,20 @@ speak one of those two languages.
 
 ## Layout
 
-- `src/content/site.js` — the `sections` list drives BOTH the sidebar nav
-  and section headers (single source of truth); also contact links. Other
+- `src/content/site.js` — the `sections` list drives BOTH the top bar
+  and section headers (single source of truth); also the hero's stat strip
+  and contact links. Other
   content lives in `src/content/{roles,projects,scrabble}.js`. The hero's
   text is deliberately inline in `Entry.astro` instead.
 - `src/styles/theme.css` — shared design tokens only. One-off values stay
   inline in the component that uses them (deliberate convention).
-- `src/components/` — Sidebar (nav + logo), Entry (hero), Section/
-  Experience/Projects/Contact, Footer (word of the day).
+- `src/components/` — Nav (sticky top bar: rack logo, links, "Say hi"),
+  Entry (hero: entry + photo rising out of a 5×5 board + SAMMY tile arc +
+  stat strip), Section (dictionary header in a sticky left column)/
+  Experience (timeline)/Projects (tile cards)/Contact, Footer (word of the
+  day as tiles).
+- `public/me-cutout.webp` — the hero photo, background removed and
+  touched up (cut from a night shot; other people masked out).
 - `design/` — **not part of the build.** Generator HTML + candidates for
   brand assets: `design/og-alternatives/og.html` regenerates the og image
   (open in a browser, screenshot frame `#d` at 2x → `public/og-image.png`);
@@ -51,19 +59,26 @@ speak one of those two languages.
 
 ## Design system
 
-- Colors (all in `theme.css`): bg `#162013` deep forest green, text
-  `#e8efe6` sage, muted `#7a927a`, accent `#e8c860` warm gold. Gold is for
-  marks/emphasis (headwords, sense numbers, active states).
-- Type: Hanuman (Google Fonts, weights 300/400/700), Georgia fallback —
-  also used inside the SVG logo assets.
+- Colors (all in `theme.css`): board green `#12382a` with a faint 48px
+  grid, deep `#0d2b20` for recessed bands, cream `#f3e9d2` text/tiles,
+  sage `#9fb8a8` muted. Accents are the four premium squares: TW
+  `#e0604f` (primary: buttons, "now", headword dots), DW `#f2a99c`, DL
+  `#9fcfe6`, TL `#3d7fc4`.
+- Type: Fraunces (headwords, names), Instrument Sans (body), JetBrains
+  Mono (metadata: dates, pos tags, labels). The SVG logo uses Georgia.
+- Tiles (`.tile` in `global.css`): cream face + a darker lip below for
+  thickness. Project cards are big tiles; each corner tile is the name's
+  initial with its real letter score.
+- The hero board is the real 5×5 around the center star of a 15×15 board
+  (TL corners, DL diagonals, ★ center) — keep it legal if you edit it.
 - The logo is a two-tile Scrabble rack (S₁ T₁), tiles tilted −5°/+4° so
-  they read hand-placed. It lives three places, deliberately not shared:
-  `public/favicon.svg` (square canvas) and two inline copies in
-  `Sidebar.astro` with the viewBox cropped to the tiles (`0 7.5 32 17.5`)
-  and rects filled with `currentColor` so the link hover shifts gold→sage.
+  they read hand-placed. It lives two places, deliberately not shared:
+  `public/favicon.svg` (square canvas, TW-red tiles) and an inline copy
+  in `Nav.astro` with the viewBox cropped to the tiles (`0 7.5 32 17.5`),
+  cream tiles.
   Don't swap the inline copies for the favicon `<img>` — the square
   canvas's dead space renders it undersized (that was a shipped bug).
-- Optical alignment: the mobile-bar mark carries `translateY(-2px)`
+- Optical alignment: the top-bar mark carries `translateY(-1px)`
   because dead-centering an icon next to text reads as too low. Keep such
   nudges; they're intentional, not drift.
 

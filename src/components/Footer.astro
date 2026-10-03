@@ -8,14 +8,18 @@ const year = new Date().getFullYear()
 ---
 
 <footer class="footer">
-  <div class="line">
-    <p class="label">Scrabble word of the day:</p>
-    <p class="row">
-      <span class="word" data-word>{fallback.text}</span>
-      <span class="score" data-score>({scrabbleScore(fallback.text)})</span>
-      <span class="def" data-def>{fallback.def}</span>
-    </p>
-    <p class="copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
+  <div class="inner">
+    <div class="wotd">
+      <p class="mono">word of the day</p>
+      <p class="play">
+        <span class="sr-only" data-word>{fallback.text}</span>
+        <span class="rack" aria-hidden="true" data-tiles>
+          {[...fallback.text].map((letter) => <span class="tile">{letter}<sub>{scrabbleScore(letter)}</sub></span>)}
+        </span>
+      </p>
+      <p class="meaning"><span class="pts" data-score>{scrabbleScore(fallback.text)} pts</span> <span data-def>{fallback.def}</span></p>
+    </div>
+    <p class="mono copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
   </div>
 </footer>
 
@@ -23,64 +27,71 @@ const year = new Date().getFullYear()
   import { wordOfTheDay, scrabbleScore } from '../content/scrabble.js'
 
   const word = wordOfTheDay()
+  const rack = document.querySelector('[data-tiles]')
+  const template = rack.firstElementChild
+  rack.replaceChildren(
+    ...[...word.text].map((letter) => {
+      // shallow clones keep Astro's scoped-style attribute
+      const tile = template.cloneNode(false)
+      const score = template.querySelector('sub').cloneNode(false)
+      score.textContent = String(scrabbleScore(letter))
+      tile.append(letter, score)
+      return tile
+    }),
+  )
   document.querySelector('[data-word]').textContent = word.text
-  document.querySelector('[data-score]').textContent = `(${scrabbleScore(word.text)})`
+  document.querySelector('[data-score]').textContent = `${scrabbleScore(word.text)} pts`
   document.querySelector('[data-def]').textContent = word.def
   document.querySelector('[data-year]').textContent = String(new Date().getFullYear())
 </script>
 
 <style>
   .footer {
+    background: var(--color-bg-deep);
     border-top: 1px solid var(--color-rule);
-    padding: var(--page-padding);
-    min-height: 10rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 3rem var(--page-padding);
   }
 
-  .line {
+  .inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    text-align: center;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
   }
 
-  .row {
+  .rack {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 0.4em;
+    gap: 0.35rem;
+    margin: 0.6rem 0 0.75rem;
   }
 
-  .label {
-    font-size: var(--text-base);
+  .tile {
+    font-size: 0.95rem;
+  }
+
+  .tile:nth-child(odd) { transform: rotate(-2deg); }
+  .tile:nth-child(3n) { transform: rotate(2.5deg); }
+
+  .meaning {
+    max-width: 30rem;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
   }
 
-  .word {
-    font-size: var(--text-base);
-    font-weight: 700;
-    color: var(--color-accent);
+  .pts {
+    margin-right: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-dw);
   }
 
-  .score {
-    font-size: var(--text-base);
-    font-weight: 400;
-    color: var(--color-text-muted);
-  }
-
-  .def {
-    font-size: var(--text-base);
-    font-style: italic;
-    color: var(--color-text-muted);
-  }
-
-  .copy {
-    margin-top: 1rem;
-    font-size: var(--text-base);
-    color: var(--color-text-muted);
+  @media (max-width: 640px) {
+    .tile {
+      font-size: 0.7rem;
+    }
   }
 </style>

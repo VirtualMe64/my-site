@@ -3,13 +3,15 @@ import Section from './Section.astro'
 import { getSection, contact } from '../content/site.js'
 ---
 
-<Section {...getSection('contact')}>
+<Section {...getSection('contact')} index={3}>
+  <p class="pitch">Always happy to talk payments, teaching, side projects, or a game of Scrabble.</p>
   <ul class="links">
     {contact.map((link) => (
-      <li class="row">
-        <span class="label">{link.label}</span>
+      <li>
         <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-          {link.display}
+          <span class="mono">{link.label}</span>
+          <span class="display">{link.display}</span>
+          <span class="arrow" aria-hidden="true">→</span>
         </a>
       </li>
     ))}
@@ -17,34 +19,58 @@ import { getSection, contact } from '../content/site.js'
 </Section>
 
 <style>
+  .pitch {
+    max-width: 34rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
   .links {
     list-style: none;
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--color-rule);
   }
 
-  .row {
-    display: flex;
+  .links a {
+    display: grid;
+    grid-template-columns: 7rem 1fr auto;
     align-items: baseline;
-    gap: 0.75em;
+    gap: 1rem;
+    padding: 1.15rem 0.25rem;
+    border-bottom: 1px solid var(--color-rule);
+    transition: background-color 0.2s ease, padding 0.2s ease;
   }
 
-  .label {
-    flex: 0 0 6rem;
-    font-size: var(--text-sm);
-    font-style: italic;
-    color: var(--color-text-muted);
+  .links a:hover {
+    color: var(--color-text);
+    background: rgba(243, 233, 210, 0.04);
+    padding-left: 0.75rem;
   }
 
-  .row a {
-    font-size: var(--text-base);
+  .display {
+    font-size: var(--text-md);
+    overflow-wrap: anywhere;
+  }
+
+  .arrow {
+    color: var(--color-tw);
+    transition: transform 0.2s ease;
+  }
+
+  .links a:hover .arrow {
+    transform: translateX(4px);
   }
 
   @media (max-width: 640px) {
-    .label {
-      flex-basis: 4.5rem;
+    .links a {
+      grid-template-columns: 1fr auto;
+      gap: 0.2rem 1rem;
+    }
+
+    .links .mono {
+      grid-column: 1 / -1;
     }
   }
 </style>

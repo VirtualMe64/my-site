@@ -1,48 +1,54 @@
 /*
  * theme.css — shared design tokens.
  *
- * Only values that are reused across components (or that you'll want to tweak
- * globally) live here: colors, the font, and the page padding. One-off values
- * stay inline in the component that uses them.
+ * The palette is a Scrabble board: felt-green board, cream tiles, and the
+ * four premium-square colors as accents. Only values reused across
+ * components live here; one-off values stay inline in the component.
  */
 
 :root {
-  /* ---- color ---- */
-  --color-bg: #162013;          /* deep forest green */
-  --color-text: #e8efe6;        /* light sage white */
-  --color-text-muted: #7a927a;  /* muted sage */
-  --color-rule: rgba(232, 239, 230, 0.3);
-  --color-wash: rgba(232, 239, 230, 0.045); /* faint hover background */
-  --color-accent: #e8c860;      /* warm yellow-gold */
+  /* ---- the board ---- */
+  --color-bg: #12382a;          /* board green */
+  --color-bg-deep: #0d2b20;     /* recessed areas: footer, stat strip */
+  --color-grid: rgba(243, 233, 210, 0.05);   /* 15×15 board lines */
+  --color-text: #f3e9d2;        /* tile cream */
+  --color-text-muted: #9fb8a8;  /* sage */
+  --color-rule: rgba(243, 233, 210, 0.14);
+
+  /* ---- tiles ---- */
+  --color-tile: #f3e9d2;
+  --color-tile-edge: #d8c79f;   /* the tile's thickness, seen below it */
+  --color-tile-ink: #1d1a14;
+
+  /* ---- premium squares (accents) ---- */
+  --color-tw: #e0604f;          /* triple word — the main accent */
+  --color-dw: #f2a99c;          /* double word */
+  --color-dl: #9fcfe6;          /* double letter */
+  --color-tl: #3d7fc4;          /* triple letter */
+
   /* ---- type ---- */
-  --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
 
-  /* ---- type scale ---- */
-  --text-sm: 0.85rem;      /* pos tags, stacks, small labels */
-  --text-base: 1rem;       /* descriptions, links, footer text */
-  --text-md: 1.125rem;     /* sidebar nav, project card titles */
-  --text-lg: 1.2rem;       /* company names */
-  --text-xl: 1.5rem;       /* sidebar guide-word mark */
-  --headword-size: clamp(1.75rem, 4vw, 2.75rem);
-  --headword-size-hero: 2.5rem;
+  --text-xs: 0.72rem;
+  --text-sm: 0.85rem;
+  --text-base: 1rem;
+  --text-md: 1.15rem;
+  --text-lg: 1.4rem;
+  --headword-size: clamp(2rem, 4vw, 3rem);
 
-  /* ---- shared layout ---- */
-  --page-padding: 2rem;         /* outer padding, sidebar + main */
+  /* ---- layout ---- */
+  --page-padding: 2rem;
+  --content-width: 72rem;
+  --radius: 10px;
 }
 
-/* the whole site's type shrinks together on small screens */
 @media (max-width: 640px) {
   :root {
-    --text-base: 0.85rem;
-    --text-md: 0.95rem;
-    --text-lg: 1rem;
-  }
-}
-
-/* desktop: the hero's h1 outranks the section headwords (still a constant,
-   just a bigger one at this breakpoint) */
-@media (min-width: 641px) {
-  :root {
-    --headword-size-hero: 3.25rem;
+    --text-base: 0.95rem;
+    --text-md: 1.05rem;
+    --text-lg: 1.2rem;
+    --page-padding: 1.25rem;
   }
 }
