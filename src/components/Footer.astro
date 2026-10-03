@@ -9,17 +9,13 @@ const year = new Date().getFullYear()
 
 <footer class="footer">
   <div class="inner">
-    <div class="wotd">
-      <p class="mono">word of the day</p>
-      <p class="play">
-        <span class="sr-only" data-word>{fallback.text}</span>
-        <span class="rack" aria-hidden="true" data-tiles>
-          {[...fallback.text].map((letter) => <span class="tile">{letter}<sub>{scrabbleScore(letter)}</sub></span>)}
-        </span>
-      </p>
-      <p class="meaning"><span class="pts" data-score>{scrabbleScore(fallback.text)} pts</span> <span data-def>{fallback.def}</span></p>
-    </div>
-    <p class="mono copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
+    <p class="wotd">
+      <span class="label">Scrabble word of the day</span>
+      <span class="word" data-word>{fallback.text}</span>
+      <span class="score" data-score>{scrabbleScore(fallback.text)} pts</span>
+      <span class="def" data-def>{fallback.def}</span>
+    </p>
+    <p class="label">&copy; <span data-year>{year}</span> Sammy Taubman</p>
   </div>
 </footer>
 
@@ -27,18 +23,6 @@ const year = new Date().getFullYear()
   import { wordOfTheDay, scrabbleScore } from '../content/scrabble.js'
 
   const word = wordOfTheDay()
-  const rack = document.querySelector('[data-tiles]')
-  const template = rack.firstElementChild
-  rack.replaceChildren(
-    ...[...word.text].map((letter) => {
-      // shallow clones keep Astro's scoped-style attribute
-      const tile = template.cloneNode(false)
-      const score = template.querySelector('sub').cloneNode(false)
-      score.textContent = String(scrabbleScore(letter))
-      tile.append(letter, score)
-      return tile
-    }),
-  )
   document.querySelector('[data-word]').textContent = word.text
   document.querySelector('[data-score]').textContent = `${scrabbleScore(word.text)} pts`
   document.querySelector('[data-def]').textContent = word.def
@@ -47,51 +31,44 @@ const year = new Date().getFullYear()
 
 <style>
   .footer {
-    background: var(--color-bg-deep);
     border-top: 1px solid var(--color-rule);
-    padding: 3rem var(--page-padding);
+    padding: 2.5rem var(--page-padding);
   }
 
   .inner {
     max-width: var(--content-width);
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem 2rem;
   }
 
-  .rack {
+  .wotd {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
-    margin: 0.6rem 0 0.75rem;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
   }
 
-  .tile {
-    font-size: 0.95rem;
+  .word {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
   }
 
-  .tile:nth-child(odd) { transform: rotate(-2deg); }
-  .tile:nth-child(3n) { transform: rotate(2.5deg); }
-
-  .meaning {
-    max-width: 30rem;
+  .score {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
   }
 
-  .pts {
-    margin-right: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-dw);
-  }
-
-  @media (max-width: 640px) {
-    .tile {
-      font-size: 0.7rem;
-    }
+  .def {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
   }
 </style>

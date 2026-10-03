@@ -1,19 +1,17 @@
 ---
-// A dictionary-entry section: the headword (interpunct dots split from the
-// ·s in `word` and hidden from screen readers), a mono line with the part of
-// speech and gloss, and the body. Wide screens put the header in a sticky
-// left column so the page reads like an open dictionary spread.
-const { id, word, pos, gloss } = Astro.props
+// A dictionary-entry section: number, headword (interpunct dots split from
+// the ·s in `word`, gold, hidden from screen readers), part of speech and
+// gloss in a left column; the body on the right — an open-book spread.
+const { id, word, pos, gloss, index } = Astro.props
 const parts = word.split('·')
-const index = String(Astro.props.index ?? '').padStart(2, '0')
 ---
 
 <section id={id} class="block">
   <div class="inner split">
     <header class="head">
-      {Astro.props.index && <p class="mono">§ {index}</p>}
+      <p class="label">{String(index).padStart(2, '0')}</p>
       <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span class="dot" aria-hidden="true">·</span>}{part}</>)}</h2>
-      <p class="mono"><em>{pos}</em> &nbsp;{gloss}</p>
+      <p class="gloss"><span class="pos">{pos}</span> {gloss}</p>
     </header>
     <div class="body"><slot /></div>
   </div>
@@ -22,23 +20,34 @@ const index = String(Astro.props.index ?? '').padStart(2, '0')
 <style>
   .split {
     display: grid;
-    grid-template-columns: 16rem 1fr;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: 3rem;
     align-items: start;
   }
 
   .head {
     position: sticky;
-    top: 6rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+    top: 7rem;
+  }
+
+  .headword {
+    margin-top: 1rem;
+  }
+
+  .gloss {
+    margin-top: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .gloss .pos {
+    margin-right: 0.3rem;
+    font-size: 1.15em;
   }
 
   @media (max-width: 900px) {
     .split {
       grid-template-columns: 1fr;
-      gap: 2.5rem;
+      gap: 3rem;
     }
 
     .head {

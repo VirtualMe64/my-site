@@ -2,30 +2,26 @@
 import Section from './Section.astro'
 import { getSection } from '../content/site.js'
 import { projects } from '../content/projects.js'
-import { scrabbleScore } from '../content/scrabble.js'
 import { md } from '../lib/md.js'
 ---
 
 <Section {...getSection('projects')} index={2}>
-  <!-- each project is a big cream tile; its corner tile is the name's first
-       letter with that letter's real Scrabble score -->
+  <!-- typeset entries, two to a row, each under its own hairline -->
   <ul class="grid">
-    {projects.map((project) => {
-      const initial = project.name[0].toUpperCase()
-      return (
-        <li class="card">
-          <span class="tile mini" aria-hidden="true">{initial}<sub>{scrabbleScore(initial)}</sub></span>
-          <h3 class="name">{project.name}</h3>
-          <p class="stack">{project.stack}</p>
-          <p class="def" set:html={md(project.def)} />
+    {projects.map((project) => (
+      <li class="project">
+        <h3 class="name">{project.name} <span class="pos">{project.pos}</span></h3>
+        <p class="def prose" set:html={md(project.def)} />
+        <div class="meta">
+          <p class="label">{project.stack}</p>
           <p class="links">
             {project.links.map((link) => (
-              <a href={link.href} target="_blank" rel="noreferrer">{link.label} ↗</a>
+              <a class="underline" href={link.href} target="_blank" rel="noreferrer">{link.label}<span aria-hidden="true"> ↗</span></a>
             ))}
           </p>
-        </li>
-      )
-    })}
+        </div>
+      </li>
+    ))}
   </ul>
 </Section>
 
@@ -33,98 +29,62 @@ import { md } from '../lib/md.js'
   .grid {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2.5rem;
   }
 
-  /* a tile-faced card: cream, with the darker lip below for thickness */
-  .card {
-    position: relative;
-    padding: 1.6rem 1.6rem 1.4rem;
-    border-radius: var(--radius);
-    background: var(--color-tile);
-    color: var(--color-tile-ink);
-    box-shadow: 0 5px 0 var(--color-tile-edge), 0 16px 28px -14px rgba(0, 0, 0, 0.6);
+  .project {
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  @media (hover: hover) {
-    .card:hover {
-      transform: translateY(-4px) rotate(-0.4deg);
-      box-shadow: 0 7px 0 var(--color-tile-edge), 0 24px 36px -16px rgba(0, 0, 0, 0.65);
-    }
-  }
-
-  .mini {
-    position: absolute;
-    top: 1.3rem;
-    right: 1.3rem;
-    font-size: 0.95rem;
-    background: var(--color-tw);
-    color: #fff;
-    box-shadow: 0 0.16em 0 #b44a3c;
+    padding: 1.75rem 0 2.25rem;
+    border-top: 1px solid var(--color-rule);
   }
 
   .name {
-    padding-right: 3rem;
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: 600;
-    line-height: 1.15;
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 400;
+    line-height: 1.1;
+    text-wrap: balance;
   }
 
-  .stack {
-    margin-top: 0.35rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.04em;
-    color: #6f6553;
+  .name .pos {
+    font-size: 0.7em;
   }
 
   .def {
-    margin-top: 0.9rem;
+    margin-top: 0.75rem;
     flex: 1;
-    font-size: 0.95rem;
-    color: #3b362c;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
   }
 
   .def :global(a) {
-    text-decoration: underline;
-    text-decoration-color: rgba(29, 26, 20, 0.3);
-    text-underline-offset: 3px;
+    color: var(--color-text);
   }
 
-  .def :global(a:hover) {
-    color: #b44a3c;
-  }
-
-  .links {
+  /* stack on one line, links on the next — the same shape on every entry */
+  .meta {
     margin-top: 1.1rem;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 0.4rem;
   }
 
-  /* link chips */
-  .links a {
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    box-shadow: inset 0 0 0 1px rgba(29, 26, 20, 0.22);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .links a:hover {
-    background: var(--color-tile-ink);
-    color: var(--color-tile);
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    font-size: var(--text-sm);
   }
 
   @media (max-width: 760px) {
     .grid {
       grid-template-columns: 1fr;
+    }
+
+    .name {
+      font-size: 1.55rem;
     }
   }
 </style>

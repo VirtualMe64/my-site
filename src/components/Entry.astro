@@ -1,304 +1,158 @@
----
-// The hero: the site's one hand-rolled dictionary entry on the left; on the
-// right, Sammy rising out of a corner of a Scrabble board with SAMMY played
-// in an arc around him. The entry's text lives here (not src/content/) so it
-// stays literal, readable markup.
-import { stats } from '../content/site.js'
-import { scrabbleScore } from '../content/scrabble.js'
-
-// the board window is the 5×5 around the center star of a real 15×15 board,
-// so the premium squares sit where they actually do: rows/cols 6–10
-const board = [
-  ['tl', '', '', '', 'tl'],
-  ['', 'dl', '', 'dl', ''],
-  ['', '', 'star', '', ''],
-  ['', 'dl', '', 'dl', ''],
-  ['tl', '', '', '', 'tl'],
-]
-
-// SAMMY in an arc around the board's lower-left corner (offsets in em)
-const arc = [
-  { letter: 'S', x: -3.4, y: 8.6, r: -10 },
-  { letter: 'A', x: -2.6, y: 13.4, r: 5 },
-  { letter: 'M', x: 0.2, y: 17.4, r: -4 },
-  { letter: 'M', x: 4.6, y: 19.8, r: 8 },
-  { letter: 'Y', x: 9.2, y: 20.6, r: -9 },
-]
-const total = scrabbleScore('SAMMY')
-// tiles are set at 1.55× the art's font-size, so their own em is bigger;
-// divide to keep the offsets above in art ems
-const TILE_SCALE = 1.55
----
-
+<!-- The hero: the site's one hand-rolled dictionary entry, set large, with a
+     portrait standing on the section's bottom rule. The text lives here (not
+     src/content/) so it stays literal, readable markup. -->
 <section id="home" class="hero">
   <div class="inner">
     <div class="entry">
-      <p class="mono">entry no. 001 &nbsp;·&nbsp; <em>n. proper</em></p>
+      <p class="kicker"><span class="label">Entry</span> <span class="pos">n. proper</span></p>
       <!-- the interpunct spans stay aria-hidden so screen readers hear
            "Sammy Taubman", not the syllable breaks -->
       <h1 class="headword name">
         Sam<span class="dot" aria-hidden="true">·</span>my<br />Taub<span class="dot" aria-hidden="true">·</span>man
       </h1>
 
-      <ol class="senses">
-        <li><span class="chip tw">1</span><span>a software engineer at <a href="https://stripe.com" target="_blank" rel="noreferrer">Stripe</a>, helping agents pay for things</span></li>
-        <li><span class="chip dw">2</span><span>a programmer with 10 years of experience who is passionate about learning how things work</span></li>
-        <li><span class="chip dl">3</span><span>a former Georgia Tech student and current Georgia Tech football fan</span></li>
-        <li><span class="chip tl">4</span><span>a lover of word games, especially Scrabble</span></li>
+      <ol class="senses prose">
+        <li><span class="num">1</span><span>A software engineer at <a href="https://stripe.com" target="_blank" rel="noreferrer">Stripe</a>, helping agents pay for things.</span></li>
+        <li><span class="num">2</span><span>A programmer with ten years of experience, passionate about learning how things work.</span></li>
+        <li><span class="num">3</span><span>A former Georgia Tech student and current Georgia Tech football fan.</span></li>
+        <li><span class="num">4</span><span>A lover of word games, especially Scrabble.</span></li>
       </ol>
 
-      <div class="actions">
-        <a class="btn primary" href="#projects">See my work</a>
-        <a class="btn ghost" href="#contact">Get in touch</a>
-      </div>
+      <p class="seeAlso">
+        <span class="pos">See also</span>
+        <a class="underline" href="#experience">experience</a>,
+        <a class="underline" href="#projects">projects</a>
+      </p>
     </div>
 
-    <div class="art" aria-hidden="true">
-      <div class="board">
-        {board.flat().map((cell) => (
-          <span class:list={['sq', cell]}>
-            {cell === 'star' ? '★' : cell ? cell.toUpperCase() : ''}
-          </span>
-        ))}
-        <img class="photo" src="/me-cutout.webp" alt="" width="698" height="900" />
-      </div>
-      {arc.map((t) => (
-        <span class="tile arc" style={`left:${(t.x / TILE_SCALE).toFixed(3)}em; top:${(t.y / TILE_SCALE).toFixed(3)}em; transform:rotate(${t.r}deg)`}>
-          {t.letter}<sub>{scrabbleScore(t.letter)}</sub>
-        </span>
-      ))}
-      <p class="mono score">S·A·M·M·Y &nbsp;=&nbsp; <em>{total} pts</em></p>
-    </div>
+    <figure class="portrait" aria-hidden="true">
+      <img src="/me.webp" alt="" width="999" height="1100" />
+    </figure>
   </div>
-
-  <!-- the stat strip: a recessed rack of quick facts under the fold line -->
-  <ul class="stats">
-    {stats.map((s) => (
-      <li><span class="value">{s.value}</span><span class="label">{s.label}</span></li>
-    ))}
-  </ul>
 </section>
 
 <style>
   .hero {
-    min-height: calc(100dvh - 3.9rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 0 var(--page-padding);
+    overflow: hidden;
   }
 
   .inner {
-    flex: 1;
-    width: 100%;
+    position: relative;
     max-width: var(--content-width);
+    min-height: calc(100dvh - 4.3rem);
     margin: 0 auto;
-    padding: 4.5rem var(--page-padding) 5rem;
     display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
     align-items: center;
   }
 
+  .entry {
+    position: relative;
+    z-index: 1;               /* above the portrait where they meet */
+    padding: 6rem 0;
+  }
+
+  .kicker {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .kicker .pos {
+    font-size: 1.1rem;
+  }
+
   .name {
-    margin-top: 0.75rem;
-    font-size: clamp(3rem, 6.4vw, 5.6rem);
-    line-height: 0.95;
+    margin-top: 1.25rem;
+    font-size: clamp(4.25rem, 10vw, 9rem);
+    line-height: 0.86;
+    letter-spacing: -0.02em;
   }
 
   .senses {
     list-style: none;
-    margin-top: 2rem;
-    max-width: 34rem;
+    margin-top: 2.75rem;
+    max-width: 30rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.6rem;
     font-size: var(--text-md);
+    line-height: 1.45;
     text-wrap: pretty;
   }
 
+  /* each sense's text starts at one x: the numeral gets its own column */
   .senses li {
     display: grid;
     grid-template-columns: 1.6rem 1fr;
-    gap: 0.85rem;
-    align-items: start;
-  }
-
-  .senses a {
-    text-decoration: underline;
-    text-decoration-color: var(--color-rule);
-    text-underline-offset: 3px;
-  }
-
-  /* sense numbers on premium-square colors */
-  .chip {
-    display: grid;
-    place-items: center;
-    width: 1.6rem;
-    height: 1.6rem;
-    margin-top: 0.15rem;
-    border-radius: 5px;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--color-tile-ink);
-  }
-
-  .chip.tw { background: var(--color-tw); }
-  .chip.dw { background: var(--color-dw); }
-  .chip.dl { background: var(--color-dl); }
-  .chip.tl { background: var(--color-tl); color: #fff; }
-
-  .actions {
-    margin-top: 2.25rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  /* ---- the art: em-based so one font-size scales it all ---- */
-  .art {
-    position: relative;
-    justify-self: center;
-    width: 24em;
-    height: 26em;
-    font-size: 1rem;
-  }
-
-  /* the board corner; the photo rises out of it (clip-path lets the head
-     and arms past the top and sides, the bottom edge crops the legs) */
-  .board {
-    position: absolute;
-    left: 0;
-    bottom: 2em;
-    width: 24em;
-    height: 24em;
-    padding: 0.5em;
-    border-radius: 0.8em;
-    background: #0b2219;
-    box-shadow: 0 1.2em 2.4em -1em rgba(0, 0, 0, 0.6);
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.35em;
-    clip-path: inset(-40% -30% 0 -30% round 0.8em);
-  }
-
-  .sq {
-    display: grid;
-    place-items: center;
-    border-radius: 0.3em;
-    background: #1c4a37;
-    font-family: var(--font-mono);
-    font-size: 0.7em;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: rgba(29, 26, 20, 0.7);
-  }
-
-  .sq.tl { background: var(--color-tl); color: rgba(255, 255, 255, 0.75); }
-  .sq.dl { background: var(--color-dl); }
-  .sq.star { background: var(--color-dw); font-size: 1.4em; }
-
-  .photo {
-    position: absolute;
-    left: 50%;
-    bottom: -1em;
-    width: auto;
-    height: 29em;
-    transform: translateX(-50%);
-    filter: drop-shadow(0 0.8em 1.2em rgba(0, 0, 0, 0.45));
-  }
-
-  .arc {
-    position: absolute;
-    font-size: 1.55em;
-  }
-
-  .score {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
-
-  /* ---- stat strip ---- */
-  .stats {
-    list-style: none;
-    background: var(--color-bg-deep);
-    border-top: 1px solid var(--color-rule);
-    border-bottom: 1px solid var(--color-rule);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .stats li {
-    padding: 1.6rem var(--page-padding);
-    display: flex;
     align-items: baseline;
-    justify-content: center;
-    gap: 0.75rem;
   }
 
-  .stats li + li {
-    border-left: 1px solid var(--color-rule);
-  }
-
-  .value {
-    font-family: var(--font-display);
-    font-size: 2.4rem;
-    font-weight: 600;
+  .num {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.35em;
     line-height: 1;
-    color: var(--color-dw);
+    color: var(--color-accent);
   }
 
-  .label {
-    max-width: 9rem;
-    font-size: var(--text-sm);
-    line-height: 1.3;
+  .seeAlso {
+    margin-top: 2.25rem;
     color: var(--color-text-muted);
   }
 
-  @media (max-width: 960px) {
+  .seeAlso .pos {
+    margin-right: 0.4rem;
+    font-size: 1.15em;
+  }
+
+  /* the portrait stands on the section's bottom rule; its legs are already
+     faded out in the image itself */
+  .portrait {
+    align-self: end;
+    justify-self: end;
+    width: 100%;
+    max-width: 38rem;
+  }
+
+  .portrait img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: calc(100dvh - 7rem);
+    object-fit: contain;
+    object-position: bottom right;
+  }
+
+  @media (max-width: 900px) {
     .inner {
       grid-template-columns: 1fr;
-      gap: 4rem;
+      min-height: 0;
     }
 
-    .stats {
-      grid-template-columns: repeat(2, 1fr);
+    .entry {
+      padding: 4rem 0 0;
     }
 
-    .stats li:nth-child(3) {
-      border-left: none;
-    }
-
-    .stats li:nth-child(n + 3) {
-      border-top: 1px solid var(--color-rule);
+    .portrait {
+      justify-self: center;
+      max-width: 30rem;
+      margin-top: 1rem;
     }
   }
 
   @media (max-width: 640px) {
-    .inner {
-      padding: 3rem var(--page-padding) 3.5rem;
-      gap: 3rem;
-    }
-
-    .art {
-      font-size: 0.72rem;
-      margin-left: 2.5em;   /* room for the arc on the left */
+    .entry {
+      padding-top: 3rem;
     }
 
     .senses {
-      font-size: var(--text-base);
+      margin-top: 2rem;
     }
 
-    .stats li {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.35rem;
-      padding: 1.25rem var(--page-padding);
-    }
-
-    .value {
-      font-size: 1.9rem;
+    .portrait {
+      max-width: 100%;
     }
   }
 </style>

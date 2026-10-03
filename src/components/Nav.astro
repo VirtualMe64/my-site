@@ -1,5 +1,5 @@
 ---
-// Top bar: rack logo + name, the section links, and a "say hi" button. The
+// Top bar: rack logo + name on the left, section links on the right. The
 // links derive from the same sections list that drives the section headers.
 import { sections } from '../content/site.js'
 ---
@@ -11,14 +11,14 @@ import { sections } from '../content/site.js'
     <a class="brand" href="#home" aria-label="Sammy Taubman, home">
       <svg viewBox="0 7.5 32 17.5" aria-hidden="true">
         <g transform="rotate(-5 8.25 15.75)">
-          <rect x="1" y="8.5" width="14.5" height="14.5" rx="2.5" fill="#f3e9d2"/>
-          <text x="7.9" y="15.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="700" fill="#1d1a14">S</text>
-          <text x="14.1" y="21.6" text-anchor="end" font-family="Georgia, serif" font-size="4.5" font-weight="700" fill="#1d1a14">1</text>
+          <rect x="1" y="8.5" width="14.5" height="14.5" rx="2.5" fill="#d6b25e"/>
+          <text x="7.9" y="15.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="700" fill="#111d16">S</text>
+          <text x="14.1" y="21.6" text-anchor="end" font-family="Georgia, serif" font-size="4.5" font-weight="700" fill="#111d16">1</text>
         </g>
         <g transform="rotate(4 23.75 16.75)">
-          <rect x="16.5" y="9.5" width="14.5" height="14.5" rx="2.5" fill="#f3e9d2"/>
-          <text x="23.4" y="16.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="700" fill="#1d1a14">T</text>
-          <text x="29.6" y="22.6" text-anchor="end" font-family="Georgia, serif" font-size="4.5" font-weight="700" fill="#1d1a14">1</text>
+          <rect x="16.5" y="9.5" width="14.5" height="14.5" rx="2.5" fill="#d6b25e"/>
+          <text x="23.4" y="16.4" dominant-baseline="central" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="700" fill="#111d16">T</text>
+          <text x="29.6" y="22.6" text-anchor="end" font-family="Georgia, serif" font-size="4.5" font-weight="700" fill="#111d16">1</text>
         </g>
       </svg>
       <span class="name">Sammy Taubman</span>
@@ -29,14 +29,12 @@ import { sections } from '../content/site.js'
         <li><a href={`#${link.id}`} class="link">{link.label}</a></li>
       ))}
     </ul>
-
-    <a class="btn primary cta" href="mailto:staubman1@gmail.com">Say hi</a>
   </div>
 </nav>
 
 <script>
-  // Scroll-spy: the section crossing the middle of the viewport lights up its
-  // link. The hero has no link, so nothing is lit while it's in view.
+  // Scroll-spy: the section crossing the middle of the viewport marks its
+  // link. Nothing is marked while the hero is in view.
   const links = [...document.querySelectorAll('nav[aria-label="Primary"] .link')]
   const ids = ['home', ...links.map((l) => l.getAttribute('href').slice(1))]
 
@@ -66,100 +64,91 @@ import { sections } from '../content/site.js'
     position: sticky;
     top: 0;
     z-index: 10;
-    background: color-mix(in srgb, var(--color-bg-deep) 82%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-rule);
   }
 
   .bar {
     max-width: calc(var(--content-width) + 2 * var(--page-padding));
     margin: 0 auto;
-    padding: 0.75rem var(--page-padding);
+    padding: 0.9rem var(--page-padding);
     display: flex;
     align-items: center;
-    gap: 2rem;
+    justify-content: space-between;
+    gap: 1.5rem;
   }
 
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    margin-right: auto;
+    gap: 0.75rem;
   }
 
   /* the nudge up: dead-centering an icon next to text reads as too low */
   .brand svg {
-    width: 2.6rem;
+    width: 2.4rem;
     height: auto;
     transform: translateY(-1px);
-    transition: transform 0.2s ease;
-  }
-
-  .brand:hover svg {
-    transform: translateY(-3px) rotate(-3deg);
   }
 
   .name {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    line-height: 1;
   }
 
   .list {
     list-style: none;
     display: flex;
-    gap: 0.25rem;
+    gap: 2rem;
   }
 
-  /* links as mono labels; the active one sits on a cream tile */
+  /* links: muted at rest; the current section is ivory with a gold rule */
   .link {
+    position: relative;
     display: inline-block;
-    padding: 0.4rem 0.75rem;
-    border-radius: 6px;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    padding: 0.3rem 0;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease;
+  }
+
+  .link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.1rem;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
   }
 
   .link:hover,
-  .link:focus-visible {
+  .link:focus-visible,
+  .link.active {
     color: var(--color-text);
   }
 
-  .link.active {
-    background: var(--color-tile);
-    color: var(--color-tile-ink);
-    box-shadow: 0 2px 0 var(--color-tile-edge);
-  }
-
-  .cta {
-    padding: 0.55em 1.1em;
-  }
-
-  @media (max-width: 760px) {
-    .cta {
-      display: none;
-    }
+  .link.active::after {
+    transform: scaleX(1);
   }
 
   @media (max-width: 640px) {
-    .bar {
-      gap: 0.5rem;
-    }
-
     .name {
       display: none;
     }
 
+    .list {
+      gap: 1.25rem;
+    }
+
     .link {
-      padding: 0.35rem 0.5rem;
-      font-size: 0.62rem;
-      letter-spacing: 0.03em;
+      font-size: 0.82rem;
     }
   }
 </style>

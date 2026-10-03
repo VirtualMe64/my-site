@@ -1,54 +1,37 @@
 /*
  * theme.css — shared design tokens.
  *
- * The palette is a Scrabble board: felt-green board, cream tiles, and the
- * four premium-square colors as accents. Only values reused across
- * components live here; one-off values stay inline in the component.
+ * Deliberately few: one dark green ground, warm ivory ink, one gold accent,
+ * two typefaces. Hierarchy comes from type size and spacing, not color.
+ * One-off values stay inline in the component that uses them.
  */
 
 :root {
-  /* ---- the board ---- */
-  --color-bg: #12382a;          /* board green */
-  --color-bg-deep: #0d2b20;     /* recessed areas: footer, stat strip */
-  --color-grid: rgba(243, 233, 210, 0.05);   /* 15×15 board lines */
-  --color-text: #f3e9d2;        /* tile cream */
-  --color-text-muted: #9fb8a8;  /* sage */
-  --color-rule: rgba(243, 233, 210, 0.14);
-
-  /* ---- tiles ---- */
-  --color-tile: #f3e9d2;
-  --color-tile-edge: #d8c79f;   /* the tile's thickness, seen below it */
-  --color-tile-ink: #1d1a14;
-
-  /* ---- premium squares (accents) ---- */
-  --color-tw: #e0604f;          /* triple word — the main accent */
-  --color-dw: #f2a99c;          /* double word */
-  --color-dl: #9fcfe6;          /* double letter */
-  --color-tl: #3d7fc4;          /* triple letter */
+  /* ---- color ---- */
+  --color-bg: #111d16;          /* deep green, almost black */
+  --color-text: #ece6d8;        /* warm ivory */
+  --color-text-muted: #94a397;  /* sage grey */
+  --color-rule: rgba(236, 230, 216, 0.13);
+  --color-accent: #d6b25e;      /* muted gold: marks only */
 
   /* ---- type ---- */
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
 
-  --text-xs: 0.72rem;
-  --text-sm: 0.85rem;
-  --text-base: 1rem;
-  --text-md: 1.15rem;
-  --text-lg: 1.4rem;
-  --headword-size: clamp(2rem, 4vw, 3rem);
+  --text-xs: 0.75rem;     /* small-caps labels */
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-md: 1.25rem;
+  --headword-size: clamp(2.6rem, 5vw, 4rem);
 
   /* ---- layout ---- */
-  --page-padding: 2rem;
-  --content-width: 72rem;
-  --radius: 10px;
+  --page-padding: clamp(1.25rem, 4vw, 3rem);
+  --content-width: 74rem;
 }
 
 @media (max-width: 640px) {
   :root {
-    --text-base: 0.95rem;
-    --text-md: 1.05rem;
-    --text-lg: 1.2rem;
-    --page-padding: 1.25rem;
+    --text-base: 1rem;
+    --text-md: 1.125rem;
   }
 }

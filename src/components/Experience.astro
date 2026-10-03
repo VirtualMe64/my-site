@@ -6,137 +6,84 @@ import { md } from '../lib/md.js'
 ---
 
 <Section {...getSection('experience')} index={1}>
-  <!-- a timeline: dates in a mono column, a rail of dots, then the role -->
-  <ol class="timeline">
+  <ol class="roles">
     {roles.map((role, i) => (
       <li>
-        <p class="mono when">{role.dates}</p>
-        <span class:list={['pip', { now: i === 0 }]} aria-hidden="true" />
-        <div class="what">
-          <p class="company">
-            <a href={role.url} target="_blank" rel="noreferrer">{role.company}</a>
-            {i === 0 && <span class="badge">now</span>}
-          </p>
+        <div class="who">
+          <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></h3>
           <p class="title">{role.title}</p>
-          <p class="desc" set:html={md(role.description)} />
+          <p class="label dates">
+            {i === 0 && <span class="current">Current &nbsp;·&nbsp; </span>}{role.dates}
+          </p>
         </div>
+        <p class="desc prose" set:html={md(role.description)} />
       </li>
     ))}
   </ol>
 </Section>
 
 <style>
-  .timeline {
+  .roles {
     list-style: none;
-    position: relative;
+    border-top: 1px solid var(--color-rule);
   }
 
-  .timeline li {
-    position: relative;
+  .roles li {
     display: grid;
-    grid-template-columns: 11rem 1.5rem 1fr;
-    gap: 0 1.25rem;
-    padding-bottom: 2.5rem;
-  }
-
-  /* the rail: one line down the pip column, stopping at the last pip */
-  .timeline li:not(:last-child)::before {
-    content: '';
-    position: absolute;
-    left: calc(11rem + 1.25rem + 0.75rem - 0.5px);
-    top: 0.9rem;
-    bottom: -0.4rem;
-    width: 1px;
-    background: var(--color-rule);
-  }
-
-  .when {
-    padding-top: 0.35rem;
-    text-align: right;
-  }
-
-  .pip {
-    justify-self: center;
-    margin-top: 0.45rem;
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 3px;
-    background: var(--color-bg);
-    box-shadow: inset 0 0 0 1.5px var(--color-text-muted);
-  }
-
-  .pip.now {
-    background: var(--color-tw);
-    box-shadow: 0 0 0 4px rgba(224, 96, 79, 0.25);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 0.75rem 2.5rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--color-rule);
   }
 
   .company {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: 600;
-    line-height: 1.25;
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.05;
   }
 
-  .badge {
-    padding: 0.1rem 0.45rem;
-    border-radius: 4px;
-    background: var(--color-tw);
-    color: #fff;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  .company a {
+    transition: color 0.2s ease;
+  }
+
+  .company a:hover {
+    color: var(--color-accent);
   }
 
   .title {
-    color: var(--color-dl);
-    font-size: var(--text-sm);
-    font-weight: 600;
+    margin-top: 0.35rem;
+  }
+
+  .dates {
+    margin-top: 0.6rem;
+  }
+
+  .current {
+    color: var(--color-accent);
   }
 
   .desc {
-    margin-top: 0.4rem;
-    max-width: 38rem;
+    padding-top: 0.35rem;
     color: var(--color-text-muted);
   }
 
-  /* links in descriptions (markup from set:html, hence :global) */
   .desc :global(a) {
     color: var(--color-text);
-    text-decoration: underline;
-    text-decoration-color: var(--color-rule);
-    text-underline-offset: 3px;
-  }
-
-  .desc :global(a:hover) {
-    color: var(--color-tw);
   }
 
   @media (max-width: 640px) {
-    .timeline li {
-      grid-template-columns: 1.5rem 1fr;
-      gap: 0 0.9rem;
-      padding-bottom: 2rem;
+    .roles li {
+      grid-template-columns: 1fr;
+      padding: 1.75rem 0;
     }
 
-    .timeline li:not(:last-child)::before {
-      left: calc(0.75rem - 0.5px);
+    .company {
+      font-size: 1.7rem;
     }
 
-    .when {
-      grid-column: 2;
-      grid-row: 2;
-      text-align: left;
+    .desc {
       padding-top: 0;
-      order: 3;
     }
-
-    .pip { grid-column: 1; grid-row: 1; }
-    .what { grid-column: 2; grid-row: 1; }
-    .desc { margin-top: 0.3rem; }
   }
 </style>
