@@ -31,16 +31,17 @@
         <p class="bracket kicker">software engineer &nbsp;·&nbsp; stripe</p>
       </div>
 
-      <!-- the "cutout": a photo of Sammy, cut out and popping out of a framed
-           dot-screen panel (head and hands break the frame), with SAMMY
-           played as tiles around it, real letter scores -->
+      <!-- the cutout: Sammy standing in front of a framed halftone close-up
+           of himself (the poster's photo + dot-screened detail crop), with
+           SAMMY played as tiles in an arc at his feet, real letter scores -->
       <div class="rack" aria-hidden="true">
-        <div class="inset"><img class="photo" src="/me-cutout.webp" alt="" width="698" height="900" /></div>
-        <span class="tile" style="--x:0em; --y:5.4em; --r:-8deg">S<sub>1</sub></span>
-        <span class="tile" style="--x:4.7em; --y:2.6em; --r:5deg">A<sub>1</sub></span>
-        <span class="tile" style="--x:8.9em; --y:6.6em; --r:-3deg">M<sub>3</sub></span>
-        <span class="tile" style="--x:13.3em; --y:11.6em; --r:9deg">M<sub>3</sub></span>
-        <span class="tile" style="--x:5.4em; --y:10.6em; --r:-12deg">Y<sub>4</sub></span>
+        <div class="inset"><img src="/me-cutout.webp" alt="" /></div>
+        <img class="cutout" src="/me-cutout.webp" alt="" width="698" height="900" />
+        <span class="tile" style="--x:0em; --y:6em; --r:-8deg">S<sub>1</sub></span>
+        <span class="tile" style="--x:1.6em; --y:10.6em; --r:6deg">A<sub>1</sub></span>
+        <span class="tile" style="--x:4.4em; --y:14.2em; --r:-4deg">M<sub>3</sub></span>
+        <span class="tile" style="--x:9em; --y:15.1em; --r:9deg">M<sub>3</sub></span>
+        <span class="tile" style="--x:13.6em; --y:14.6em; --r:-11deg">Y<sub>4</sub></span>
         <span class="note pts">
           <svg class="scribble" viewBox="0 0 70 30" width="54"><path d="M66 22C48 26 22 22 6 8" /><path d="M5 18L5 7l11 1" /></svg>
           12 pts!
@@ -162,7 +163,7 @@
     position: relative;
     flex: none;
     width: 22em;
-    height: 18em;
+    height: 19em;
     font-size: 1rem;
   }
 
@@ -196,27 +197,42 @@
     font-size: 0.36em;
   }
 
-  /* the frame: a dot-screen panel (the poster's halftone texture) that the
-     photo sits in. clip-path lets the head and hands break out past the top
-     and sides while the bottom edge still crops the legs */
+  /* framed halftone close-up (the poster's dot-screened detail crop): the
+     photo seen through a paper screen punched with dot holes */
   .inset {
     position: absolute;
     right: 0;
-    top: 1.5em;
-    width: 10em;
-    height: 13em;
+    top: 0;
+    width: 9.5em;
+    height: 12.5em;
     border: 1.25px solid var(--color-text);
-    background: radial-gradient(circle, var(--color-ghost) 1.6px, transparent 2.1px) 0 0 / 6px 6px;
-    clip-path: inset(-5em -4em 0 -4em);
+    overflow: hidden;
+    background: #fff;
   }
 
-  .photo {
+  .inset::after {
+    content: '';
     position: absolute;
-    left: -2.6em;
-    top: -2.4em;
-    width: 15.2em;
-    height: auto;
-    filter: drop-shadow(0 6px 10px rgba(31, 30, 28, 0.16));
+    inset: 0;
+    background: radial-gradient(circle, transparent 1.5px, var(--color-bg) 2.2px) 0 0 / 5px 5px;
+  }
+
+  /* the same cutout, scaled way up and cropped to head and shoulders */
+  .inset img {
+    position: absolute;
+    width: 24em;
+    left: -6.6em;
+    top: 0.6em;
+  }
+
+  /* the cutout itself, standing in front of the frame's left edge */
+  .cutout {
+    position: absolute;
+    left: 6.2em;
+    top: 0.4em;
+    width: auto;
+    height: 17.5em;
+    filter: drop-shadow(0 10px 14px rgba(31, 30, 28, 0.18));
   }
 
   .pts {
