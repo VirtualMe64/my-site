@@ -1,10 +1,10 @@
-// Projects, roughly newest first. `doodle` names a drawing in Doodle.astro. Definitions support [text](url) links via
+// Projects, roughly newest first. Definitions support [text](url) links via
 // src/lib/md.js, plus literal <em>/<br /> where needed.
 
 export const projects = [
   {
     name: 'Advent of FPGA',
-    doodle: 'chip',
+    pos: 'n.',
     def: "A collection of hardware implementations and writeups solving 8 of 12 Advent of Code 2025 problems, written in Hardcaml as part of Jane Street's ['Advent of FPGA' challenge](https://blog.janestreet.com/advent-of-fpga-challenge-2025/).",
     stack: 'OCaml · Hardcaml',
     links: [
@@ -13,7 +13,7 @@ export const projects = [
   },
   {
     name: 'Flux Slides',
-    doodle: 'slides',
+    pos: 'n.',
     def: 'A developer-first slideshow app allowing you to make presentations using Markdown and LaTeX, built on a custom written Markdown parser.',
     stack: 'TypeScript · Svelte',
     links: [
@@ -22,7 +22,7 @@ export const projects = [
   },
   {
     name: 'Polymarket Trader Visualization',
-    doodle: 'scatter',
+    pos: 'n.',
     def: 'A k-means analysis of millions of Polymarket trades; clusters active traders into behavioral archetypes — i.e. gamblers, grinders, and specialists — and exposes them through a configurable D3 scatterplot with per-trader tooltips.',
     stack: 'Python · D3.js',
     links: [
@@ -34,7 +34,7 @@ export const projects = [
   },
   {
     name: 'RL Soccer Agent',
-    doodle: 'soccer',
+    pos: 'n.',
     def: 'A reinforcement learning agent that plays a simple 2v2 game of soccer, trained via reward shaping and neural network architecture experiments. Wins 79.5% of episodes against a baseline model, even after training for a similar amount of time.',
     stack: 'Python · RLlib',
     links: [
@@ -44,7 +44,7 @@ export const projects = [
   },
   {
     name: 'Authorship Attribution via AI Stylometry',
-    doodle: 'quill',
+    pos: 'n.',
     def: 'A pipeline that classifies the authorship of a text using a neural net trained via triplet loss. Achieves 84% accuracy on a 50-author Victorian-era dataset, and 99.8% accuracy on a human vs. AI dataset.',
     stack: 'Python · PyTorch',
     links: [
@@ -54,7 +54,7 @@ export const projects = [
   },
   {
     name: 'Sprint Analysis Dashboard',
-    doodle: 'stopwatch',
+    pos: 'n.',
     def: 'An analysis pipeline and dashboard for sprinter gait and form, built as a Junior Design project with [Demotu](https://www.demotuapp.com). Placed 3rd out of ~50 student groups in the final showcase. <em>Source not available due to confidentiality agreement with Demotu.</em>',
     stack: 'Python · React',
     links: [
@@ -63,7 +63,7 @@ export const projects = [
   },
   {
     name: 'SwingML',
-    doodle: 'baseball',
+    pos: 'n.',
     def: 'A platform that uses computer vision to analyze and improve baseball swings. Built and deployed the Python analysis pipeline: video passes through an AI keypoint model, gets projected into 3D, and is distilled into 20+ actionable metrics.',
     stack: 'Python',
     links: [
@@ -73,7 +73,7 @@ export const projects = [
   },
   {
     name: 'KinetixML',
-    doodle: 'nodes',
+    pos: 'n.',
     def: 'A platform to help developers create and deploy computer vision workflows. Built the node-based pipeline editor in TypeScript and Svelte, and published a Python library implementing 40+ pipeline-component modules using OpenCV, Roboflow, and MediaPipe. <em>Deprecated</em>',
     stack: 'TypeScript · Svelte · Python',
     links: [

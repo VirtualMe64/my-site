@@ -1,23 +1,165 @@
 ---
+import { words, scrabbleScore } from '../content/scrabble.js'
+
+// The static HTML gets a deterministic fallback word (and the build-time
+// year); the client script below swaps in the values for the visitor's date.
+const fallback = words[0]
 const year = new Date().getFullYear()
 ---
 
 <footer class="footer">
-  <p>&copy; {year} Sammy Taubman</p>
-  <p class="hand">thanks for scrolling!</p>
+  <div class="line">
+    <p class="bracket label">scrabble word of the day</p>
+    <!-- the word played as tiles; the visually-hidden copy is what screen
+         readers get, since letter-by-letter tiles read badly -->
+    <p class="play">
+      <span class="sr" data-word>{fallback.text}</span>
+      <span class="tiles" aria-hidden="true" data-tiles>
+        {[...fallback.text].map((letter) => <span class="tile">{letter}<sub>{scrabbleScore(letter)}</sub></span>)}
+      </span>
+    </p>
+    <p class="row">
+      <span class="score" data-score>{scrabbleScore(fallback.text)} pts</span>
+      <span class="def" data-def>{fallback.def}</span>
+    </p>
+    <p class="copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
+  </div>
 </footer>
 
+<script>
+  import { wordOfTheDay, scrabbleScore } from '../content/scrabble.js'
+
+  const word = wordOfTheDay()
+  const tiles = document.querySelector('[data-tiles]')
+  const template = tiles.firstElementChild
+  tiles.replaceChildren(
+    ...[...word.text].map((letter) => {
+      // shallow clones keep Astro's scoped-style attribute
+      const tile = template.cloneNode(false)
+      const score = template.querySelector('sub').cloneNode(false)
+      score.textContent = String(scrabbleScore(letter))
+      tile.append(letter, score)
+      return tile
+    }),
+  )
+  document.querySelector('[data-word]').textContent = word.text
+  document.querySelector('[data-score]').textContent = `${scrabbleScore(word.text)} pts`
+  document.querySelector('[data-def]').textContent = word.def
+  document.querySelector('[data-year]').textContent = String(new Date().getFullYear())
+</script>
+
 <style>
+  /* dot-matrix band, like the poster's last slide */
   .footer {
     border-top: 1px solid var(--color-rule);
-    padding: 1.75rem var(--page-padding) 2.25rem;
+    padding: 4rem var(--page-padding);
+    background: radial-gradient(circle, var(--color-ghost) 1.6px, transparent 2px) 0 0 / 12px 12px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .line {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
-    font-size: var(--text-xs);
-    letter-spacing: 0.14em;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .label {
+    text-transform: lowercase;
+  }
+
+  .tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem;
+    margin: 0.5rem 0 0.25rem;
+  }
+
+  .tile {
+    position: relative;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.3rem;
+    background: linear-gradient(160deg, #f6edd6, var(--color-tile) 60%, #e3d5b3);
+    box-shadow: 0 1px 0 rgba(31, 30, 28, 0.18), 0 6px 10px -5px rgba(31, 30, 28, 0.3);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* alternate tiny tilts so the row looks hand-placed on the rack */
+  .tile:nth-child(odd) { transform: rotate(-2deg); }
+  .tile:nth-child(3n) { transform: rotate(2.5deg); }
+
+  .tile sub {
+    position: absolute;
+    right: 0.18rem;
+    bottom: 0.12rem;
+    font-size: 0.45rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.5em;
+    max-width: 32rem;
+  }
+
+  .score {
+    font-size: var(--text-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .def {
+    font-size: var(--text-base);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-text-muted);
+  }
+
+  .copy {
+    margin-top: 1.5rem;
+    font-size: var(--text-sm);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-text-muted);
+  }
+
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .tile {
+      width: 1.45rem;
+      height: 1.45rem;
+      font-size: 0.8rem;
+      border-radius: 0.2rem;
+    }
+
+    .tile sub {
+      font-size: 0.35rem;
+      right: 0.1rem;
+      bottom: 0.06rem;
+    }
+
+    .tiles {
+      gap: 0.2rem;
+    }
   }
 </style>

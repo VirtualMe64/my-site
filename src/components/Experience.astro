@@ -1,165 +1,177 @@
 ---
-// The overview slide ("EXECUTIVE BOARD"): everyone in a grid, each labeled in
-// red marker, and every label drawn on a little differently — circled, with
-// an arrow, a measuring bar, or a swoosh underneath (role.mark).
-import Slide from './Slide.astro'
+import Section from './Section.astro'
 import { getSection } from '../content/site.js'
 import { roles } from '../content/roles.js'
 import { md } from '../lib/md.js'
 ---
 
-<Slide {...getSection('experience')} ghostTop="2rem">
-  <ol class="grid">
-    {roles.map((role) => (
-      <li class:list={['role', `mark-${role.mark}`]}>
-        {role.mark === 'bar' && <span class="bar" aria-hidden="true" />}
-        <p class="label" aria-hidden="true">
-          <span class="hand">{role.label}</span>
-          {role.mark === 'circle' && <svg class="ink ring" viewBox="0 0 120 50" preserveAspectRatio="none"><path d="M72 7C40 2 6 10 5 26s34 21 62 19 49-9 47-23S84 3 50 8" /></svg>}
-          {role.mark === 'swoosh' && <svg class="ink swoosh" viewBox="0 0 120 14" preserveAspectRatio="none"><path d="M3 9C30 4 70 3 117 6M20 12c25-3 50-4 80-3" /></svg>}
-          {role.mark === 'arrow' && <svg class="ink arrow" viewBox="0 0 40 34" width="26"><path d="M34 3C20 6 10 14 8 28" /><path d="M2 21l6 8 7-6" /></svg>}
-        </p>
-        <p class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></p>
-        <p class="meta">{role.title}</p>
-        <p class="dates">{role.dates}</p>
-        <p class="desc" set:html={md(role.description)} />
-      </li>
-    ))}
-  </ol>
-</Slide>
+<Section {...getSection('experience')}>
+  <div class="wrap">
+    <!-- red-pen measurement bar down the side of the list, like the poster's
+         "TREASURER" height line -->
+    <div class="measure" aria-hidden="true"><span class="note">since '23</span></div>
+    <ol class="roles">
+      {roles.map((role, i) => (
+        <li>
+          <span class="box">{i + 1}</span>
+          <div class="body">
+            <p class="company">
+              <a href={role.url} target="_blank" rel="noreferrer">{role.company}</a>
+              {i === 0 && (
+                <span class="note now" aria-hidden="true">
+                  <svg class="scribble" viewBox="0 0 50 24" width="40"><path d="M46 14C34 20 18 18 6 10" /><path d="M5 18 5 9l9-1" /></svg>
+                  now!
+                </span>
+              )}
+            </p>
+            <p class="meta">{role.title}</p>
+            <p class="roleDesc" set:html={md(role.description)} />
+          </div>
+          <p class="dates">{role.dates}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Section>
 
 <style>
-  .grid {
+  .wrap {
+    position: relative;
+    margin-top: 3rem;
+  }
+
+  .roles {
     list-style: none;
-    margin-top: 4rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 4rem 3.5rem;
   }
 
-  .role {
-    position: relative;
-    flex: 0 1 calc((100% - 7rem) / 3);
-    min-width: 15rem;
+  .roles li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0 1.5rem;
+    align-items: start;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-rule);
   }
 
-  .label {
-    position: relative;
-    display: inline-flex;
-    align-items: flex-end;
-    gap: 0.3rem;
-    margin-bottom: 0.9rem;
-    min-height: 1.6rem;
+  .roles li:last-child {
+    border-bottom: 1px solid var(--color-rule);
   }
 
-  .ring {
-    position: absolute;
-    left: -0.8rem;
-    top: -0.55rem;
-    width: calc(100% + 1.6rem);
-    height: calc(100% + 1.1rem);
-    stroke-width: 1.6;
+  .box {
+    margin-top: 0.1rem;
   }
-
-  .swoosh {
-    position: absolute;
-    left: -0.3rem;
-    bottom: -0.55rem;
-    width: calc(100% + 0.6rem);
-    height: 0.6rem;
-    stroke-width: 1.6;
-  }
-
-  .arrow {
-    margin-bottom: -1rem;
-    stroke-width: 1.8;
-  }
-
-  /* tick-ended measuring bar down the card's left edge */
-  .role.mark-bar {
-    padding-left: 1.5rem;
-  }
-
-  .bar {
-    position: absolute;
-    left: 0.25rem;
-    top: 0.2rem;
-    bottom: 0.2rem;
-    border-left: 1.6px solid var(--color-accent);
-  }
-
-  .bar::before,
-  .bar::after {
-    content: '';
-    position: absolute;
-    left: -0.45rem;
-    width: 0.8rem;
-    border-top: 1.6px solid var(--color-accent);
-  }
-
-  .bar::before { top: 0; }
-  .bar::after { bottom: 0; }
 
   .company {
-    font-size: 1.35rem;
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: 0.02em;
+    position: relative;
+    display: inline-block;
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .now {
+    left: calc(100% + 0.5rem);
+    top: 0.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    transform: rotate(-4deg);
+  }
+
+  .now svg {
+    filter: url(#wobble);
   }
 
   .meta {
-    margin-top: 0.3rem;
     font-size: var(--text-base);
-  }
-
-  .dates {
-    margin-top: 0.15rem;
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-style: italic;
     color: var(--color-text-muted);
   }
 
-  .desc {
-    margin-top: 0.8rem;
+  .roleDesc {
+    margin-top: 0.4rem;
+    max-width: 40rem;
     font-size: var(--text-base);
-    color: var(--color-text-muted);
+    font-weight: 300;
   }
 
-  /* links in descriptions (markup from set:html, hence :global) */
-  .desc :global(a) {
-    color: var(--color-text);
+  /* description links are underlined at rest; hover styling is global.
+     :global because the markup comes from set:html */
+  .roleDesc :global(a) {
     text-decoration: underline;
     text-decoration-color: var(--color-rule);
     text-underline-offset: 3px;
   }
 
-  .desc :global(a:hover) {
-    color: var(--color-accent);
+  .dates {
+    font-size: var(--text-sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    margin-top: 0.2rem;
   }
 
-  @media (max-width: 960px) {
-    .role {
-      flex-basis: calc((100% - 3.5rem) / 2);
+  /* vertical rule with tick ends, hung in the left gutter */
+  .measure {
+    position: absolute;
+    left: -2.75rem;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 0.6rem;
+    border-left: 1.4px solid var(--color-accent);
+    transform: translateX(0.3rem);
+  }
+
+  .measure::before,
+  .measure::after {
+    content: '';
+    position: absolute;
+    left: -0.4rem;
+    width: 0.8rem;
+    border-top: 1.4px solid var(--color-accent);
+  }
+
+  .measure::before { top: 0; }
+  .measure::after { bottom: 0; }
+
+  .measure .note {
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: right center;
+  }
+
+  /* the gutter isn't there below this width */
+  @media (max-width: 1180px) {
+    .measure {
+      display: none;
     }
   }
 
   @media (max-width: 640px) {
-    .grid {
-      margin-top: 3rem;
-      gap: 2.75rem;
+    .roles li {
+      grid-template-columns: auto 1fr;
+      gap: 0 0.9rem;
+      padding: 1.25rem 0;
     }
 
-    .role {
-      flex-basis: 100%;
-      min-width: 0;
+    /* dates tuck under the title instead of hanging right */
+    .dates {
+      grid-column: 2;
+      grid-row: 2;
+      margin-top: 0;
+      white-space: normal;
     }
 
-    .company {
-      font-size: 1.15rem;
+    .body {
+      display: contents;
     }
+
+    .company { grid-column: 2; justify-self: start; }
+    .meta { grid-column: 2; }
+    .roleDesc { grid-column: 2; }
+    .box { grid-row: 1; }
   }
 </style>

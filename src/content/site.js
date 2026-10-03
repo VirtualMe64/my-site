@@ -1,12 +1,13 @@
-// Site-wide content: the slide list (which drives the nav, the slide
-// counter, and each slide's title + ghost watermark) and the contact links.
+// Site-wide content: the section index (which drives both the sidebar and
+// each section's dictionary-entry header) and the contact links. The hero's
+// text and the head metadata are deliberately NOT here — they live inline in
+// Entry.astro and index.astro.
 
 export const sections = [
-  { id: 'home', label: 'Home', ghost: ['hi,', "i'm", 'sammy'] },
-  { id: 'about', label: 'About', title: 'Software Engineer', ghost: ['sammy', 'taubman'] },
-  { id: 'experience', label: 'Experience', title: 'Experience', ghost: ['where', "i've", 'been'] },
-  { id: 'projects', label: 'Projects', title: 'Projects', ghost: ['things', "i've", 'made'] },
-  { id: 'contact', label: 'Contact', title: 'Say Hello', ghost: ['see', 'ya!'] },
+  { id: 'home', label: 'Home' }, // hero — rendered by Entry.astro, not Section.astro
+  { id: 'experience', label: 'Experience', word: 'ex·pe·ri·ence', pos: 'n.', gloss: "places i've worked." },
+  { id: 'projects', label: 'Projects', word: 'proj·ects', pos: 'n. pl.', gloss: "things i've made." },
+  { id: 'contact', label: 'Contact', word: 'con·tact', pos: 'n.', gloss: 'ways to reach me.' },
 ]
 
 export const getSection = (id) => sections.find((s) => s.id === id)

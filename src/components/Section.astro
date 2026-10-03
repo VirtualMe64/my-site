@@ -1,0 +1,56 @@
+---
+// A dictionary-entry section: headword (interpunct dots split from the ·s in
+// `word` and hidden from screen readers), part-of-speech tag, a bracketed
+// gloss, and the section body in the default slot. Always an <h2> — the hero
+// is the one exception and hand-rolls its <h1> in Entry.astro.
+//
+// Behind it all sits the watermark: the same word, lowercase and huge in
+// ghost grey, one syllable per line ("ex / pe / ri / ence") — the poster's
+// stacked "meet / our / eboard", with the syllable breaks doing the stacking.
+const { id, word, pos, gloss } = Astro.props
+const parts = word.split('·')
+---
+
+<section id={id}>
+  <p class="ghost" aria-hidden="true">{parts.map((part) => <span>{part}</span>)}</p>
+  <div class="inner">
+    <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span aria-hidden="true">·</span>}{part}</>)} <span class="pos">{pos}</span></h2>
+    <p class="bracket gloss">{gloss}</p>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .inner {
+    position: relative;          /* above the watermark */
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .gloss {
+    margin-top: 0.75rem;
+  }
+
+  .ghost {
+    position: absolute;
+    top: 2.5rem;
+    right: -0.04em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: clamp(5rem, 13vw, 12rem);
+    font-weight: 600;
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: var(--color-ghost);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @media (max-width: 640px) {
+    .ghost {
+      top: 1.5rem;
+      font-size: 5.5rem;
+    }
+  }
+</style>
