@@ -1,57 +1,58 @@
 ---
-// A dictionary-entry section: number, headword (interpunct dots split from
-// the ·s in `word`, gold, hidden from screen readers), part of speech and
-// gloss in a left column; the body on the right — an open-book spread.
-const { id, word, pos, gloss, index } = Astro.props
+// A dictionary-entry section: headword (interpunct dots split from the ·s in
+// `word` and hidden from screen readers), part-of-speech tag, a bracketed
+// gloss, and the section body in the default slot. Always an <h2> — the hero
+// is the one exception and hand-rolls its <h1> in Entry.astro.
+//
+// Behind it all sits the watermark: the same word, lowercase and huge in
+// ghost grey, one syllable per line ("ex / pe / ri / ence") — the poster's
+// stacked "meet / our / eboard", with the syllable breaks doing the stacking.
+const { id, word, pos, gloss } = Astro.props
 const parts = word.split('·')
 ---
 
-<section id={id} class="block">
-  <div class="inner split">
-    <header class="head">
-      <p class="label">{String(index).padStart(2, '0')}</p>
-      <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span class="dot" aria-hidden="true">·</span>}{part}</>)}</h2>
-      <p class="gloss"><span class="pos">{pos}</span> {gloss}</p>
-    </header>
-    <div class="body"><slot /></div>
+<section id={id}>
+  <p class="ghost" aria-hidden="true">{parts.map((part) => <span>{part}</span>)}</p>
+  <div class="inner">
+    <h2 class="headword">{parts.map((part, i) => <>{i > 0 && <span aria-hidden="true">·</span>}{part}</>)} <span class="pos">{pos}</span></h2>
+    <p class="bracket gloss">{gloss}</p>
+    <slot />
   </div>
 </section>
 
 <style>
-  .split {
-    display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-    gap: 3rem;
-    align-items: start;
-  }
-
-  .head {
-    position: sticky;
-    top: 7rem;
-  }
-
-  .headword {
-    margin-top: 1rem;
+  .inner {
+    position: relative;          /* above the watermark */
+    max-width: var(--content-width);
+    margin: 0 auto;
   }
 
   .gloss {
-    margin-top: 0.9rem;
-    color: var(--color-text-muted);
+    margin-top: 0.75rem;
   }
 
-  .gloss .pos {
-    margin-right: 0.3rem;
-    font-size: 1.15em;
+  .ghost {
+    position: absolute;
+    top: 2.5rem;
+    right: -0.04em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(5.5rem, 14vw, 13rem);
+    font-weight: 400;
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--color-ghost);
+    pointer-events: none;
+    user-select: none;
   }
 
-  @media (max-width: 900px) {
-    .split {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-    }
-
-    .head {
-      position: static;
+  @media (max-width: 640px) {
+    .ghost {
+      top: 1.5rem;
+      font-size: 5.5rem;
     }
   }
 </style>

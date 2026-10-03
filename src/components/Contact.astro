@@ -1,72 +1,87 @@
 ---
 import Section from './Section.astro'
 import { getSection, contact } from '../content/site.js'
-
-const [email, ...others] = contact
-
-// Instrument Serif's "1" is nearly an "l" — set digits in the sans so the
-// address reads unambiguously
-const emailParts = email.display.split(/(\d+)/).filter(Boolean)
 ---
 
-<Section {...getSection('contact')} index={3}>
-  <p class="label">Best by email</p>
-  <a class="email" href={email.href}><span>{emailParts.map((part) => (/\d/.test(part) ? <span class="fig">{part}</span> : part))}</span><span class="arrow" aria-hidden="true">→</span></a>
-  <ul class="others">
-    {others.map((link) => (
-      <li>
+<Section {...getSection('contact')}>
+  <ul class="links">
+    {contact.map((link, i) => (
+      <li class="row">
         <span class="label">{link.label}</span>
-        <a class="underline" href={link.href} target="_blank" rel="noreferrer">{link.display}</a>
+        <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
+          {link.display}
+        </a>
+        {i === 0 && (
+          <span class="note hi" aria-hidden="true">
+            <svg class="scribble" viewBox="0 0 50 24" width="40"><path d="M46 14C34 20 18 18 6 10" /><path d="M5 18 5 9l9-1" /></svg>
+            say hi!
+          </span>
+        )}
       </li>
     ))}
   </ul>
+
+  <!-- sign-off, set in the serif italic like the margin notes -->
+  <p class="signature" aria-hidden="true">sammy taubman</p>
 </Section>
 
 <style>
-  .email {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.3em;
-    margin-top: 0.75rem;
-    font-family: var(--font-serif);
-    font-size: clamp(2rem, 4.6vw, 3.6rem);
-    line-height: 1.1;
-    overflow-wrap: anywhere;
-    transition: color 0.2s ease;
-  }
-
-  .email:hover {
-    color: var(--color-accent);
-  }
-
-  .fig {
-    font-family: var(--font-sans);
-    font-size: 0.86em;
-    font-weight: 400;
-  }
-
-  .arrow {
-    font-family: var(--font-sans);
-    font-size: 0.55em;
-    color: var(--color-accent);
-    transition: transform 0.2s ease;
-  }
-
-  .email:hover .arrow {
-    transform: translateX(0.25em);
-  }
-
-  .others {
+  .links {
     list-style: none;
-    margin-top: 2.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem 3rem;
+    margin-top: 3rem;
+    border-top: 1px solid var(--color-rule);
   }
 
-  .others li {
+  .row {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .label {
+    flex: 0 0 7rem;
+    font-size: var(--text-sm);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .row a {
+    font-size: var(--text-md);
+    font-weight: 300;
+    overflow-wrap: anywhere;
+  }
+
+  .hi {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin-left: 0.75rem;
+    transform: rotate(-4deg) translateY(0.1rem);
+  }
+
+
+  .signature {
+    margin-top: 3.5rem;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(3rem, 7vw, 4.5rem);
+    line-height: 1;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .label {
+      flex-basis: 5.5rem;
+    }
+
+    .hi {
+      display: none;
+    }
   }
 </style>

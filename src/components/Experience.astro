@@ -5,85 +5,169 @@ import { roles } from '../content/roles.js'
 import { md } from '../lib/md.js'
 ---
 
-<Section {...getSection('experience')} index={1}>
-  <ol class="roles">
-    {roles.map((role, i) => (
-      <li>
-        <div class="who">
-          <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></h3>
-          <p class="title">{role.title}</p>
-          <p class="label dates">
-            {i === 0 && <span class="current">Current &nbsp;·&nbsp; </span>}{role.dates}
-          </p>
-        </div>
-        <p class="desc prose" set:html={md(role.description)} />
-      </li>
-    ))}
-  </ol>
+<Section {...getSection('experience')}>
+  <div class="wrap">
+    <!-- a fine gold measuring rule down the side of the list -->
+    <div class="measure" aria-hidden="true"><span class="note">since '23</span></div>
+    <ol class="roles">
+      {roles.map((role, i) => (
+        <li>
+          <span class="box">{i + 1}</span>
+          <div class="body">
+            <p class="company">
+              <a href={role.url} target="_blank" rel="noreferrer">{role.company}</a>
+              {i === 0 && (
+                <span class="note now" aria-hidden="true">
+                  <svg class="scribble" viewBox="0 0 50 24" width="40"><path d="M46 14C34 20 18 18 6 10" /><path d="M5 18 5 9l9-1" /></svg>
+                  now!
+                </span>
+              )}
+            </p>
+            <p class="meta">{role.title}</p>
+            <p class="roleDesc" set:html={md(role.description)} />
+          </div>
+          <p class="dates">{role.dates}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
 </Section>
 
 <style>
+  .wrap {
+    position: relative;
+    margin-top: 3rem;
+  }
+
   .roles {
     list-style: none;
-    border-top: 1px solid var(--color-rule);
   }
 
   .roles li {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: 0.75rem 2.5rem;
-    padding: 2rem 0;
+    grid-template-columns: auto 1fr auto;
+    gap: 0 1.5rem;
+    align-items: start;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .roles li:last-child {
     border-bottom: 1px solid var(--color-rule);
   }
 
+  .box {
+    margin-top: 0.1rem;
+  }
+
   .company {
+    position: relative;
+    display: inline-block;
     font-family: var(--font-serif);
-    font-size: 2rem;
+    font-size: var(--text-lg);
     font-weight: 400;
-    line-height: 1.05;
+    line-height: 1.1;
   }
 
-  .company a {
-    transition: color 0.2s ease;
+  .now {
+    left: calc(100% + 0.5rem);
+    top: 0.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    transform: rotate(-4deg);
   }
 
-  .company a:hover {
-    color: var(--color-accent);
-  }
 
-  .title {
-    margin-top: 0.35rem;
-  }
-
-  .dates {
-    margin-top: 0.6rem;
-  }
-
-  .current {
-    color: var(--color-accent);
-  }
-
-  .desc {
-    padding-top: 0.35rem;
+  .meta {
+    font-size: var(--text-base);
+    font-style: italic;
     color: var(--color-text-muted);
   }
 
-  .desc :global(a) {
-    color: var(--color-text);
+  .roleDesc {
+    margin-top: 0.4rem;
+    max-width: 40rem;
+    font-size: var(--text-base);
+    font-weight: 300;
+  }
+
+  /* description links are underlined at rest; hover styling is global.
+     :global because the markup comes from set:html */
+  .roleDesc :global(a) {
+    text-decoration: underline;
+    text-decoration-color: var(--color-rule);
+    text-underline-offset: 3px;
+  }
+
+  .dates {
+    font-size: var(--text-sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    margin-top: 0.2rem;
+  }
+
+  /* vertical rule with tick ends, hung in the left gutter */
+  .measure {
+    position: absolute;
+    left: -2.75rem;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 0.6rem;
+    border-left: 1px solid var(--color-accent);
+    transform: translateX(0.3rem);
+  }
+
+  .measure::before,
+  .measure::after {
+    content: '';
+    position: absolute;
+    left: -0.4rem;
+    width: 0.8rem;
+    border-top: 1px solid var(--color-accent);
+  }
+
+  .measure::before { top: 0; }
+  .measure::after { bottom: 0; }
+
+  .measure .note {
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: right center;
+  }
+
+  /* the gutter isn't there below this width */
+  @media (max-width: 1180px) {
+    .measure {
+      display: none;
+    }
   }
 
   @media (max-width: 640px) {
     .roles li {
-      grid-template-columns: 1fr;
-      padding: 1.75rem 0;
+      grid-template-columns: auto 1fr;
+      gap: 0 0.9rem;
+      padding: 1.25rem 0;
     }
 
-    .company {
-      font-size: 1.7rem;
+    /* dates tuck under the title instead of hanging right */
+    .dates {
+      grid-column: 2;
+      grid-row: 2;
+      margin-top: 0;
+      white-space: normal;
     }
 
-    .desc {
-      padding-top: 0;
+    .body {
+      display: contents;
     }
+
+    .company { grid-column: 2; justify-self: start; }
+    .meta { grid-column: 2; }
+    .roleDesc { grid-column: 2; }
+    .box { grid-row: 1; }
   }
 </style>

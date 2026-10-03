@@ -1,9 +1,9 @@
 /*
  * theme.css — shared design tokens.
  *
- * Deliberately few: one dark green ground, warm ivory ink, one gold accent,
- * two typefaces. Hierarchy comes from type size and spacing, not color.
- * One-off values stay inline in the component that uses them.
+ * Deep green ground, warm ivory ink, one muted gold for marks and drawings.
+ * Two typefaces. Drawings are fine, even gold lines — an engraved dictionary
+ * plate, not a marker. One-off values stay inline in the component.
  */
 
 :root {
@@ -12,26 +12,42 @@
   --color-text: #ece6d8;        /* warm ivory */
   --color-text-muted: #94a397;  /* sage grey */
   --color-rule: rgba(236, 230, 216, 0.13);
-  --color-accent: #d6b25e;      /* muted gold: marks only */
+  --color-wash: rgba(236, 230, 216, 0.035); /* faint hover background */
+  --color-ghost: rgba(236, 230, 216, 0.045); /* watermark syllables */
+  --color-accent: #d6b25e;      /* muted gold: marks, notes, drawings */
+  --color-tile: #ece2c8;        /* ivory Scrabble tile */
+  --color-tile-ink: #1b1a15;
 
   /* ---- type ---- */
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
 
-  --text-xs: 0.75rem;     /* small-caps labels */
-  --text-sm: 0.875rem;
-  --text-base: 1.0625rem;
-  --text-md: 1.25rem;
-  --headword-size: clamp(2.6rem, 5vw, 4rem);
+  /* ---- type scale ---- */
+  --text-sm: 0.82rem;      /* labels, stacks, dates */
+  --text-base: 1rem;       /* descriptions, links */
+  --text-md: 1.1rem;       /* nav, project titles */
+  --text-lg: 1.6rem;       /* company names (serif) */
+  --text-note: 1.2rem;     /* margin notes (serif italic) */
+  --headword-size: clamp(2.6rem, 5vw, 3.8rem);
+  --headword-size-hero: 3rem;
 
-  /* ---- layout ---- */
-  --page-padding: clamp(1.25rem, 4vw, 3rem);
-  --content-width: 74rem;
+  /* ---- shared layout ---- */
+  --page-padding: 2rem;
+  --content-width: 64rem;
 }
 
 @media (max-width: 640px) {
   :root {
-    --text-base: 1rem;
-    --text-md: 1.125rem;
+    --text-base: 0.95rem;
+    --text-md: 1rem;
+    --text-lg: 1.4rem;
+    --text-note: 1.1rem;
+    --page-padding: 1.25rem;
+  }
+}
+
+@media (min-width: 641px) {
+  :root {
+    --headword-size-hero: clamp(3.6rem, 7vw, 5.6rem);
   }
 }

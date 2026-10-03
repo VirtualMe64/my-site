@@ -1,12 +1,13 @@
-// Site-wide content: the section index (which drives both the top bar and
+// Site-wide content: the section index (which drives both the sidebar and
 // each section's dictionary-entry header) and the contact links. The hero's
-// text lives inline in Entry.astro.
+// text and the head metadata are deliberately NOT here — they live inline in
+// Entry.astro and index.astro.
 
 export const sections = [
   { id: 'home', label: 'Home' }, // hero — rendered by Entry.astro, not Section.astro
-  { id: 'experience', label: 'Experience', word: 'ex·pe·ri·ence', pos: 'n.', gloss: "Places I've worked." },
-  { id: 'projects', label: 'Projects', word: 'proj·ects', pos: 'n. pl.', gloss: "Things I've made." },
-  { id: 'contact', label: 'Contact', word: 'con·tact', pos: 'v.', gloss: 'To get in touch with.' },
+  { id: 'experience', label: 'Experience', word: 'ex·pe·ri·ence', pos: 'n.', gloss: "places i've worked." },
+  { id: 'projects', label: 'Projects', word: 'proj·ects', pos: 'n. pl.', gloss: "things i've made." },
+  { id: 'contact', label: 'Contact', word: 'con·tact', pos: 'n.', gloss: 'ways to reach me.' },
 ]
 
 export const getSection = (id) => sections.find((s) => s.id === id)
