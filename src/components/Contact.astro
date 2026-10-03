@@ -1,90 +1,85 @@
 ---
-import Section from './Section.astro'
+// The closing slide ("see ya!"): a dot-matrix mascot in ghost dots, the
+// links, the bracket caption, and the signature.
+import Slide from './Slide.astro'
+import DotMatrix from './DotMatrix.astro'
 import { getSection, contact } from '../content/site.js'
 ---
 
-<Section {...getSection('contact')}>
+<Slide {...getSection('contact')} ghostTop="2rem">
+  <div class="dots"><DotMatrix /></div>
+
   <ul class="links">
-    {contact.map((link, i) => (
-      <li class="row">
-        <span class="label">{link.label}</span>
+    {contact.map((link) => (
+      <li>
+        <span class="caption">{link.label}</span>
         <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
           {link.display}
         </a>
-        {i === 0 && (
-          <span class="note hi" aria-hidden="true">
-            <svg class="scribble" viewBox="0 0 50 24" width="40"><path d="M46 14C34 20 18 18 6 10" /><path d="M5 18 5 9l9-1" /></svg>
-            say hi!
-          </span>
-        )}
       </li>
     ))}
   </ul>
 
-  <!-- the poster's script signature, signed off in red pen -->
+  <p class="bracket bye" aria-hidden="true"><span>see ya !</span></p>
   <p class="signature" aria-hidden="true">sammy taubman</p>
-</Section>
+</Slide>
 
 <style>
+  .dots {
+    position: absolute;
+    left: -2rem;
+    top: 4rem;
+    width: clamp(14rem, 32vw, 26rem);
+    z-index: -1;
+  }
+
   .links {
     list-style: none;
-    margin-top: 3rem;
-    border-top: 1px solid var(--color-rule);
-  }
-
-  .row {
-    position: relative;
+    margin: 4rem auto 0;
+    max-width: 30rem;
     display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--color-rule);
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
   }
 
-  .label {
-    flex: 0 0 7rem;
-    font-size: var(--text-sm);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  .links li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .caption {
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
     color: var(--color-text-muted);
   }
 
-  .row a {
-    font-size: var(--text-md);
-    font-weight: 300;
+  .links a {
+    font-size: 1.2rem;
     overflow-wrap: anywhere;
   }
 
-  .hi {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.15rem;
-    margin-left: 0.75rem;
-    transform: rotate(-4deg) translateY(0.1rem);
-  }
-
-  .hi svg {
-    filter: url(#wobble);
+  .bye {
+    margin-top: 4rem;
   }
 
   .signature {
-    margin-top: 3.5rem;
-    text-align: center;
-    font-family: var(--font-script);
-    font-size: clamp(3rem, 7vw, 4.5rem);
-    line-height: 1;
-    color: var(--color-accent);
+    margin-top: 2.5rem;
     transform: rotate(-3deg);
   }
 
   @media (max-width: 640px) {
-    .label {
-      flex-basis: 5.5rem;
+    .dots {
+      left: -1rem;
+      top: 3rem;
+      width: 13rem;
     }
 
-    .hi {
-      display: none;
+    .links a {
+      font-size: 1.05rem;
     }
   }
 </style>

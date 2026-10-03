@@ -1,0 +1,30 @@
+---
+// One poster page: centered uppercase title, the ghost watermark behind it
+// (stacked lines, cropped by the slide edge), and the slide's body. The
+// cover (Cover.astro) hand-rolls its own layout and skips this.
+//
+// `ghostAt` places the watermark: 'right' (default) or 'left', plus how far
+// down the slide it sits.
+const { id, title, ghost, ghostAt = 'right', ghostTop = '3rem' } = Astro.props
+---
+
+<section id={id} class="slide">
+  <p class:list={['ghost', ghostAt]} style={`top:${ghostTop}`} aria-hidden="true">
+    {ghost.map((line) => <span>{line}</span>)}
+  </p>
+  <div class="inner">
+    <h2 class="title">{title}</h2>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .ghost.right {
+    right: -0.05em;
+    align-items: flex-end;
+  }
+
+  .ghost.left {
+    left: -0.05em;
+  }
+</style>

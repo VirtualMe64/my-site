@@ -1,4 +1,5 @@
-/* Global baseline. Component-specific styling lives in each .astro file. */
+/* Global baseline + the shared poster vocabulary. Component-specific styling
+   lives in each .astro file. */
 
 @import './theme.css';
 
@@ -16,8 +17,8 @@
 html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;     /* nav links glide between sections */
-  scroll-padding-top: 4rem;    /* clear the sticky top bar */
+  scroll-behavior: smooth;
+  scroll-padding-top: 3.5rem;   /* clear the sticky nav */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -26,16 +27,12 @@ html {
   }
 }
 
-/* paper: a faint fibrous grain over the off-white (inline SVG noise, so no
-   extra request) */
 body {
   min-height: 100dvh;
   background-color: var(--color-bg);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .11 0 0 0 0 .1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: var(--text-base);
   line-height: 1.65;
 }
 
@@ -44,114 +41,136 @@ a {
   text-decoration: none;
 }
 
-/* content links (everything under <main>): red pen + underline on hover */
 main a {
   transition: color 0.2s ease;
 }
 
 main a:hover {
   color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
-/* dictionary headwords — shared by the hero's h1 and Section's h2s: the
-   poster's clean uppercase titles */
-.headword {
-  font-size: var(--headword-size);
+/* ---- slides: every section is one poster page ---- */
+.slide {
+  position: relative;
+  overflow: hidden;              /* the ghost watermark gets cropped, as on the poster */
+  padding: 7rem var(--page-padding);
+}
+
+.slide + .slide {
+  border-top: 1px solid var(--color-rule);
+}
+
+.slide > .inner {
+  position: relative;            /* above the watermark */
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+/* centered uppercase slide title: "PRESIDENT", "EXECUTIVE BOARD" */
+.title {
+  text-align: center;
+  font-size: var(--text-title);
   font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: 0.04em;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  word-spacing: 0.12em;
   text-transform: uppercase;
-  word-spacing: 0.15em;
-  color: var(--color-text);
 }
 
-.headword .pos {
-  margin-left: 0.4em;
-  font-size: var(--pos-size, 0.45em);
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--color-text-muted);
-}
-
-/* red-pen bracket captions: "[   places i've worked.   ]" */
-.bracket {
-  font-size: var(--text-base);
-  letter-spacing: 0.08em;
-  word-spacing: 0.2em;
-  color: var(--color-accent);
-}
-
-.bracket::before,
-.bracket::after {
-  content: '[';
-  margin-right: 1.4em;
-}
-
-.bracket::after {
-  content: ']';
-  margin-right: 0;
-  margin-left: 1.4em;
-}
-
-/* boxed numerals (the poster's 1 / 2 / 3) — used for senses and list items */
-.box {
-  display: inline-grid;
-  place-items: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  border: 1.25px solid var(--color-text);
-  font-size: 0.8rem;
-  font-weight: 400;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  flex: none;
-}
-
-/* hand annotations: red Caveat + scribbled SVG strokes. purely decorative —
-   every use is aria-hidden */
-.note {
+/* giant stacked lowercase watermark, one line per span */
+.ghost {
   position: absolute;
-  font-family: var(--font-hand);
-  font-size: var(--text-hand);
-  font-weight: 500;
-  line-height: 1;
-  color: var(--color-accent);
-  text-transform: none;
-  letter-spacing: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-ghost);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  color: var(--color-ghost);
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
 }
 
-.scribble {
+/* red bracket caption: "[    GTFSA   2026 - 2027    ]" */
+.bracket {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 1.75em;
+  font-size: var(--text-md);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  word-spacing: 0.5em;
+  color: var(--color-accent);
+}
+
+.bracket::before { content: '['; }
+.bracket::after { content: ']'; }
+
+/* boxed numeral */
+.box {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1.25px solid var(--color-text);
+  font-size: 0.85rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+/* small uppercase caption under a doodle: "JUNIOR", "PHYSICS" */
+.caption {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* red marker label (the overview slide's "PRESIDENT", "EVP!") */
+.hand {
+  font-family: var(--font-hand);
+  font-size: var(--text-hand);
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* signature */
+.signature {
+  font-family: var(--font-script);
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-accent);
+  text-align: center;
+}
+
+/* line drawings: red stroke, roughened by the shared #wobble filter */
+.ink {
   fill: none;
   stroke: var(--color-accent);
-  stroke-width: 1.6;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   overflow: visible;
+  filter: url(#wobble);
 }
 
-section {
-  position: relative;
-  overflow: hidden;             /* clip the watermark words */
-  padding: 7rem var(--page-padding);
-}
-
-section + section {
-  border-top: 1px solid var(--color-rule);
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (max-width: 640px) {
-  section {
+  .slide {
     padding: 4.5rem var(--page-padding);
-  }
-
-  body {
-    font-size: 0.9rem;
   }
 }

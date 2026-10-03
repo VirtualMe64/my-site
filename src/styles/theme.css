@@ -2,58 +2,44 @@
  * theme.css — shared design tokens.
  *
  * Only values that are reused across components (or that you'll want to tweak
- * globally) live here: colors, fonts, and the page padding. One-off values
- * stay inline in the component that uses them.
- *
- * The palette is a poster on warm paper: near-black ink, one oxblood red for
- * the "hand" (annotations, brackets, the signature, active states), and a
- * barely-there ghost grey for the giant watermark words.
+ * globally) live here. One-off values stay inline in the component that uses
+ * them. See design/STYLE.md for where the look comes from.
  */
 
 :root {
-  /* ---- color ---- */
-  --color-bg: #f7f5f0;          /* warm off-white paper */
-  --color-text: #1f1e1c;        /* ink */
-  --color-text-muted: #77746e;  /* pencil grey */
-  --color-rule: rgba(31, 30, 28, 0.16);
-  --color-wash: rgba(31, 30, 28, 0.035); /* faint hover background */
-  --color-ghost: #e9e6df;       /* watermark words, dot-matrix */
-  --color-accent: #a8363a;      /* oxblood — the red pen */
-  --color-tile: #efe4c8;        /* ivory Scrabble tile */
+  /* ---- color: paper, ink, and one red pen ---- */
+  --color-bg: #faf9f6;          /* warm off-white paper */
+  --color-text: #141414;        /* ink */
+  --color-text-muted: #6f6c66;  /* pencil */
+  --color-rule: rgba(20, 20, 20, 0.14);
+  --color-ghost: #ecebe7;       /* watermark words, dot-matrix */
+  --color-accent: #a8403f;      /* brick red — everything hand-made */
 
-  /* ---- type ---- */
-  --font-sans: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
-  --font-hand: 'Caveat', 'Comic Sans MS', cursive;   /* red-pen notes */
-  --font-script: 'Sacramento', cursive;              /* signatures */
+  /* ---- type: three voices ---- */
+  --font-sans: 'Figtree', 'Helvetica Neue', Arial, sans-serif;   /* print */
+  --font-hand: 'Architects Daughter', 'Comic Sans MS', cursive;  /* marker */
+  --font-script: 'Sacramento', cursive;                          /* signature */
 
   /* ---- type scale ---- */
-  --text-sm: 0.8rem;       /* pos tags, stacks, small labels */
-  --text-base: 0.95rem;    /* descriptions, links, footer text */
-  --text-md: 1.05rem;      /* nav, project card titles */
-  --text-lg: 1.15rem;      /* company names */
-  --text-hand: 1.5rem;     /* annotations */
-  --headword-size: clamp(1.6rem, 3.4vw, 2.4rem);
-  --headword-size-hero: 2.4rem;
+  --text-xs: 0.72rem;      /* tiny uppercase captions */
+  --text-sm: 0.82rem;      /* captions, stacks, dates */
+  --text-base: 1rem;       /* body */
+  --text-md: 1.1rem;       /* card names */
+  --text-title: clamp(1.35rem, 2.4vw, 1.9rem);   /* centered slide titles */
+  --text-ghost: clamp(6rem, 17vw, 15rem);        /* watermark */
+  --text-hand: 1.05rem;    /* marker labels */
 
-  /* ---- shared layout ---- */
-  --page-padding: 2rem;    /* outer gutter */
-  --content-width: 64rem;
+  /* ---- layout ---- */
+  --page-padding: 2rem;
+  --content-width: 68rem;
 }
 
-/* the whole site's type shrinks together on small screens */
 @media (max-width: 640px) {
   :root {
-    --text-base: 0.85rem;
-    --text-md: 0.9rem;
-    --text-lg: 1rem;
-    --text-hand: 1.3rem;
+    --text-base: 0.92rem;
+    --text-md: 1rem;
+    --text-ghost: 5.5rem;
+    --text-hand: 0.95rem;
     --page-padding: 1.25rem;
-  }
-}
-
-/* desktop: the hero's h1 outranks the section headwords */
-@media (min-width: 641px) {
-  :root {
-    --headword-size-hero: clamp(2.6rem, 5vw, 4rem);
   }
 }

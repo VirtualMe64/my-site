@@ -1,0 +1,82 @@
+---
+// Sammy's mascot: a red line-drawn cat, the stand-in for the poster's
+// per-person characters (hamster, frog, bear, bunny). Same head every time;
+// `pose` swaps the arms and props. Decorative — always aria-hidden.
+//
+// Paths live in a 130×122 box. `.paper` shapes are filled with the page
+// color so props (laptop, football, paws) can sit in front of the body lines.
+const { pose = 'wave', class: className } = Astro.props
+
+const eyes = {
+  wave: [0, 0],
+  laptop: [0, 3],     // looking down at the screen
+  football: [0, 0],
+  words: [2, -2],     // looking up at the bubble
+}[pose]
+---
+
+<svg class:list={['mascot', className]} viewBox="-5 0 130 122" aria-hidden="true">
+  <g class="ink">
+    <path d="M46 85C40 95 37 107 38 119M74 85C80 95 83 107 82 119" />
+    <path class="paper" d="M31 64C27 48 29 32 35 21L46 35C53 32 67 32 74 35L85 21C91 32 93 48 89 64C87 79 75 87 60 87S33 79 31 64Z" />
+    <path d="M57 66q1.5 2.5 3 0q1.5 2.5 3 0M60 63.5v2.5" />
+    <path d="M30 60 18 57M30 66 18 68M90 60l12-3M90 66l12 2M38 28l4 5M82 28l-4 5" />
+    <circle class="dot" cx={48 + eyes[0]} cy={57 + eyes[1]} r="2.4" />
+    <circle class="dot" cx={72 + eyes[0]} cy={57 + eyes[1]} r="2.4" />
+
+    {pose === 'wave' && (
+      <>
+        <path d="M46 96C41 103 43 110 50 110M78 93C88 89 95 81 99 70" />
+        <path d="M99 70c-2-5 1-10 5-9 4 1 4 6 1 9-2 2-4 1-6 0z" />
+        <path d="M106 53l3-5M112 59l6-2M110 66l5 1" />
+      </>
+    )}
+    {pose === 'laptop' && (
+      <>
+        <path class="paper" d="M30 98h60l-5 21H35z" />
+        <path d="M56 105l-3 3 3 3M64 105l3 3-3 3" />
+        <path class="paper" d="M38 98c0-6 9-6 9 0M73 98c0-6 9-6 9 0" />
+      </>
+    )}
+    {pose === 'football' && (
+      <>
+        <g transform="rotate(-14 60 104)">
+          <ellipse class="paper" cx="60" cy="104" rx="19" ry="10.5" />
+          <path d="M50 104h20M54 101v6M58 101v6M62 101v6M66 101v6" />
+        </g>
+        <path class="paper" d="M38 108c-3-6 3-11 7-7M82 98c3 6-3 11-7 7" />
+      </>
+    )}
+    {pose === 'words' && (
+      <>
+        <path d="M48 100C47 92 50 86 56 84" />
+        <path class="paper" d="M53 86c0-5 7-6 8-1 1 4-4 6-8 1z" />
+        <path d="M90 18c0-12 30-12 30 0s-18 12-23 9l-8 6 3-8c-2-2-2-4-2-7z" />
+        <text x="105" y="23" text-anchor="middle">abc</text>
+      </>
+    )}
+  </g>
+</svg>
+
+<style>
+  .mascot {
+    display: block;
+    height: auto;
+  }
+
+  .mascot :global(.paper) {
+    fill: var(--color-bg);
+  }
+
+  .dot {
+    fill: var(--color-accent);
+    stroke: none;
+  }
+
+  text {
+    fill: var(--color-accent);
+    stroke: none;
+    font-family: var(--font-hand);
+    font-size: 13px;
+  }
+</style>

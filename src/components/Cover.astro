@@ -1,0 +1,140 @@
+---
+// The cover slide (the poster's "meet our eboard" page): ghost "hi, / i'm /
+// sammy" stacked top-right, the mascot waving where the group photo was, and
+// the name as the red bracket caption at the bottom.
+import Mascot from './Mascot.astro'
+import { getSection } from '../content/site.js'
+
+const { ghost } = getSection('home')
+---
+
+<section id="home" class="slide cover">
+  <p class="ghost" aria-hidden="true">{ghost.map((line) => <span>{line}</span>)}</p>
+
+  <div class="inner">
+    <div class="art">
+      <Mascot pose="wave" class="hero" />
+      <p class="hand note me" aria-hidden="true">
+        that's me!
+        <svg class="ink" viewBox="0 0 60 40" width="48"><path d="M4 6c18 0 30 10 36 28" /><path d="M31 28l9 7 3-11" /></svg>
+      </p>
+    </div>
+
+    <h1 class="bracket name"><span>Sammy Taubman</span></h1>
+    <p class="tagline">software engineer at <a href="https://stripe.com" target="_blank" rel="noreferrer">Stripe</a>, helping agents pay for things.</p>
+
+    <a class="hand note scroll" href="#about">
+      scroll
+      <svg class="ink" viewBox="0 0 20 30" width="14" aria-hidden="true"><path d="M10 2v24M3 19l7 8 7-8" /></svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  .cover {
+    min-height: calc(100dvh - 3.1rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+  }
+
+  .ghost {
+    top: 2rem;
+    right: -0.05em;
+    align-items: flex-end;
+    font-size: clamp(7rem, 21vw, 19rem);
+  }
+
+  .inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .art {
+    position: relative;
+    margin-bottom: 3rem;
+  }
+
+  .art :global(.hero) {
+    width: clamp(15rem, 30vw, 22rem);
+  }
+
+  .note {
+    position: absolute;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .me {
+    top: 18%;
+    left: -7.5rem;
+    transform: rotate(-6deg);
+  }
+
+  .me svg {
+    margin-top: 0.7rem;
+  }
+
+  .name {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tagline {
+    margin-top: 0.9rem;
+    text-align: center;
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+  }
+
+  .tagline a {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: var(--color-rule);
+    text-underline-offset: 3px;
+  }
+
+  .scroll {
+    position: static;
+    margin-top: 3.5rem;
+    align-items: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .scroll:hover {
+    color: var(--color-accent);
+    opacity: 0.7;
+  }
+
+  @media (max-width: 640px) {
+    .cover {
+      padding-top: 4rem;
+      padding-bottom: 3rem;
+    }
+
+    .ghost {
+      font-size: 6.5rem;
+      top: 1.5rem;
+    }
+
+    .art {
+      margin-bottom: 2rem;
+    }
+
+    .me {
+      left: -3.5rem;
+      top: -0.5rem;
+    }
+
+    .name {
+      gap: 1em;
+    }
+  }
+</style>
