@@ -17,6 +17,7 @@ html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;     /* nav links glide between sections */
+  scroll-padding-top: 4rem;    /* clear the sticky top bar */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -25,13 +26,17 @@ html {
   }
 }
 
+/* paper: a faint fibrous grain over the off-white (inline SVG noise, so no
+   extra request) */
 body {
   min-height: 100dvh;
   background-color: var(--color-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .11 0 0 0 0 .1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color: var(--color-text);
-  font-family: var(--font-serif);
-  font-size: clamp(1rem, 1.4vw, 1.25rem);
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.65;
 }
 
 a {
@@ -39,7 +44,7 @@ a {
   text-decoration: none;
 }
 
-/* content links (everything under <main>): accent + dotted underline on hover */
+/* content links (everything under <main>): red pen + underline on hover */
 main a {
   transition: color 0.2s ease;
 }
@@ -47,55 +52,106 @@ main a {
 main a:hover {
   color: var(--color-accent);
   text-decoration: underline;
-  text-decoration-style: dotted;
   text-underline-offset: 3px;
 }
 
-/* dictionary headwords — shared by the hero's h1 and Section's h2s */
+/* dictionary headwords — shared by the hero's h1 and Section's h2s: the
+   poster's clean uppercase titles */
 .headword {
   font-size: var(--headword-size);
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.1;
-  letter-spacing: 0.01em;
-  color: var(--color-accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  word-spacing: 0.15em;
+  color: var(--color-text);
 }
 
 .headword .pos {
-  margin-left: 0.35em;
-  /* relative, so it scales with the headword; the hero dials it back down */
-  font-size: var(--pos-size, 0.55em);
+  margin-left: 0.4em;
+  font-size: var(--pos-size, 0.45em);
   font-weight: 400;
   font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
+/* red-pen bracket captions: "[   places i've worked.   ]" */
+.bracket {
+  font-size: var(--text-base);
+  letter-spacing: 0.08em;
+  word-spacing: 0.2em;
+  color: var(--color-accent);
+}
+
+.bracket::before,
+.bracket::after {
+  content: '[';
+  margin-right: 1.4em;
+}
+
+.bracket::after {
+  content: ']';
+  margin-right: 0;
+  margin-left: 1.4em;
+}
+
+/* boxed numerals (the poster's 1 / 2 / 3) — used for senses and list items */
+.box {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1.25px solid var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+/* hand annotations: red Caveat + scribbled SVG strokes. purely decorative —
+   every use is aria-hidden */
+.note {
+  position: absolute;
+  font-family: var(--font-hand);
+  font-size: var(--text-hand);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-accent);
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.scribble {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
 section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 6rem var(--page-padding) 6rem 4rem;
+  position: relative;
+  overflow: hidden;             /* clip the watermark words */
+  padding: 7rem var(--page-padding);
 }
 
 section + section {
   border-top: 1px solid var(--color-rule);
 }
 
-#home {
-  min-height: 100dvh;
-}
-
 @media (max-width: 640px) {
   section {
-    padding: 4rem var(--page-padding);
+    padding: 4.5rem var(--page-padding);
   }
 
   body {
-    font-size: 0.85rem;
-  }
-
-  #home {
-    min-height: 100svh;
-    justify-content: flex-start;
-    padding-top: 10rem;
+    font-size: 0.9rem;
   }
 }
