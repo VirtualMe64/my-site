@@ -29,7 +29,7 @@ update it as items land or new ideas come up.
 Every design decision extends one bit: the page is a dictionary entry for
 "Sam·my Taub·man, *n. proper*". Sections are entries with headwords,
 part-of-speech tags, numbered senses, and "See also" cross-references.
-The other identity thread is **Scrabble** (sense 4 of the hero): tile-rack
+The other identity thread is **Scrabble** (sense 3 of the hero): tile-rack
 logo, word-of-the-day footer, Scrabble-board og image. New features should
 speak one of those two languages.
 
