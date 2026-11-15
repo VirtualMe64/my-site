@@ -1,0 +1,384 @@
+---
+// The background: a watercolor night landscape painted live in a <canvas> —
+// a gold moon over misty hills and a ridge of pines, in the site's palette.
+//
+// Technique (the generative-watercolor method): every wash starts as a
+// polygon that's recursively deformed (each edge's midpoint pushed out by a
+// gaussian scaled to the edge's length), then painted as dozens of very
+// translucent glazes, each one deformed again. Edges come out soft and
+// layered like real pigment; a scatter of tiny erased dots adds granulation.
+//
+// On landing, each wash sweeps in behind a wet, wobbly leading edge and keeps
+// deepening as glazes land; the moon blooms out from its center; flicked
+// splatters come last. Every shape has its own seeded RNG, so the painting is
+// the same on every visit. prefers-reduced-motion paints it instantly.
+---
+
+<canvas class="watercolor" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<script>
+  const canvas = document.querySelector('canvas.watercolor')
+  const ctx = canvas.getContext('2d')
+  const temp = document.createElement('canvas')
+  const tctx = temp.getContext('2d')
+
+  // ---- seeded randomness ----
+  function mulberry32(a) {
+    return () => {
+      a = (a + 0x6d2b79f5) | 0
+      let t = Math.imul(a ^ (a >>> 15), 1 | a)
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+    }
+  }
+
+  function makeRand(seed) {
+    const next = mulberry32(seed)
+    const rand = (a = 0, b = 1) => a + (b - a) * next()
+    const gauss = () => {
+      let u = 0
+      let v = 0
+      while (!u) u = next()
+      while (!v) v = next()
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v)
+    }
+    return { rand, gauss }
+  }
+
+  // ---- polygons ----
+  // recursive midpoint deformation; `v` is each edge's own wobbliness
+  function deform(pts, depth, R, spread = 1) {
+    for (let d = 0; d < depth; d++) {
+      const out = []
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i]
+        const b = pts[(i + 1) % pts.length]
+        out.push(a)
+        const sd = Math.hypot(b.x - a.x, b.y - a.y) * a.v * spread * 0.5
+        out.push({
+          x: (a.x + b.x) / 2 + R.gauss() * sd,
+          y: (a.y + b.y) / 2 + R.gauss() * sd,
+          v: a.v * R.rand(0.85, 1.15),
+        })
+      }
+      pts = out
+    }
+    return pts
+  }
+
+  function blob(cx, cy, rx, ry, R, vMin = 0.25, vMax = 0.6, n = 14) {
+    const pts = []
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2
+      pts.push({ x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry, v: R.rand(vMin, vMax) })
+    }
+    return pts
+  }
+
+  // a hill: a ridge line across the canvas, closed off below the bottom edge
+  function ridge(W, H, baseY, amp, R, v = 0.4) {
+    const p1 = R.rand(0, 6.28)
+    const p2 = R.rand(0, 6.28)
+    const f1 = R.rand(1.2, 2.2)
+    const f2 = R.rand(3, 5)
+    const pts = [{ x: -0.15 * W, y: H + 80, v: 0.05 }]
+    const steps = 10
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps
+      const y = baseY + amp * (Math.sin(t * f1 * Math.PI + p1) * 0.7 + Math.sin(t * f2 * Math.PI + p2) * 0.3)
+      pts.push({ x: -0.15 * W + t * 1.3 * W, y, v: R.rand(v * 0.6, v * 1.2) })
+    }
+    pts.push({ x: 1.15 * W, y: H + 80, v: 0.05 })
+    return pts
+  }
+
+  function ridgeY(shape, x) {
+    // height of a hill's base ridge at x (for planting pines on it)
+    const r = shape.ridge
+    for (let i = 1; i < r.length; i++) {
+      if (r[i].x >= x) {
+        const a = r[i - 1]
+        const b = r[i]
+        return a.y + ((x - a.x) / (b.x - a.x)) * (b.y - a.y)
+      }
+    }
+    return r[r.length - 1].y
+  }
+
+  function pine(x, baseY, h, R) {
+    const w = h * R.rand(0.28, 0.38)
+    return [
+      { x: x, y: baseY - h, v: 0.08 },
+      { x: x + w * 0.5, y: baseY - h * 0.45, v: 0.25 },
+      { x: x + w * 0.55, y: baseY + 4, v: 0.1 },
+      { x: x - w * 0.55, y: baseY + 4, v: 0.1 },
+      { x: x - w * 0.5, y: baseY - h * 0.45, v: 0.25 },
+    ]
+  }
+
+  // ---- the painting ----
+  // colors are RGB; alpha is per glaze (dozens stack up)
+  function compose(W, H) {
+    const S = Math.min(W, H)
+    const shapes = []
+    const add = (seed, spec, build) => {
+      const R = makeRand(seed)
+      const shape = { ...spec, R, drawn: 0 }
+      build(shape, R)
+      shape.bases = shape.polys.map((p) => deform(p, 2, R))
+      shapes.push(shape)
+      return shape
+    }
+    const moon = { x: W * 0.8, y: H * 0.22, r: S * 0.07 }
+
+    add(11, { color: [40, 70, 50], alpha: 0.03, layers: 34, start: 0, dur: 1500, sweep: 0.35 }, (s, R) => {
+      s.polys = [blob(W * 0.25, H * 0.18, W * 0.42, H * 0.3, R)]
+    })
+    add(16, { color: [34, 66, 62], alpha: 0.03, layers: 34, start: 250, dur: 1500, sweep: Math.PI - 0.3 }, (s, R) => {
+      s.polys = [blob(W * 0.78, H * 0.25, W * 0.35, H * 0.32, R)]
+    })
+    // the glow: a radial gradient in just a few strong glazes. (dozens of
+    // faint ones would each round up to the smallest 8-bit alpha near the
+    // edge and stack into a visible ring)
+    add(13, { color: [232, 200, 96], alpha: 0.2, layers: 3, start: 700, dur: 1400, grow: moon, growR: moon.r * 4.2, radial: moon.r * 2.7 }, (s, R) => {
+      s.polys = [blob(moon.x, moon.y, moon.r * 3.6, moon.r * 3.6, R, 0.15, 0.35, 18)]
+    })
+    add(14, { color: [238, 216, 140], alpha: 0.055, layers: 40, start: 950, dur: 1200, grow: moon, growR: moon.r * 1.4 }, (s, R) => {
+      s.polys = [blob(moon.x, moon.y, moon.r, moon.r, R, 0.06, 0.16, 20)]
+    })
+    add(21, { color: [70, 94, 72], alpha: 0.032, layers: 36, start: 1350, dur: 1600, sweep: 0 }, (s, R) => {
+      s.polys = [ridge(W, H, H * 0.6, H * 0.06, R)]
+    })
+    add(22, { color: [150, 172, 150], alpha: 0.012, layers: 26, start: 1750, dur: 1300, sweep: Math.PI }, (s, R) => {
+      // a long, flat band: low wobble so it can't throw tall spikes
+      s.polys = [blob(W * 0.5, H * 0.69, W * 0.7, H * 0.045, R, 0.08, 0.22, 24)]
+    })
+    const mid = add(23, { color: [38, 58, 40], alpha: 0.036, layers: 36, start: 2050, dur: 1500, sweep: 0 }, (s, R) => {
+      s.polys = [ridge(W, H, H * 0.72, H * 0.05, R)]
+      s.ridge = s.polys[0]
+    })
+    add(24, { color: [24, 40, 26], alpha: 0.07, layers: 18, start: 2750, dur: 1100, sweep: -Math.PI / 2 }, (s, R) => {
+      s.polys = []
+      let x = W * 0.52
+      while (x < W * 1.02) {
+        const h = S * R.rand(0.05, 0.11)
+        s.polys.push(pine(x, ridgeY(mid, x) + S * 0.01, h, R))
+        x += S * R.rand(0.018, 0.045)
+      }
+    })
+    add(25, { color: [17, 30, 18], alpha: 0.05, layers: 36, start: 3000, dur: 1400, sweep: Math.PI }, (s, R) => {
+      s.polys = [ridge(W, H, H * 0.86, H * 0.04, R, 0.35)]
+    })
+    return { shapes, moon, end: 4400 }
+  }
+
+  // ---- painting machinery ----
+  const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2)
+
+  function glaze(c, shape) {
+    const [r, g, b] = shape.color
+    if (shape.radial) {
+      const { x, y } = shape.grow
+      const grad = c.createRadialGradient(x, y, 0, x, y, shape.radial)
+      grad.addColorStop(0, `rgba(${r},${g},${b},${shape.alpha})`)
+      grad.addColorStop(0.35, `rgba(${r},${g},${b},${shape.alpha * 0.4})`)
+      grad.addColorStop(1, `rgba(${r},${g},${b},0)`)
+      c.fillStyle = grad
+    } else {
+      c.fillStyle = `rgba(${r},${g},${b},${shape.alpha})`
+    }
+    for (const base of shape.bases) {
+      const p = deform(base, 3, shape.R, 0.9)
+      c.beginPath()
+      c.moveTo(p[0].x, p[0].y)
+      for (let i = 1; i < p.length; i++) c.lineTo(p[i].x, p[i].y)
+      c.closePath()
+      c.fill()
+    }
+  }
+
+  // erase a few tiny dots from fresh paint: pigment granulating on paper
+  function granulate(c, W, H, R, n) {
+    c.globalCompositeOperation = 'destination-out'
+    c.fillStyle = 'rgba(0,0,0,0.35)'
+    for (let i = 0; i < n; i++) {
+      c.beginPath()
+      c.arc(R.rand(0, W), R.rand(0, H), R.rand(0.5, 2.2), 0, Math.PI * 2)
+      c.fill()
+    }
+    c.globalCompositeOperation = 'source-over'
+  }
+
+  // the wet leading edge: everything behind the front is kept, fading out
+  // across a soft, wobbly border
+  function applyMask(shape, p, W, H) {
+    const wob = (t) => Math.sin(t * 0.011 + shape.R0) * 0.6 + Math.sin(t * 0.027 + shape.R0 * 2) * 0.4
+    tctx.globalCompositeOperation = 'destination-in'
+    tctx.beginPath()
+    if (shape.grow) {
+      const { x, y } = shape.grow
+      const rr = Math.max(1, shape.growR * p)
+      for (let i = 0; i <= 64; i++) {
+        const a = (i / 64) * Math.PI * 2
+        const r = rr * (1 + 0.1 * wob(a * 300))
+        tctx.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r)
+      }
+      const grad = tctx.createRadialGradient(x, y, rr * 0.55, x, y, rr * 1.1)
+      grad.addColorStop(0, '#000')
+      grad.addColorStop(1, 'rgba(0,0,0,0)')
+      tctx.fillStyle = grad
+    } else {
+      const dx = Math.cos(shape.sweep)
+      const dy = Math.sin(shape.sweep)
+      const proj = [0, W].flatMap((x) => [0, H].map((y) => x * dx + y * dy))
+      const sMin = Math.min(...proj)
+      const sMax = Math.max(...proj)
+      const feather = 160
+      const amp = 50
+      const front = sMin + p * (sMax - sMin + feather + amp)
+      const L = Math.hypot(W, H)
+      // in (s, t) coordinates: s along the sweep, t across it
+      const pt = (s, t) => [s * dx - t * dy, s * dy + t * dx]
+      tctx.moveTo(...pt(sMin - 10, -L))
+      for (let t = -L; t <= L; t += 24) tctx.lineTo(...pt(front + wob(t) * amp, t))
+      tctx.lineTo(...pt(sMin - 10, L))
+      const g0 = pt(front - feather, 0)
+      const g1 = pt(front + amp, 0)
+      const grad = tctx.createLinearGradient(g0[0], g0[1], g1[0], g1[1])
+      grad.addColorStop(0, '#000')
+      grad.addColorStop(1, 'rgba(0,0,0,0)')
+      tctx.fillStyle = grad
+    }
+    tctx.closePath()
+    tctx.fill()
+    tctx.globalCompositeOperation = 'source-over'
+  }
+
+  // flicked drops; draws the slice of them between fractions `from` and `to`
+  function splatter(c, art, W, H, from, to) {
+    const R = makeRand(99)
+    const S = Math.min(W, H)
+    const drops = []
+    for (let i = 0; i < 70; i++) {
+      const nearMoon = i < 28
+      const x = nearMoon ? art.moon.x + R.gauss() * S * 0.12 : R.rand(0, W)
+      const y = nearMoon ? art.moon.y + R.gauss() * S * 0.1 : H * R.rand(0.62, 0.98)
+      const gold = nearMoon || R.rand() < 0.4
+      drops.push({ x, y, r: R.rand(0.6, 2.6) * (R.rand() < 0.1 ? 2.2 : 1), a: R.rand(0.18, 0.55), gold })
+    }
+    for (let i = Math.floor(drops.length * from); i < Math.floor(drops.length * to); i++) {
+      const d = drops[i]
+      c.fillStyle = d.gold ? `rgba(232,200,96,${d.a})` : `rgba(160,184,160,${d.a * 0.6})`
+      c.beginPath()
+      c.arc(d.x, d.y, d.r, 0, Math.PI * 2)
+      c.fill()
+    }
+  }
+
+  // ---- run ----
+  let raf = 0
+  let size = { w: 0, h: 0 }
+
+  function setup() {
+    const scale = Math.min(window.devicePixelRatio || 1, 1.25)
+    const W = canvas.clientWidth
+    const H = canvas.clientHeight
+    size = { w: W, h: H }
+    for (const c of [canvas, temp]) {
+      c.width = Math.round(W * scale)
+      c.height = Math.round(H * scale)
+    }
+    ctx.setTransform(scale, 0, 0, scale, 0, 0)
+    tctx.setTransform(scale, 0, 0, scale, 0, 0)
+    ctx.clearRect(0, 0, W, H)
+    const art = compose(W, H)
+    art.shapes.forEach((s, i) => (s.R0 = i * 1.7 + 0.4))
+    return { art, W, H }
+  }
+
+  function paintInstantly() {
+    cancelAnimationFrame(raf)
+    const { art, W, H } = setup()
+    for (const s of art.shapes) {
+      for (let i = 0; i < s.layers; i++) {
+        tctx.clearRect(0, 0, W, H)
+        glaze(tctx, s)
+        granulate(tctx, W, H, s.R, 60)
+        ctx.drawImage(temp, 0, 0, W, H)
+      }
+    }
+    splatter(ctx, art, W, H, 0, 1)
+  }
+
+  function paintAnimated() {
+    const { art, W, H } = setup()
+    const t0 = performance.now()
+    let splatDone = 0
+
+    const frame = (now) => {
+      const t = now - t0
+      for (const s of art.shapes) {
+        const local = (t - s.start) / s.dur
+        if (local <= 0 || s.drawn >= s.layers) continue
+        const target = Math.min(s.layers, Math.ceil(s.layers * Math.min(1, local)))
+        if (target <= s.drawn) continue
+        tctx.clearRect(0, 0, W, H)
+        while (s.drawn < target) {
+          glaze(tctx, s)
+          s.drawn++
+        }
+        granulate(tctx, W, H, s.R, 60)
+        const front = Math.min(1, local / 0.55)
+        if (front < 1) applyMask(s, ease(front), W, H)
+        ctx.drawImage(temp, 0, 0, W, H)
+      }
+      // the drops flick in over the last half-second
+      const sp = Math.min(1, Math.max(0, (t - art.end + 500) / 500))
+      if (sp > splatDone) {
+        splatter(ctx, art, W, H, splatDone, sp)
+        splatDone = sp
+      }
+      if (splatDone < 1) raf = requestAnimationFrame(frame)
+    }
+    raf = requestAnimationFrame(frame)
+  }
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduce) paintInstantly()
+  else paintAnimated()
+
+  // repaint (instantly) when the viewport really changes — not for the
+  // small height jitter of a mobile browser's toolbar
+  let resizeTimer = 0
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer)
+    resizeTimer = setTimeout(() => {
+      const W = canvas.clientWidth
+      const H = canvas.clientHeight
+      if (W !== size.w || Math.abs(H - size.h) / size.h > 0.15) paintInstantly()
+    }, 200)
+  })
+</script>
+
+<style>
+  .watercolor {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    width: 100vw;
+    height: 100lvh;
+    pointer-events: none;
+  }
+
+  /* cold-press paper: a faint grain over the whole painting */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .9 0 0 0 0 .94 0 0 0 0 .9 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+</style>

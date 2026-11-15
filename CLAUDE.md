@@ -1,8 +1,8 @@
 # CLAUDE.md
 
 Personal site for Sammy Taubman — staubman.vercel.app. Static Astro site,
-one page, no framework JS beyond two small inline scripts (scroll-spy nav,
-Scrabble word-of-the-day).
+one page, no framework JS beyond three small inline scripts (scroll-spy nav,
+Scrabble word-of-the-day, and the watercolor background).
 
 **Check `TODO.md`** for open threads and ideas Sammy wants to pursue —
 update it as items land or new ideas come up.
@@ -44,6 +44,14 @@ speak one of those two languages.
   inline in the component that uses them (deliberate convention).
 - `src/components/` — Sidebar (nav + logo), Entry (hero), Section/
   Experience/Projects/Contact, Footer (word of the day).
+- `src/components/Watercolor.astro` — the background: a fixed `<canvas>`
+  behind everything, painted live as a watercolor night landscape (moon,
+  misty hills, pines) in the site palette. Each wash is a recursively
+  deformed polygon glazed dozens of times at low alpha. On landing, washes
+  sweep in behind a wet edge (~4.4s total); `prefers-reduced-motion`
+  paints it instantly. Every shape has its own seeded RNG, so the painting
+  is identical on every visit. Keep it dark behind text: muted text has to
+  stay readable over the hills.
 - `design/` — **not part of the build.** Generator HTML + candidates for
   brand assets: `design/og-alternatives/og.html` regenerates the og image
   (open in a browser, screenshot frame `#d` at 2x → `public/og-image.png`);
@@ -75,6 +83,10 @@ speak one of those two languages.
   words, keep the play legal-looking (opening word covers the center star).
 - The interpunct syllable dots in headwords are `aria-hidden` spans so
   screen readers hear the name, not the breaks — preserve that pattern.
+- Watercolor: don't paint a soft gradient as dozens of faint glazes —
+  each one rounds up to the smallest 8-bit alpha near its edge and they
+  stack into a visible ring (the moon glow uses 3 strong glazes instead).
+  Flat, wide shapes need low edge wobble or they throw tall spikes.
 - `og:image` meta in `index.astro` points at `/og-image.png` with explicit
   width/height hints (currently 2400×1260, a 2x render) — keep the hints in
   sync if you regenerate the image.
