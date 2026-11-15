@@ -27,7 +27,8 @@
   --headword-size-hero: 2.5rem;
 
   /* ---- shared layout ---- */
-  --page-padding: 2rem;         /* outer padding, sidebar + main */
+  --page-padding: 2rem;         /* outer padding, top bar + main */
+  --content-width: 60rem;       /* the centered column under the top bar */
 }
 
 /* the whole site's type shrinks together on small screens */
