@@ -2,7 +2,8 @@
 // The first screen's backdrop: a watercolor night landscape painted live in
 // a <canvas> — a gold moon over misty hills and a ridge of pines, in the
 // site's palette. It scrolls away with the hero and fades out at the bottom
-// into the plain background: the rest of the page stays simple.
+// into the ground: the green, sparsely speckled like salt sprinkled on a wet
+// wash (soft light blooms with crisp centers) — quiet behind the text.
 //
 // Technique (the generative-watercolor method): every wash starts as a
 // polygon that's recursively deformed (each edge's midpoint pushed out by a
@@ -346,6 +347,65 @@
     raf = requestAnimationFrame(frame)
   }
 
+  // ---- the ground: salt speckles ----
+  // salt on a wet wash pulls pigment away into small, irregular light
+  // blooms. a sparse, seeded, seamlessly wrapping tile of them becomes the
+  // page background below the painting
+  function saltTexture() {
+    const T = 720
+    const tile = document.createElement('canvas')
+    tile.width = T
+    tile.height = T
+    const c = tile.getContext('2d')
+    const R = makeRand(31)
+    const speck = (x, y) => {
+      const r = R.rand() < 0.15 ? R.rand(4, 9) : R.rand(1.5, 4)
+      const a = R.rand(0.03, 0.09)
+      // a soft bloom, slightly squashed and turned so no two match...
+      c.save()
+      c.translate(x, y)
+      c.rotate(R.rand(0, Math.PI))
+      c.scale(1, R.rand(0.6, 1))
+      const g = c.createRadialGradient(0, 0, 0, 0, 0, r)
+      g.addColorStop(0, `rgba(232,239,230,${a})`)
+      g.addColorStop(0.45, `rgba(232,239,230,${a * 0.5})`)
+      g.addColorStop(1, 'rgba(232,239,230,0)')
+      c.fillStyle = g
+      c.beginPath()
+      c.arc(0, 0, r, 0, Math.PI * 2)
+      c.fill()
+      c.restore()
+      // ...around a crisp little center, the grain the salt left
+      c.fillStyle = `rgba(232,239,230,${a * 1.3})`
+      c.beginPath()
+      c.arc(x, y, R.rand(0.4, 0.9), 0, Math.PI * 2)
+      c.fill()
+    }
+    for (let i = 0; i < 170; i++) {
+      // loose clusters, the way salt falls, plus strays
+      const cx = R.rand(0, T)
+      const cy = R.rand(0, T)
+      const n = R.rand() < 0.3 ? Math.floor(R.rand(3, 7)) : 1
+      for (let k = 0; k < n; k++) {
+        const x = cx + (n > 1 ? R.gauss() * 14 : 0)
+        const y = cy + (n > 1 ? R.gauss() * 14 : 0)
+        // paint near an edge again on the far side so the tile wraps
+        for (const ox of [-T, 0, T]) for (const oy of [-T, 0, T]) {
+          const px = x + ox
+          const py = y + oy
+          if (px > -12 && px < T + 12 && py > -12 && py < T + 12) speck(px, py)
+        }
+      }
+    }
+    tile.toBlob((blobData) => {
+      if (!blobData) return
+      document.body.style.backgroundImage = `url(${URL.createObjectURL(blobData)})`
+      document.body.style.backgroundSize = `${T}px ${T}px`
+    })
+  }
+  // off the critical path: the ground is below the fold
+  ;(window.requestIdleCallback || ((f) => setTimeout(f, 300)))(saltTexture)
+
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduce) paintInstantly()
   else paintAnimated()
@@ -365,7 +425,7 @@
 
 <style>
   /* covers the first screen and scrolls away with it; the bottom fades
-     out into the plain background */
+     out into the salted ground */
   .watercolor {
     position: absolute;
     top: 0;

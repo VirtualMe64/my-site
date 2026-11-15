@@ -49,10 +49,11 @@ speak one of those two languages.
 - `src/components/Watercolor.astro` — the first screen's backdrop: a
   `<canvas>` behind the hero (it scrolls away with it, bottom fading out),
   painted live as a watercolor night landscape (moon, misty hills, pines)
-  in the site palette. Below it the page is the green with a field of very
-  faint light dots (`body` in `global.css`, 22px grid at 7% ivory). Keep the
-  scrolled page that simple: a mottled watercolor ground was tried and was
-  too busy; Sammy wants the painting only up top. Each wash is a recursively
+  in the site palette. Below it the page is the green, sparsely speckled
+  with faint "salt" blooms (like salt on a wet wash) that the same script
+  generates as a wrapping tile and sets as the body background. Keep the
+  scrolled page this quiet. Rejected so far: a mottled watercolor ground
+  (too busy) and a regular dot grid (read as graph paper, not watercolor). Each wash is a recursively
   deformed polygon glazed dozens of times at low alpha. On landing, washes
   sweep in behind a wet edge (~4.4s total); `prefers-reduced-motion`
   paints it instantly. Every shape has its own seeded RNG, so the painting
