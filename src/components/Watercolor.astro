@@ -2,8 +2,7 @@
 // The first screen's backdrop: a watercolor night landscape painted live in
 // a <canvas> — a gold moon over misty hills and a ridge of pines, in the
 // site's palette. It scrolls away with the hero and fades out at the bottom
-// into the ground: the rest of the page is the hills' dark green, mottled
-// with a tileable watercolor texture made by the same machinery.
+// into the plain background: the rest of the page stays simple.
 //
 // Technique (the generative-watercolor method): every wash starts as a
 // polygon that's recursively deformed (each edge's midpoint pushed out by a
@@ -347,43 +346,6 @@
     raf = requestAnimationFrame(frame)
   }
 
-  // ---- the ground below the painting ----
-  // a tile of faint light and dark washes on transparent, each blob also
-  // painted at the eight neighbouring offsets so the tile wraps seamlessly
-  function groundTexture() {
-    const T = 900
-    const tile = document.createElement('canvas')
-    tile.width = T
-    tile.height = T
-    const c = tile.getContext('2d')
-    const R = makeRand(7)
-    for (let i = 0; i < 10; i++) {
-      const light = i % 2 === 0
-      const color = light ? 'rgba(34,50,33,0.009)' : 'rgba(8,14,8,0.014)'
-      const base = deform(blob(R.rand(0, T), R.rand(0, T), R.rand(120, 260), R.rand(100, 220), R, 0.3, 0.6, 10), 2, R)
-      for (let l = 0; l < 12; l++) {
-        const p = deform(base, 3, R, 0.9)
-        c.fillStyle = color
-        for (const ox of [-T, 0, T]) {
-          for (const oy of [-T, 0, T]) {
-            c.beginPath()
-            c.moveTo(p[0].x + ox, p[0].y + oy)
-            for (let k = 1; k < p.length; k++) c.lineTo(p[k].x + ox, p[k].y + oy)
-            c.closePath()
-            c.fill()
-          }
-        }
-      }
-    }
-    tile.toBlob((blobData) => {
-      if (!blobData) return
-      document.body.style.backgroundImage = `url(${URL.createObjectURL(blobData)})`
-      document.body.style.backgroundSize = `${T}px ${T}px`
-    })
-  }
-  // off the critical path: the ground is below the fold
-  ;(window.requestIdleCallback || ((f) => setTimeout(f, 300)))(groundTexture)
-
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduce) paintInstantly()
   else paintAnimated()
@@ -403,7 +365,7 @@
 
 <style>
   /* covers the first screen and scrolls away with it; the bottom fades
-     out into the textured ground */
+     out into the plain background */
   .watercolor {
     position: absolute;
     top: 0;
@@ -417,13 +379,19 @@
     mask-image: linear-gradient(to bottom, #000 80%, transparent);
   }
 
-  /* cold-press paper: a faint grain over the whole painting */
+  /* cold-press paper: a faint grain over the painting only (same box and
+     fade as the canvas), so the page below stays plain */
   .grain {
-    position: fixed;
-    inset: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
     z-index: -1;
+    width: 100%;
+    height: 100lvh;
     pointer-events: none;
     opacity: 0.5;
+    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent);
+    mask-image: linear-gradient(to bottom, #000 80%, transparent);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .9 0 0 0 0 .94 0 0 0 0 .9 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 </style>

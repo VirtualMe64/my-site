@@ -49,9 +49,9 @@ speak one of those two languages.
 - `src/components/Watercolor.astro` — the first screen's backdrop: a
   `<canvas>` behind the hero (it scrolls away with it, bottom fading out),
   painted live as a watercolor night landscape (moon, misty hills, pines)
-  in the site palette. Below it the page is the hills' dark green, mottled
-  by a tileable watercolor texture the same script generates (body
-  background). Sammy wanted the painting only up top, not fixed. Each wash is a recursively
+  in the site palette. Below it the page is the plain background — no
+  texture, no grain: Sammy wants the painting only up top and the scrolled
+  page simple (a mottled ground texture was tried and was too busy). Each wash is a recursively
   deformed polygon glazed dozens of times at low alpha. On landing, washes
   sweep in behind a wet edge (~4.4s total); `prefers-reduced-motion`
   paints it instantly. Every shape has its own seeded RNG, so the painting
