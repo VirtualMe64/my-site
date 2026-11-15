@@ -22,8 +22,7 @@ update it as items land or new ideas come up.
   tests or linter).
 - To eyeball changes, build and screenshot with the pre-installed
   Playwright Chromium at two widths: **1440px (desktop)** and **390px
-  (mobile)** — the main breakpoint is **640px** (the top bar drops the
-  "Sam·my" guide word; senses run together).
+  (mobile)** — the main breakpoint is **640px** (senses run together).
 
 ## Concept: the whole site is a dictionary
 
@@ -43,13 +42,16 @@ speak one of those two languages.
 - `src/styles/theme.css` — shared design tokens only (incl.
   `--content-width`, the centered column the top bar lines up with). One-off values stay
   inline in the component that uses them (deliberate convention).
-- `src/components/` — Nav (sticky top bar at every width: rack logo +
-  "Sam·my" guide word, section links; clear over the painting at the top,
+- `src/components/` — Nav (sticky top bar at every width: the rack logo
+  as the home link, section links; clear over the painting at the top,
   blurred backdrop once scrolled), Entry (hero), Section/
   Experience/Projects/Contact, Footer (word of the day).
-- `src/components/Watercolor.astro` — the background: a fixed `<canvas>`
-  behind everything, painted live as a watercolor night landscape (moon,
-  misty hills, pines) in the site palette. Each wash is a recursively
+- `src/components/Watercolor.astro` — the first screen's backdrop: a
+  `<canvas>` behind the hero (it scrolls away with it, bottom fading out),
+  painted live as a watercolor night landscape (moon, misty hills, pines)
+  in the site palette. Below it the page is the hills' dark green, mottled
+  by a tileable watercolor texture the same script generates (body
+  background). Sammy wanted the painting only up top, not fixed. Each wash is a recursively
   deformed polygon glazed dozens of times at low alpha. On landing, washes
   sweep in behind a wet edge (~4.4s total); `prefers-reduced-motion`
   paints it instantly. Every shape has its own seeded RNG, so the painting

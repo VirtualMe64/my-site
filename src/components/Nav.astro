@@ -1,5 +1,5 @@
 ---
-// The top bar, at every width: rack logo + "Sam·my" guide word on the left,
+// The top bar, at every width: the rack logo (the home link) on the left,
 // section links on the right. The links derive from the same sections list
 // that drives the section headers, so the two can't fall out of sync.
 import { sections } from '../content/site.js'
@@ -10,7 +10,7 @@ import { sections } from '../content/site.js'
     <!-- the rack mark is inlined rather than reusing the favicon <img>: the
          favicon's square viewBox has dead space above/below the tiles that
          would render it undersized, and inlining lets the tile rects fill
-         with currentColor so the link can hover-shift like the name -->
+         with currentColor so the link can hover-shift gold → sage -->
     <a class="brand" href="#home" aria-label="Sammy Taubman, home">
       <svg viewBox="0 7.5 32 17.5" aria-hidden="true">
         <g transform="rotate(-5 8.25 15.75)">
@@ -24,8 +24,6 @@ import { sections } from '../content/site.js'
           <text x="29.6" y="22.6" text-anchor="end" font-family="Georgia, 'Times New Roman', serif" font-size="4.5" font-weight="700" fill="#162013">1</text>
         </g>
       </svg>
-      <!-- the guide word: the name styled like a small headword (desktop) -->
-      <span class="name" aria-hidden="true">Sam<span>·</span>my</span>
     </a>
     <ul class="list">
       {sections.filter((s) => s.id !== 'home').map((link) => (
@@ -97,9 +95,7 @@ import { sections } from '../content/site.js'
   }
 
   .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
+    display: block;
     color: var(--color-accent);
     transition: color 0.2s ease;
   }
@@ -117,13 +113,6 @@ import { sections } from '../content/site.js'
     width: 2.75rem;
     height: auto;
     transform: translateY(-2px);
-  }
-
-  .name {
-    font-size: var(--text-xl);
-    font-weight: 700;
-    letter-spacing: 0.01em;   /* match the headwords */
-    line-height: 1;
   }
 
   .list {
@@ -153,11 +142,6 @@ import { sections } from '../content/site.js'
   @media (max-width: 640px) {
     .bar {
       padding: 0.875rem var(--page-padding);
-    }
-
-    /* the rack alone is the home link on phones */
-    .name {
-      display: none;
     }
 
     .list {
