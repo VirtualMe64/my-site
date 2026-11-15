@@ -134,13 +134,6 @@
       return shape
     }
     const moon = { x: W * 0.8, y: H * 0.22, r: S * 0.07 }
-    // hill heights, as fractions of the viewport. desktop sets them lower so
-    // the hero text sits on calm sky instead of crossing a ridge; phones keep
-    // the taller landscape (their text block ends higher up anyway). 640px
-    // is the site's layout breakpoint
-    const hills = W > 640
-      ? { far: [0.67, 0.05], mist: [0.75, 0.04], mid: [0.78, 0.045], near: [0.9, 0.035] }
-      : { far: [0.6, 0.06], mist: [0.69, 0.045], mid: [0.72, 0.05], near: [0.86, 0.04] }
 
     add(11, { color: [40, 70, 50], alpha: 0.03, layers: 34, start: 0, dur: 1500, sweep: 0.35 }, (s, R) => {
       s.polys = [blob(W * 0.25, H * 0.18, W * 0.42, H * 0.3, R)]
@@ -158,14 +151,14 @@
       s.polys = [blob(moon.x, moon.y, moon.r, moon.r, R, 0.06, 0.16, 20)]
     })
     add(21, { color: [70, 94, 72], alpha: 0.032, layers: 36, start: 1350, dur: 1600, sweep: 0 }, (s, R) => {
-      s.polys = [ridge(W, H, H * hills.far[0], H * hills.far[1], R)]
+      s.polys = [ridge(W, H, H * 0.6, H * 0.06, R)]
     })
     add(22, { color: [150, 172, 150], alpha: 0.012, layers: 26, start: 1750, dur: 1300, sweep: Math.PI }, (s, R) => {
       // a long, flat band: low wobble so it can't throw tall spikes
-      s.polys = [blob(W * 0.5, H * hills.mist[0], W * 0.7, H * hills.mist[1], R, 0.08, 0.22, 24)]
+      s.polys = [blob(W * 0.5, H * 0.69, W * 0.7, H * 0.045, R, 0.08, 0.22, 24)]
     })
     const mid = add(23, { color: [38, 58, 40], alpha: 0.036, layers: 36, start: 2050, dur: 1500, sweep: 0 }, (s, R) => {
-      s.polys = [ridge(W, H, H * hills.mid[0], H * hills.mid[1], R)]
+      s.polys = [ridge(W, H, H * 0.72, H * 0.05, R)]
       s.ridge = s.polys[0]
     })
     add(24, { color: [24, 40, 26], alpha: 0.07, layers: 18, start: 2750, dur: 1100, sweep: -Math.PI / 2 }, (s, R) => {
@@ -178,7 +171,7 @@
       }
     })
     add(25, { color: [17, 30, 18], alpha: 0.05, layers: 36, start: 3000, dur: 1400, sweep: Math.PI }, (s, R) => {
-      s.polys = [ridge(W, H, H * hills.near[0], H * hills.near[1], R, 0.35)]
+      s.polys = [ridge(W, H, H * 0.86, H * 0.04, R, 0.35)]
     })
     return { shapes, moon, end: 4400 }
   }
