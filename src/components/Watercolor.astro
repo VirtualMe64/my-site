@@ -424,8 +424,10 @@
 </script>
 
 <style>
-  /* covers the first screen and scrolls away with it; the bottom fades
-     out into the salted ground */
+  /* covers the first screen and scrolls away with it. both edges fade: the
+     bottom into the salted ground, the top into the plain background color
+     — which is what mobile Safari tints its toolbar with, so the sky rises
+     out of the browser chrome instead of butting up against it */
   .watercolor {
     position: absolute;
     top: 0;
@@ -435,8 +437,8 @@
     width: 100%;
     height: 100lvh;
     pointer-events: none;
-    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent);
-    mask-image: linear-gradient(to bottom, #000 80%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
   }
 
   /* cold-press paper: a faint grain over the painting only (same box and
@@ -450,8 +452,8 @@
     height: 100lvh;
     pointer-events: none;
     opacity: 0.5;
-    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent);
-    mask-image: linear-gradient(to bottom, #000 80%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .9 0 0 0 0 .94 0 0 0 0 .9 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 </style>

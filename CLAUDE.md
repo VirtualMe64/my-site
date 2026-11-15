@@ -51,7 +51,10 @@ speak one of those two languages.
   painted live as a watercolor night landscape (moon, misty hills, pines)
   in the site palette. Below it the page is the green, sparsely speckled
   with faint "salt" blooms (like salt on a wet wash) that the same script
-  generates as a wrapping tile and sets as the body background. Keep the
+  generates as a wrapping tile and sets as the body background.
+  The painting's top edge fades into the plain bg color on purpose: mobile
+  Safari tints its toolbar with the page background, and an unfaded sky
+  showed as a mismatched band under it. `theme-color` is set to match. Keep the
   scrolled page this quiet. Rejected so far: a mottled watercolor ground
   (too busy) and a regular dot grid (read as graph paper, not watercolor). Each wash is a recursively
   deformed polygon glazed dozens of times at low alpha. On landing, washes
