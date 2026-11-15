@@ -22,8 +22,8 @@ update it as items land or new ideas come up.
   tests or linter).
 - To eyeball changes, build and screenshot with the pre-installed
   Playwright Chromium at two widths: **1440px (desktop)** and **390px
-  (mobile)** — the layout switches at **640px** (sidebar becomes a
-  horizontal top bar).
+  (mobile)** — the main breakpoint is **640px** (the top bar drops the
+  "Sam·my" guide word; senses run together).
 
 ## Concept: the whole site is a dictionary
 
@@ -36,13 +36,16 @@ speak one of those two languages.
 
 ## Layout
 
-- `src/content/site.js` — the `sections` list drives BOTH the sidebar nav
+- `src/content/site.js` — the `sections` list drives BOTH the top bar
   and section headers (single source of truth); also contact links. Other
   content lives in `src/content/{roles,projects,scrabble}.js`. The hero's
   text is deliberately inline in `Entry.astro` instead.
-- `src/styles/theme.css` — shared design tokens only. One-off values stay
+- `src/styles/theme.css` — shared design tokens only (incl.
+  `--content-width`, the centered column the top bar lines up with). One-off values stay
   inline in the component that uses them (deliberate convention).
-- `src/components/` — Sidebar (nav + logo), Entry (hero), Section/
+- `src/components/` — Nav (sticky top bar at every width: rack logo +
+  "Sam·my" guide word, section links; clear over the painting at the top,
+  blurred backdrop once scrolled), Entry (hero), Section/
   Experience/Projects/Contact, Footer (word of the day).
 - `src/components/Watercolor.astro` — the background: a fixed `<canvas>`
   behind everything, painted live as a watercolor night landscape (moon,
@@ -65,13 +68,13 @@ speak one of those two languages.
 - Type: Hanuman (Google Fonts, weights 300/400/700), Georgia fallback —
   also used inside the SVG logo assets.
 - The logo is a two-tile Scrabble rack (S₁ T₁), tiles tilted −5°/+4° so
-  they read hand-placed. It lives three places, deliberately not shared:
-  `public/favicon.svg` (square canvas) and two inline copies in
-  `Sidebar.astro` with the viewBox cropped to the tiles (`0 7.5 32 17.5`)
-  and rects filled with `currentColor` so the link hover shifts gold→sage.
-  Don't swap the inline copies for the favicon `<img>` — the square
+  they read hand-placed. It lives two places, deliberately not shared:
+  `public/favicon.svg` (square canvas) and an inline copy in `Nav.astro`
+  with the viewBox cropped to the tiles (`0 7.5 32 17.5`) and rects filled
+  with `currentColor` so the link hover shifts gold→sage.
+  Don't swap the inline copy for the favicon `<img>` — the square
   canvas's dead space renders it undersized (that was a shipped bug).
-- Optical alignment: the mobile-bar mark carries `translateY(-2px)`
+- Optical alignment: the top-bar mark carries `translateY(-2px)`
   because dead-centering an icon next to text reads as too low. Keep such
   nudges; they're intentional, not drift.
 

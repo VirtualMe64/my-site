@@ -20,9 +20,9 @@
   /* ---- type scale ---- */
   --text-sm: 0.85rem;      /* pos tags, stacks, small labels */
   --text-base: 1rem;       /* descriptions, links, footer text */
-  --text-md: 1.125rem;     /* sidebar nav, project card titles */
+  --text-md: 1.125rem;     /* nav links, project card titles */
   --text-lg: 1.2rem;       /* company names */
-  --text-xl: 1.5rem;       /* sidebar guide-word mark */
+  --text-xl: 1.5rem;       /* top-bar guide-word mark */
   --headword-size: clamp(1.75rem, 4vw, 2.75rem);
   --headword-size-hero: 2.5rem;
 
