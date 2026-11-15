@@ -1,4 +1,4 @@
-// Site-wide content: the section index (which drives both the sidebar and
+// Site-wide content: the section index (which drives both the top bar and
 // each section's dictionary-entry header) and the contact links. The hero's
 // text and the head metadata are deliberately NOT here — they live inline in
 // Entry.astro and index.astro.
