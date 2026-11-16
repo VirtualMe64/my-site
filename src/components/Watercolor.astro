@@ -315,6 +315,7 @@
   }
 
   function paintAnimated() {
+    cancelAnimationFrame(raf)
     const { art, W, H } = setup()
     const t0 = performance.now()
     let splatDone = 0
@@ -343,6 +344,7 @@
         splatDone = sp
       }
       if (splatDone < 1) raf = requestAnimationFrame(frame)
+      else animating = false
     }
     raf = requestAnimationFrame(frame)
   }
@@ -407,20 +409,38 @@
   ;(window.requestIdleCallback || ((f) => setTimeout(f, 300)))(saltTexture)
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (reduce) paintInstantly()
-  else paintAnimated()
+  let animating = false
 
-  // repaint (instantly) when the viewport really changes — not for the
-  // small height jitter of a mobile browser's toolbar
+  function paint() {
+    if (reduce) {
+      paintInstantly()
+    } else {
+      animating = true
+      paintAnimated()
+    }
+  }
+  paint()
+
+  // repaint whenever the canvas's *displayed* size changes — watching the
+  // canvas itself, not just window resizes. on iOS the script can run before
+  // the stylesheet has applied, so the first paint measures the unstyled
+  // 300×150-ish canvas; the styles then arrive without any resize event and
+  // the small painting got stretched to fill the screen (a tall, thin moon).
+  // a change during the intro restarts it at the right size (on a slow load
+  // that's within the first instant); later changes repaint instantly. the
+  // canvas is 100lvh, so a mobile toolbar sliding doesn't trigger this
   let resizeTimer = 0
-  window.addEventListener('resize', () => {
+  new ResizeObserver(() => {
+    const W = canvas.clientWidth
+    const H = canvas.clientHeight
+    if (Math.abs(W - size.w) < 2 && Math.abs(H - size.h) < 2) return
     clearTimeout(resizeTimer)
-    resizeTimer = setTimeout(() => {
-      const W = canvas.clientWidth
-      const H = canvas.clientHeight
-      if (W !== size.w || Math.abs(H - size.h) / size.h > 0.15) paintInstantly()
-    }, 200)
-  })
+    if (animating && !reduce) {
+      paint()                                        // still in the intro: restart now
+    } else {
+      resizeTimer = setTimeout(paintInstantly, 150)  // settled: repaint once resizing stops
+    }
+  }).observe(canvas)
 </script>
 
 <style>

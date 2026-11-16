@@ -97,6 +97,10 @@ speak one of those two languages.
   each one rounds up to the smallest 8-bit alpha near its edge and they
   stack into a visible ring (the moon glow uses 3 strong glazes instead).
   Flat, wide shapes need low edge wobble or they throw tall spikes.
+- Watercolor sizing: repaint on the *canvas's* size (`ResizeObserver`),
+  never only on window `resize`. On iOS the script can run before the
+  stylesheet applies, so the first paint measures the unstyled ~300×150
+  canvas and gets stretched (a tall, thin moon) until reload — a shipped bug.
 - `og:image` meta in `index.astro` points at `/og-image.png` with explicit
   width/height hints (currently 2400×1260, a 2x render) — keep the hints in
   sync if you regenerate the image.
