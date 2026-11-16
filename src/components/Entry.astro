@@ -9,23 +9,20 @@
       <span class="pos">n. proper</span>
     </h1>
 
-    <ol class="definitions" role="list">
-      <li><span class="num" aria-hidden="true">1.</span> a software engineer at Stripe, helping agents pay for things</li>
-      <li><span class="num" aria-hidden="true">2.</span> a former Georgia Tech student and current Georgia Tech football fan</li>
-      <li><span class="num" aria-hidden="true">3.</span> a lover of word games, especially Scrabble</li>
+    <ol class="definitions">
+      <li><span class="num">1.</span> a software engineer at Stripe, helping agents pay for things</li>
+      <li><span class="num">2.</span> a former Georgia Tech student and current Georgia Tech football fan</li>
+      <li><span class="num">3.</span> a lover of word games, especially Scrabble</li>
     </ol>
 
     <p class="seeAlso">
-      See also: <a href="#experience">experience</a>, <a href="#contact">contact</a>
+      See also: <a href="#experience">experience</a>
     </p>
   </div>
 </section>
 
 <style>
-  /* a soft, dark scrim behind the text column so the hill line never
-     competes with the senses; it fades out long before the moon */
   .entry {
-    position: relative;
     width: 100%;
     max-width: var(--content-width);
     margin: 0 auto;
@@ -35,23 +32,6 @@
        the site's muted color is fine on the plain green, but over the
        painting's misty hills it dropped to ~2.7:1 */
     --color-text-muted: #b4c8b4;
-  }
-
-  .entry::before {
-    content: '';
-    position: absolute;
-    inset: -5rem 20% -4rem -8rem;
-    z-index: -1;
-    pointer-events: none;
-    /* reaches zero exactly at the box edges, so it has no visible border */
-    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(12, 22, 13, 0.55), rgba(12, 22, 13, 0.3) 55%, transparent 100%);
-  }
-
-  @media (max-width: 640px) {
-    .entry::before {
-      inset: -3rem -1.5rem;
-      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(12, 22, 13, 0.5), rgba(12, 22, 13, 0.25) 55%, transparent 100%);
-    }
   }
 
   /* desktop: each sense on its own line, numbers hanging in the margin */

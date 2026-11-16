@@ -17,7 +17,7 @@ html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;     /* nav links glide between sections */
-  scroll-padding-top: 0;       /* sections' own top padding clears the bar */
+  scroll-padding-top: 4.5rem;  /* clear the sticky top bar */
 }
 
 @media (prefers-reduced-motion: reduce) {
