@@ -10,7 +10,7 @@
   /* ---- color ---- */
   --color-bg: #162013;          /* deep forest green */
   --color-text: #e8efe6;        /* light sage white */
-  --color-text-muted: #7a927a;  /* muted sage */
+  --color-text-muted: #93a893;  /* muted sage (≈6.7:1 on bg) */
   --color-rule: rgba(232, 239, 230, 0.3);
   --color-wash: rgba(232, 239, 230, 0.045); /* faint hover background */
   --color-accent: #e8c860;      /* warm yellow-gold */
@@ -18,8 +18,8 @@
   --font-serif: 'Hanuman', Georgia, 'Times New Roman', serif;
 
   /* ---- type scale ---- */
-  --text-sm: 0.85rem;      /* pos tags, stacks, small labels */
-  --text-base: 1rem;       /* descriptions, links, footer text */
+  --text-sm: 0.95rem;      /* pos tags, stacks, small labels */
+  --text-base: 1.0625rem; /* descriptions, links, footer text */
   --text-md: 1.125rem;     /* nav links, project card titles */
   --text-lg: 1.2rem;       /* company names */
   --headword-size: clamp(1.75rem, 4vw, 2.75rem);
@@ -33,9 +33,9 @@
 /* the whole site's type shrinks together on small screens */
 @media (max-width: 640px) {
   :root {
-    --text-base: 0.85rem;
-    --text-md: 0.95rem;
-    --text-lg: 1rem;
+    --text-base: 0.95rem;
+    --text-md: 1rem;
+    --text-lg: 1.05rem;
   }
 }
 

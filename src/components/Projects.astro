@@ -14,14 +14,14 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
       <div class="row">
         {row.map((project) => (
           <article class="card">
-            <p class="name">{project.name} <span class="pos">{project.pos}</span></p>
+            <h3 class="name">{project.name} <span class="pos">{project.pos}</span></h3>
             <p class="def" set:html={md(project.def)} />
             <footer class="cardFoot">
               <span class="stack">{project.stack}</span>
               <span class="seeAlso">
                 See also:{' '}
                 {project.links.map((link, i) => (
-                  <span><a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>{i < project.links.length - 1 && ', '}</span>
+                  <span><a href={link.href} target="_blank" rel="noreferrer" aria-label={`${project.name} ${link.label} (opens in a new tab)`}>{link.label}</a>{i < project.links.length - 1 && ', '}</span>
                 ))}
               </span>
             </footer>
@@ -104,7 +104,6 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
   }
 
   .def {
-    font-weight: 300;
     font-size: var(--text-base);
     line-height: 1.5;
     flex: 1;
@@ -118,21 +117,25 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
     text-underline-offset: 3px;
   }
 
+  /* stack left, links right; they wrap onto two lines when the card is
+     narrow instead of squeezing into fixed halves */
   .cardFoot {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: baseline;
+    gap: 0.25rem 1rem;
     margin-top: 0.25rem;
   }
 
   .stack {
-    width: 50%;
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     font-style: italic;
   }
 
   .seeAlso {
-    width: 50%;
+    margin-left: auto;
     font-size: var(--text-sm);
     font-style: italic;
     color: var(--color-text-muted);
@@ -148,7 +151,7 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
   }
 
   .seeAlso a:hover {
-    font-weight: 700;
+    color: var(--color-accent);
   }
 
   @media (max-width: 640px) {
