@@ -27,7 +27,7 @@ import { sections } from '../content/site.js'
     </a>
     <ul class="list">
       {sections.filter((s) => s.id !== 'home').map((link) => (
-        <li><a href={`#${link.id}`} class="link">{link.label}</a></li>
+        <li><a href={`#${link.id}`} class="link" data-label={link.label}>{link.label}</a></li>
       ))}
     </ul>
   </div>
@@ -44,7 +44,7 @@ import { sections } from '../content/site.js'
     for (const link of links) {
       const active = link.getAttribute('href') === `#${id}`
       link.classList.toggle('active', active)
-      if (active) link.setAttribute('aria-current', 'true')
+      if (active) link.setAttribute('aria-current', 'location')
       else link.removeAttribute('aria-current')
     }
   }
@@ -72,15 +72,16 @@ import { sections } from '../content/site.js'
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 1px solid transparent;
-    transition: background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
   }
 
   .nav.scrolled {
-    background: color-mix(in srgb, var(--color-bg) 72%, transparent);
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom-color: var(--color-rule);
+    /* a soft shadow, not a rule: a hairline here stacked with the
+       sections' own top rules into a double line */
+    box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.7);
   }
 
   /* lined up with the content column below it */
@@ -122,8 +123,14 @@ import { sections } from '../content/site.js'
   }
 
   /* light at rest so bold means "you are here" */
+  /* padded to a 44px tap target; the hidden bold copy of the label reserves
+     the bold width so the row doesn't shift when a link becomes current */
   .link {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
     font-size: var(--text-md);
     font-weight: 300;
     color: var(--color-text);
@@ -133,6 +140,14 @@ import { sections } from '../content/site.js'
   .link:hover,
   .link:focus-visible {
     color: var(--color-accent);
+  }
+
+  .link::after {
+    content: attr(data-label);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-weight: 700;
   }
 
   .link.active {

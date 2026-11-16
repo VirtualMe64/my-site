@@ -9,8 +9,8 @@ import { md } from '../lib/md.js'
   <ol class="roles">
     {roles.map((role) => (
       <li>
-        <p class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></p>
-        <p class="meta">{role.title}<span aria-hidden="true"> · </span>{role.dates}</p>
+        <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></h3>
+        <p class="meta">{role.title}<span aria-hidden="true"> · </span><span class="dates">{role.dates.replace(' - ', ' – ')}</span></p>
         <p class="roleDesc" set:html={md(role.description)} />
       </li>
     ))}
@@ -29,6 +29,11 @@ import { md } from '../lib/md.js'
   .company {
     font-size: var(--text-lg);
     font-weight: 700;
+  }
+
+  /* a date range never breaks across lines */
+  .dates {
+    white-space: nowrap;
   }
 
   .meta {

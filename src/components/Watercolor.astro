@@ -284,9 +284,11 @@
   let size = { w: 0, h: 0 }
 
   function setup() {
-    const scale = Math.min(window.devicePixelRatio || 1, 1.25)
     const W = canvas.clientWidth
     const H = canvas.clientHeight
+    // resolution: at most 1.25× the CSS size, and at most ~2.5MP in total so
+    // huge monitors don't allocate tens of MB for a background
+    const scale = Math.min(window.devicePixelRatio || 1, 1.25, Math.sqrt(2.5e6 / Math.max(1, W * H)))
     size = { w: W, h: H }
     for (const c of [canvas, temp]) {
       c.width = Math.round(W * scale)
@@ -300,18 +302,25 @@
     return { art, W, H }
   }
 
+  // the finished painting without the sweep. one shape per frame rather than
+  // all ~260 glazes in one go, so a rotate or resize on a slow phone never
+  // freezes the page
   function paintInstantly() {
     cancelAnimationFrame(raf)
     const { art, W, H } = setup()
-    for (const s of art.shapes) {
-      for (let i = 0; i < s.layers; i++) {
+    let i = 0
+    const step = () => {
+      const s = art.shapes[i++]
+      for (let l = 0; l < s.layers; l++) {
         tctx.clearRect(0, 0, W, H)
         glaze(tctx, s)
         granulate(tctx, W, H, s.R, 60)
         ctx.drawImage(temp, 0, 0, W, H)
       }
+      if (i < art.shapes.length) raf = requestAnimationFrame(step)
+      else splatter(ctx, art, W, H, 0, 1)
     }
-    splatter(ctx, art, W, H, 0, 1)
+    step()
   }
 
   function paintAnimated() {
@@ -344,7 +353,10 @@
         splatDone = sp
       }
       if (splatDone < 1) raf = requestAnimationFrame(frame)
-      else animating = false
+      else {
+        animating = false
+        laySalt()
+      }
     }
     raf = requestAnimationFrame(frame)
   }
@@ -405,8 +417,15 @@
       document.body.style.backgroundSize = `${T}px ${T}px`
     })
   }
-  // off the critical path: the ground is below the fold
-  ;(window.requestIdleCallback || ((f) => setTimeout(f, 300)))(saltTexture)
+  // the salt goes down once the painting is done (or right away with
+  // reduced motion), so the first frames of the intro are clean green rather
+  // than speckles waiting for paint; idle time keeps it off the critical path
+  let salted = false
+  function laySalt() {
+    if (salted) return
+    salted = true
+    ;(window.requestIdleCallback || ((f) => setTimeout(f, 300)))(saltTexture)
+  }
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   let animating = false
@@ -414,6 +433,7 @@
   function paint() {
     if (reduce) {
       paintInstantly()
+      laySalt()
     } else {
       animating = true
       paintAnimated()
@@ -436,7 +456,7 @@
     if (Math.abs(W - size.w) < 2 && Math.abs(H - size.h) < 2) return
     clearTimeout(resizeTimer)
     if (animating && !reduce) {
-      paint()                                        // still in the intro: restart now
+      resizeTimer = setTimeout(paint, 60)            // still in the intro: restart (once it settles)
     } else {
       resizeTimer = setTimeout(paintInstantly, 150)  // settled: repaint once resizing stops
     }

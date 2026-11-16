@@ -14,7 +14,7 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
       <div class="row">
         {row.map((project) => (
           <article class="card">
-            <p class="name">{project.name} <span class="pos">{project.pos}</span></p>
+            <h3 class="name">{project.name} <span class="pos">{project.pos}</span></h3>
             <p class="def" set:html={md(project.def)} />
             <footer class="cardFoot">
               <span class="stack">{project.stack}</span>
@@ -118,21 +118,25 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
     text-underline-offset: 3px;
   }
 
+  /* stack left, links right; they wrap onto two lines when the card is
+     narrow instead of squeezing into fixed halves */
   .cardFoot {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: baseline;
+    gap: 0.25rem 1rem;
     margin-top: 0.25rem;
   }
 
   .stack {
-    width: 50%;
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     font-style: italic;
   }
 
   .seeAlso {
-    width: 50%;
+    margin-left: auto;
     font-size: var(--text-sm);
     font-style: italic;
     color: var(--color-text-muted);
