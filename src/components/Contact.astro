@@ -4,6 +4,8 @@ import { getSection, contact } from '../content/site.js'
 ---
 
 <Section {...getSection('contact')}>
+  <!-- three forms of the same entry, set across the column: label above,
+       address below -->
   <ul class="links">
     {contact.map((link) => (
       <li class="row">
@@ -20,19 +22,25 @@ import { getSection, contact } from '../content/site.js'
   .links {
     list-style: none;
     margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--color-rule);
+    border-bottom: 1px solid var(--color-rule);
   }
 
   .row {
     display: flex;
-    align-items: baseline;
-    gap: 0.75em;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.25rem 1.25rem 1.4rem 0;
+  }
+
+  .row + .row {
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--color-rule);
   }
 
   .label {
-    flex: 0 0 6rem;
     font-size: var(--text-sm);
     font-style: italic;
     color: var(--color-text-muted);
@@ -40,11 +48,26 @@ import { getSection, contact } from '../content/site.js'
 
   .row a {
     font-size: var(--text-base);
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--color-rule);
+    text-underline-offset: 4px;
   }
 
   @media (max-width: 640px) {
-    .label {
-      flex-basis: 4.5rem;
+    .links {
+      grid-template-columns: 1fr;
+    }
+
+    .row,
+    .row + .row {
+      padding: 1rem 0;
+      border-left: none;
+    }
+
+    .row + .row {
+      border-top: 1px solid var(--color-rule);
     }
   }
 </style>

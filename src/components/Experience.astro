@@ -6,12 +6,19 @@ import { md } from '../lib/md.js'
 ---
 
 <Section {...getSection('experience')}>
+  <!-- each role is a numbered sense: gold numeral, company as the sense's
+       lead word, title and description beneath, dates set in a right-hand
+       column the way a dictionary sets dates of use -->
   <ol class="roles">
-    {roles.map((role) => (
+    {roles.map((role, i) => (
       <li>
-        <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></h3>
-        <p class="meta">{role.title}<span aria-hidden="true"> · </span><span class="dates">{role.dates.replace(' - ', ' – ')}</span></p>
-        <p class="roleDesc" set:html={md(role.description)} />
+        <span class="num" aria-hidden="true">{i + 1}.</span>
+        <div class="body">
+          <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></h3>
+          <p class="meta">{role.title}</p>
+          <p class="roleDesc" set:html={md(role.description)} />
+        </div>
+        <p class="dates">{role.dates.replace(' - ', ' – ')}</p>
       </li>
     ))}
   </ol>
@@ -21,9 +28,21 @@ import { md } from '../lib/md.js'
   .roles {
     list-style: none;
     margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .roles li {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    gap: 0 1.5rem;
+    align-items: baseline;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .num {
+    font-weight: 700;
+    color: var(--color-accent);
   }
 
   .company {
@@ -31,9 +50,12 @@ import { md } from '../lib/md.js'
     font-weight: 700;
   }
 
-  /* a date range never breaks across lines */
-  .dates {
-    white-space: nowrap;
+  /* company links: dotted underline at rest so they read as links on touch */
+  .company a {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--color-rule);
+    text-underline-offset: 4px;
   }
 
   .meta {
@@ -43,6 +65,8 @@ import { md } from '../lib/md.js'
   }
 
   .roleDesc {
+    margin-top: 0.35rem;
+    max-width: 36rem;
     font-size: var(--text-base);
   }
 
@@ -52,5 +76,33 @@ import { md } from '../lib/md.js'
     text-decoration: underline;
     text-decoration-style: dotted;
     text-underline-offset: 3px;
+  }
+
+  /* a date range never breaks across lines */
+  .dates {
+    font-size: var(--text-sm);
+    font-style: italic;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* phone: dates tuck under the title instead of a third column */
+  @media (max-width: 640px) {
+    .roles li {
+      grid-template-columns: 1.5rem 1fr;
+      gap: 0 0.75rem;
+      padding: 1.2rem 0;
+    }
+
+    .dates {
+      grid-column: 2;
+      grid-row: 2;
+      text-align: left;
+    }
+
+    .roleDesc {
+      grid-row: auto;
+    }
   }
 </style>

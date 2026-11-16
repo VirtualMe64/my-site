@@ -9,12 +9,17 @@ const year = new Date().getFullYear()
 
 <footer class="footer">
   <div class="line">
-    <p class="label">Scrabble word of the day:</p>
-    <p class="row">
-      <span class="word" data-word>{fallback.text}</span>
-      <span class="score" data-score>({scrabbleScore(fallback.text)})</span>
-      <span class="def" data-def>{fallback.def}</span>
+    <p class="label">Scrabble word of the day</p>
+    <!-- the word played as tiles, real letter scores in the corners; the
+         visually hidden copy is what screen readers get -->
+    <p class="play">
+      <span class="sr-only" data-word>{fallback.text}</span>
+      <span class="rack" aria-hidden="true" data-tiles>
+        {[...fallback.text].map((letter) => <span class="tile">{letter}<sub>{scrabbleScore(letter)}</sub></span>)}
+      </span>
+      <span class="score" data-score>{scrabbleScore(fallback.text)} pts</span>
     </p>
+    <p class="def" data-def>{fallback.def}</p>
     <p class="copy">&copy; <span data-year>{year}</span> Sammy Taubman</p>
   </div>
 </footer>
@@ -23,64 +28,120 @@ const year = new Date().getFullYear()
   import { wordOfTheDay, scrabbleScore } from '../content/scrabble.js'
 
   const word = wordOfTheDay()
+  const rack = document.querySelector('[data-tiles]')
+  const template = rack.firstElementChild
+  rack.replaceChildren(
+    ...[...word.text].map((letter) => {
+      // shallow clones keep Astro's scoped-style attribute
+      const tile = template.cloneNode(false)
+      const score = template.querySelector('sub').cloneNode(false)
+      score.textContent = String(scrabbleScore(letter))
+      tile.append(letter, score)
+      return tile
+    }),
+  )
   document.querySelector('[data-word]').textContent = word.text
-  document.querySelector('[data-score]').textContent = `(${scrabbleScore(word.text)})`
+  document.querySelector('[data-score]').textContent = `${scrabbleScore(word.text)} pts`
   document.querySelector('[data-def]').textContent = word.def
   document.querySelector('[data-year]').textContent = String(new Date().getFullYear())
 </script>
 
 <style>
+  /* lined up with the content column, like the sections above it */
   .footer {
     border-top: 1px solid var(--color-rule);
-    padding: var(--page-padding);
-    min-height: 10rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 3rem var(--page-padding) 2.5rem;
   }
 
   .line {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    text-align: center;
-  }
-
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 0.4em;
+    max-width: var(--content-width);
+    margin: 0 auto;
   }
 
   .label {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
+    font-style: italic;
     color: var(--color-text-muted);
   }
 
-  .word {
-    font-size: var(--text-base);
+  .play {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .rack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  /* tiles in the logo's colors: gold face, dark letter, score bottom-right */
+  .tile {
+    position: relative;
+    width: 2.1rem;
+    height: 2.1rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.3rem;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.15rem;
     font-weight: 700;
-    color: var(--color-accent);
+    line-height: 1;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  /* a slight hand-placed tilt, like the logo's tiles */
+  .tile:nth-child(odd) { transform: rotate(-2deg); }
+  .tile:nth-child(3n) { transform: rotate(2.5deg); }
+
+  .tile sub {
+    position: absolute;
+    right: 0.18rem;
+    bottom: 0.1rem;
+    font-size: 0.45rem;
   }
 
   .score {
-    font-size: var(--text-base);
-    font-weight: 400;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
   }
 
   .def {
+    margin-top: 0.6rem;
     font-size: var(--text-base);
     font-style: italic;
     color: var(--color-text-muted);
   }
 
   .copy {
-    margin-top: 1rem;
-    font-size: var(--text-base);
+    margin-top: 1.75rem;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .tile {
+      width: 1.6rem;
+      height: 1.6rem;
+      font-size: 0.85rem;
+    }
+
+    .tile sub {
+      font-size: 0.38rem;
+    }
   }
 </style>
