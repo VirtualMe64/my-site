@@ -60,6 +60,13 @@ import { sections } from '../content/site.js'
     if (section) observer.observe(section)
   }
 
+  // a short last section may never cross the middle band: mark it current
+  // once the page is scrolled to the bottom
+  const lastId = ids[ids.length - 1]
+  window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) setActive(lastId)
+  }, { passive: true })
+
   // the bar sits clear over the painting at the top, and picks up a blurred
   // backdrop once the page scrolls under it
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8)

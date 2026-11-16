@@ -18,7 +18,7 @@ const total = scrabbleScore('SAMMY')
       <span class="pos">n. proper</span>
     </h1>
 
-    <p class="play" aria-label={`Scrabble: SAMMY, ${total} points`}>
+    <p class="play" role="img" aria-label={`Scrabble tiles: SAMMY, ${total} points`}>
       <span class="rack" aria-hidden="true">
         {rack.map((letter) => <span class="tile">{letter}<sub>{scrabbleScore(letter)}</sub></span>)}
       </span>
@@ -38,7 +38,10 @@ const total = scrabbleScore('SAMMY')
 </section>
 
 <style>
+  /* a soft dark scrim behind the text column (see ::before) so the hill
+     line never competes with the senses */
   .entry {
+    position: relative;
     width: 100%;
     max-width: var(--content-width);
     margin: 0 auto;
@@ -48,6 +51,23 @@ const total = scrabbleScore('SAMMY')
        the site's muted color is fine on the plain green, but over the
        painting's misty hills it dropped to ~2.7:1 */
     --color-text-muted: #b4c8b4;
+  }
+
+  .entry::before {
+    content: '';
+    position: absolute;
+    inset: -5rem 20% -4rem -8rem;
+    z-index: -1;
+    pointer-events: none;
+    /* reaches zero exactly at the box edges, so it has no visible border */
+    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(12, 22, 13, 0.55), rgba(12, 22, 13, 0.3) 55%, transparent 100%);
+  }
+
+  @media (max-width: 640px) {
+    .entry::before {
+      inset: -3rem -1.5rem;
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(12, 22, 13, 0.5), rgba(12, 22, 13, 0.25) 55%, transparent 100%);
+    }
   }
 
   /* desktop: each sense on its own line, numbers hanging in the margin */
@@ -126,9 +146,9 @@ const total = scrabbleScore('SAMMY')
 
   .tile sub {
     position: absolute;
-    right: 0.16rem;
-    bottom: 0.08rem;
-    font-size: 0.45rem;
+    right: 0.14rem;
+    bottom: 0.06rem;
+    font-size: 0.55rem;
   }
 
   .pts {

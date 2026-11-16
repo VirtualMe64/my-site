@@ -14,7 +14,7 @@ import { md } from '../lib/md.js'
       <li>
         <span class="num" aria-hidden="true">{i + 1}.</span>
         <div class="body">
-          <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer">{role.company}</a></h3>
+          <h3 class="company"><a href={role.url} target="_blank" rel="noreferrer" aria-label={`${role.company} (opens in a new tab)`}>{role.company}</a></h3>
           <p class="meta">{role.title}</p>
           <p class="roleDesc" set:html={md(role.description)} />
         </div>
@@ -25,8 +25,11 @@ import { md } from '../lib/md.js'
 </Section>
 
 <style>
+  /* narrower than the column, so the dates sit near their entries rather
+     than stranded at the far edge */
   .roles {
     list-style: none;
+    max-width: 46rem;
     margin-top: 2rem;
     border-top: 1px solid var(--color-rule);
   }
