@@ -9,7 +9,7 @@ import { md } from '../lib/md.js'
   <!-- each role is a numbered sense: gold numeral, company as the sense's
        lead word, title and description beneath, dates set in a right-hand
        column the way a dictionary sets dates of use -->
-  <ol class="roles">
+  <ol class="roles" role="list">
     {roles.map((role, i) => (
       <li>
         <span class="num" aria-hidden="true">{i + 1}.</span>
@@ -54,7 +54,7 @@ import { md } from '../lib/md.js'
   .company a {
     text-decoration: underline;
     text-decoration-style: dotted;
-    text-decoration-color: var(--color-rule);
+    text-decoration-color: var(--color-text-muted);
     text-underline-offset: 4px;
   }
 

@@ -109,15 +109,23 @@
     return r[r.length - 1].y
   }
 
+  // a fir: three stepped tiers of boughs narrowing to the tip, on a short
+  // trunk. low wobble so the silhouette stays crisp after glazing
   function pine(x, baseY, h, R) {
-    const w = h * R.rand(0.28, 0.38)
-    return [
-      { x: x, y: baseY - h, v: 0.08 },
-      { x: x + w * 0.5, y: baseY - h * 0.45, v: 0.25 },
-      { x: x + w * 0.55, y: baseY + 4, v: 0.1 },
-      { x: x - w * 0.55, y: baseY + 4, v: 0.1 },
-      { x: x - w * 0.5, y: baseY - h * 0.45, v: 0.25 },
-    ]
+    const w = h * R.rand(0.34, 0.44)
+    const top = baseY - h
+    const crown = h * 0.84                       // boughs span this much of the height
+    const right = []
+    for (let k = 1; k <= 3; k++) {
+      const t = k / 3
+      const y = top + crown * t
+      right.push({ x: x + w * 0.5 * t * R.rand(0.9, 1.08), y, v: 0.05 })
+      if (k < 3) right.push({ x: x + w * 0.2 * t, y: y - h * 0.05, v: 0.04 })
+    }
+    const tw = Math.max(1.5, w * 0.07)
+    right.push({ x: x + tw, y: top + crown, v: 0.02 }, { x: x + tw, y: baseY + 4, v: 0.02 })
+    const left = right.map((p) => ({ x: 2 * x - p.x + R.rand(-0.6, 0.6), y: p.y, v: p.v })).reverse()
+    return [{ x, y: top, v: 0.03 }, ...right, ...left]
   }
 
   // ---- the painting ----
@@ -144,11 +152,12 @@
     // the glow: a radial gradient in just a few strong glazes. (dozens of
     // faint ones would each round up to the smallest 8-bit alpha near the
     // edge and stack into a visible ring)
-    add(13, { color: [232, 200, 96], alpha: 0.2, layers: 3, start: 700, dur: 1400, grow: moon, growR: moon.r * 4.2, radial: moon.r * 2.7 }, (s, R) => {
+    add(13, { color: [232, 200, 96], alpha: 0.2, layers: 3, start: 250, dur: 1200, grow: moon, growR: moon.r * 4.2, radial: moon.r * 2.7 }, (s, R) => {
       s.polys = [blob(moon.x, moon.y, moon.r * 3.6, moon.r * 3.6, R, 0.15, 0.35, 18)]
     })
-    add(14, { color: [238, 216, 140], alpha: 0.055, layers: 40, start: 950, dur: 1200, grow: moon, growR: moon.r * 1.4 }, (s, R) => {
-      s.polys = [blob(moon.x, moon.y, moon.r, moon.r, R, 0.06, 0.16, 20)]
+    add(14, { color: [238, 216, 140], alpha: 0.055, layers: 40, start: 450, dur: 1100, grow: moon, growR: moon.r * 1.4 }, (s, R) => {
+      // nearly round: a little wobble reads as paint, a lot reads as a notch
+      s.polys = [blob(moon.x, moon.y, moon.r, moon.r, R, 0.02, 0.05, 28)]
     })
     add(21, { color: [70, 94, 72], alpha: 0.032, layers: 36, start: 1350, dur: 1600, sweep: 0 }, (s, R) => {
       s.polys = [ridge(W, H, H * 0.6, H * 0.06, R)]
@@ -165,7 +174,7 @@
       s.polys = []
       let x = W * 0.52
       while (x < W * 1.02) {
-        const h = S * R.rand(0.05, 0.11)
+        const h = S * R.rand(0.045, 0.12)
         s.polys.push(pine(x, ridgeY(mid, x) + S * 0.01, h, R))
         x += S * R.rand(0.018, 0.045)
       }
@@ -263,12 +272,13 @@
     const R = makeRand(99)
     const S = Math.min(W, H)
     const drops = []
-    for (let i = 0; i < 70; i++) {
-      const nearMoon = i < 28
+    for (let i = 0; i < 56; i++) {
+      const nearMoon = i < 14
       const x = nearMoon ? art.moon.x + R.gauss() * S * 0.12 : R.rand(0, W)
       const y = nearMoon ? art.moon.y + R.gauss() * S * 0.1 : H * R.rand(0.62, 0.98)
       const gold = nearMoon || R.rand() < 0.4
-      drops.push({ x, y, r: R.rand(0.6, 2.6) * (R.rand() < 0.1 ? 2.2 : 1), a: R.rand(0.18, 0.55), gold })
+      const big = !nearMoon && R.rand() < 0.08
+      drops.push({ x, y, r: R.rand(0.6, nearMoon ? 1.6 : 2.4) * (big ? 1.8 : 1), a: R.rand(0.18, nearMoon ? 0.4 : 0.5), gold })
     }
     for (let i = Math.floor(drops.length * from); i < Math.floor(drops.length * to); i++) {
       const d = drops[i]
