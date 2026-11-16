@@ -21,7 +21,7 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
               <span class="seeAlso">
                 See also:{' '}
                 {project.links.map((link, i) => (
-                  <span><a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>{i < project.links.length - 1 && ', '}</span>
+                  <span><a href={link.href} target="_blank" rel="noreferrer" aria-label={`${project.name} ${link.label} (opens in a new tab)`}>{link.label}</a>{i < project.links.length - 1 && ', '}</span>
                 ))}
               </span>
             </footer>
@@ -104,7 +104,6 @@ for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2))
   }
 
   .def {
-    font-weight: 300;
     font-size: var(--text-base);
     line-height: 1.5;
     flex: 1;

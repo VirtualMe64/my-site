@@ -86,6 +86,7 @@ section + section {
 /* the painting fades out on its own; a rule under it would cut across it */
 #home + section {
   border-top: none;
+  padding-top: 3rem;
 }
 
 /* h3s for companies and projects: semantic headings, styled by their

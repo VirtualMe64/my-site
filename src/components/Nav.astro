@@ -160,11 +160,33 @@ import { sections } from '../content/site.js'
     }
 
     .list {
-      gap: 1.5rem;
+      gap: 1.1rem;
     }
 
     .link {
       font-weight: 400;
+    }
+  }
+  /* the narrowest phones (320–375px): tighter still so nothing overflows.
+     after the 640px block on purpose, so these win */
+  @media (max-width: 380px) {
+    .list {
+      gap: 0.8rem;
+    }
+
+    .link {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .bar {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .list {
+      gap: 0.6rem;
     }
   }
 </style>
